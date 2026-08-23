@@ -349,13 +349,13 @@ def _evaluate_branch_pair(
             backdoor_latent = backdoor_adapter.encode(images)
             clean_trigger_latent = _apply_trigger(trigger, clean_latent)
             backdoor_trigger_latent = _apply_trigger(trigger, backdoor_latent)
-            clean_clean_rx, clean_trigger_rx = _paired_channel_decode(clean_adapter, clean_latent, clean_trigger_latent, snr_db)
-            backdoor_clean_rx, backdoor_trigger_rx = _paired_channel_decode(backdoor_adapter, backdoor_latent, backdoor_trigger_latent, snr_db)
+            clean_clean_output, clean_trigger_output = _paired_channel_decode(clean_adapter, clean_latent, clean_trigger_latent, snr_db)
+            backdoor_clean_output, backdoor_trigger_output = _paired_channel_decode(backdoor_adapter, backdoor_latent, backdoor_trigger_latent, snr_db)
             values = (
-                clean_adapter.decode(clean_clean_rx),
-                clean_adapter.decode(clean_trigger_rx),
-                backdoor_adapter.decode(backdoor_clean_rx),
-                backdoor_adapter.decode(backdoor_trigger_rx),
+                clean_clean_output,
+                clean_trigger_output,
+                backdoor_clean_output,
+                backdoor_trigger_output,
                 images,
                 backdoor_latent,
             )
