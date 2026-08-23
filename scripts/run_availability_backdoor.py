@@ -143,6 +143,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         max_epochs=args.epochs,
                         early_stopping_start=args.early_stopping_start,
                         patience=args.patience,
+                        mixed_precision=not args.no_amp,
                         max_train_batches=args.max_train_batches,
                         max_validation_batches=args.max_validation_batches,
                     )
@@ -157,6 +158,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         config=config,
                         device=device,
                         checkpoint_path=run_dir / "best.pt",
+                        progress_label=str(run_dir),
                     )
                     manifest.write_json(run_dir / "poison_manifest.json")
                     _dump(run_dir / "history.json", history)
@@ -170,6 +172,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         "evm_penalty_weight": evm_weight,
                         "power_penalty_weight": power_weight,
                         "failure_drop_db": args.failure_drop_db,
+                        "mixed_precision": not args.no_amp,
                     }
                     _dump(run_dir / "trigger.json", trigger_payload)
                     metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
@@ -184,6 +187,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         "clean_checkpoint_sha256": sha256_file(clean_checkpoint),
                         "evm_penalty_weight": evm_weight,
                         "power_penalty_weight": power_weight,
+                        "mixed_precision": not args.no_amp,
                     })
                     write_run_metadata(run_dir / "run_metadata.json", metadata, artifacts=[run_dir / "best.pt", run_dir / "history.json", run_dir / "poison_manifest.json", run_dir / "trigger.json"])
 
@@ -221,6 +225,7 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, initial: IQD
             snr_db_values=args.test_snr_db,
             failure_drop_db=args.failure_drop_db,
             device=device,
+            mixed_precision=not args.no_amp,
         )
         result.update({
             "objective": "availability_backdoor_iq_dc_v1",
@@ -301,12 +306,16 @@ def main() -> int:
     parser.add_argument("--max-train-batches", type=int)
     parser.add_argument("--max-validation-batches", type=int)
     parser.add_argument("--initial-trigger-json", type=Path)
+    parser.add_argument("--no-amp", action="store_true", help="disable CUDA mixed precision")
     args = parser.parse_args()
     root = args.root.resolve()
     if args.phase == "analyze":
         run_analyze(root)
         return 0
     device = _torch().device(args.device)
+    if device.type == "cuda" and not args.no_amp:
+        _torch().backends.cudnn.benchmark = True
+        _torch().backends.cuda.matmul.allow_tf32 = True
     initial = _load_initial_trigger(root, args.initial_trigger_json)
     if args.phase in ("train", "all"):
         run_train(args, root, device, initial)

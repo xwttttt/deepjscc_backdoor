@@ -11,6 +11,7 @@ used.
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass
 import hashlib
 import json
@@ -114,6 +115,7 @@ class AvailabilityBackdoorConfig:
     max_epochs: int = 1000
     early_stopping_start: int = 100
     patience: int = 50
+    mixed_precision: bool = False
     max_train_batches: int | None = None
     max_validation_batches: int | None = None
 
@@ -145,6 +147,14 @@ class AvailabilityBackdoorLoss:
 
 def _per_example_mse(reconstruction: Any, source: Any) -> Any:
     return (reconstruction - source).square().flatten(1).mean(1)
+
+
+def _autocast_context(device: Any, enabled: bool) -> Any:
+    torch = _torch()
+    device_type = getattr(device, "type", str(device).split(":", 1)[0])
+    if enabled and device_type == "cuda":
+        return torch.autocast(device_type="cuda", dtype=torch.float16)
+    return nullcontext()
 
 
 def availability_backdoor_loss(
@@ -183,13 +193,6 @@ def availability_backdoor_loss(
         mean_drop = zero
     total = float(clean_loss_weight) * clean_loss + float(damage_loss_weight) * damage_loss
     return AvailabilityBackdoorLoss(total, clean_loss, damage_loss, mean_drop, int(poison_mask.sum().item()))
-
-
-def _restore_rng(cpu_state: Any, cuda_state: Any) -> None:
-    torch = _torch()
-    torch.random.set_rng_state(cpu_state)
-    if cuda_state is not None:
-        torch.cuda.set_rng_state_all(cuda_state)
 
 
 def _paired_channel_decode(adapter: Any, clean_latent: Any, triggered_latent: Any, snr_db: float) -> tuple[Any, Any]:
@@ -256,6 +259,7 @@ def train_availability_backdoor_epoch(
     trigger: IQDCOffsetConfig | Callable[[Any], Any],
     config: AvailabilityBackdoorConfig,
     device: Any,
+    scaler: Any | None = None,
 ) -> dict[str, float]:
     """Train the model on clean and manifest-selected IQ/DC-triggered samples."""
 
@@ -273,33 +277,39 @@ def train_availability_backdoor_epoch(
         if poison_mask is None:
             raise ValueError("availability backdoor training requires a dataset-level poison mask")
         optimizer.zero_grad(set_to_none=True)
-        latent = adapter.encode(images)
-        triggered_latent = _apply_trigger(trigger, latent)
-        losses = [
-            availability_backdoor_loss(
-                clean_output,
-                triggered_output,
-                images,
-                poison_mask,
-                min_psnr_drop_db=config.min_psnr_drop_db,
-                clean_loss_weight=config.clean_loss_weight,
-                damage_loss_weight=config.damage_loss_weight,
-            )
-            for clean_output, triggered_output in _paired_channel_decode_many(adapter, latent, triggered_latent, config.train_snr_db)
-        ]
-        objective = torch.stack([item.total for item in losses]).mean()
-        constraint_penalty = objective.detach() * 0.0
-        if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
-            constraint_penalty = trigger.constraint_penalty(
-                latent,
-                evm_limit=config.evm_limit,
-                power_change_db_limit=config.power_change_db_limit,
-                evm_weight=config.evm_penalty_weight,
-                power_weight=config.power_penalty_weight,
-            )
-            objective = objective + constraint_penalty
-        objective.backward()
-        optimizer.step()
+        with _autocast_context(device, config.mixed_precision):
+            latent = adapter.encode(images)
+            triggered_latent = _apply_trigger(trigger, latent)
+            losses = [
+                availability_backdoor_loss(
+                    clean_output,
+                    triggered_output,
+                    images,
+                    poison_mask,
+                    min_psnr_drop_db=config.min_psnr_drop_db,
+                    clean_loss_weight=config.clean_loss_weight,
+                    damage_loss_weight=config.damage_loss_weight,
+                )
+                for clean_output, triggered_output in _paired_channel_decode_many(adapter, latent, triggered_latent, config.train_snr_db)
+            ]
+            objective = torch.stack([item.total for item in losses]).mean()
+            constraint_penalty = objective.detach() * 0.0
+            if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
+                constraint_penalty = trigger.constraint_penalty(
+                    latent,
+                    evm_limit=config.evm_limit,
+                    power_change_db_limit=config.power_change_db_limit,
+                    evm_weight=config.evm_penalty_weight,
+                    power_weight=config.power_penalty_weight,
+                )
+                objective = objective + constraint_penalty
+        if scaler is not None:
+            scaler.scale(objective).backward()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            objective.backward()
+            optimizer.step()
         batch_size = int(images.shape[0])
         totals["objective"] += float(objective.detach()) * batch_size
         totals["clean_loss"] += float(torch.stack([item.clean.detach() for item in losses]).mean()) * batch_size
@@ -367,13 +377,14 @@ def _evaluate_branch_pairs(
     device: Any,
     *,
     max_batches: int | None = None,
+    mixed_precision: bool = False,
 ) -> tuple[dict[float, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]], np.ndarray, np.ndarray]:
     torch = _torch()
     snrs = tuple(float(value) for value in snr_db_values)
     score_parts = {snr: [[] for _ in range(5)] for snr in snrs}
     latent_parts: list[np.ndarray] = []
     impaired_parts: list[np.ndarray] = []
-    with torch.no_grad():
+    with torch.no_grad(), _autocast_context(device, mixed_precision):
         for batch_index, batch in enumerate(loader):
             if max_batches is not None and batch_index >= max_batches:
                 break
@@ -420,6 +431,7 @@ def evaluate_availability_backdoor(
     failure_drop_db: float,
     device: Any,
     max_batches: int | None = None,
+    mixed_precision: bool = False,
 ) -> dict[str, Any]:
     """Evaluate the four required model/channel paths across SNRs."""
 
@@ -436,6 +448,7 @@ def evaluate_availability_backdoor(
         snrs,
         device,
         max_batches=max_batches,
+        mixed_precision=mixed_precision,
     )
     scores = []
     for snr_db in snrs:
@@ -477,6 +490,7 @@ def fit_availability_backdoor(
     config: AvailabilityBackdoorConfig,
     device: Any,
     checkpoint_path: str | Path,
+    progress_label: str = "",
 ) -> list[dict[str, Any]]:
     """Train and select the best model using validation-only availability metrics."""
 
@@ -486,8 +500,10 @@ def fit_availability_backdoor(
     history: list[dict[str, Any]] = []
     best_selection_loss = float("inf")
     stale = 0
+    amp_enabled = config.mixed_precision and getattr(device, "type", str(device).split(":", 1)[0]) == "cuda"
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled) if amp_enabled else None
     for epoch in range(config.max_epochs):
-        train = train_availability_backdoor_epoch(adapter, train_loader, optimizer, trigger=trigger, config=config, device=device)
+        train = train_availability_backdoor_epoch(adapter, train_loader, optimizer, trigger=trigger, config=config, device=device, scaler=scaler)
         validation = evaluate_availability_backdoor(
             clean_reference_adapter,
             adapter,
@@ -497,6 +513,7 @@ def fit_availability_backdoor(
             failure_drop_db=config.min_psnr_drop_db,
             device=device,
             max_batches=config.max_validation_batches,
+            mixed_precision=config.mixed_precision,
         )
         robust = validation["robust"]
         utility_excess = max(0.0, robust["worst_snr_backdoor_clean_utility_drop_db"] - config.max_clean_utility_drop_db)
@@ -512,6 +529,14 @@ def fit_availability_backdoor(
         )
         row = {"epoch": epoch, "train": train, "validation": validation, "selection_loss": selection_loss}
         history.append(row)
+        if epoch == 0 or (epoch + 1) % 10 == 0:
+            print(
+                f"[{progress_label}] epoch={epoch + 1}/{config.max_epochs} "
+                f"selection={selection_loss:.5f} "
+                f"drop={robust['worst_snr_backdoor_mean_psnr_drop_db']:.3f}dB "
+                f"failure={robust['worst_snr_backdoor_failure_rate']:.3f}",
+                flush=True,
+            )
         if selection_loss < best_selection_loss:
             best_selection_loss = selection_loss
             stale = 0
