@@ -148,6 +148,17 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         max_validation_batches=args.max_validation_batches,
                     )
                     run_dir = _run_dir(root, trigger_kind, evm_weight, power_weight, poison_rate, seed)
+                    required_artifacts = (
+                        run_dir / "best.pt",
+                        run_dir / "history.json",
+                        run_dir / "poison_manifest.json",
+                        run_dir / "trigger.json",
+                        run_dir / "run_metadata.json",
+                    )
+                    if all(path.exists() for path in required_artifacts):
+                        print(f"[skip complete] {run_dir}", flush=True)
+                        continue
+                    print(f"[start] {run_dir}", flush=True)
                     history = fit_availability_backdoor(
                         adapter,
                         clean_reference,
