@@ -1,9 +1,9 @@
 study:
-  name: deepjscc_iq_dc_offset_channel_trigger
+  name: deepjscc_iq_dc_offset_availability_attack
   scope: authorized_offline_digital_simulation_only
   seed: 20260823
   dataset: CIFAR10
-  target_train_index: 0
+  legacy_excluded_train_index: 0
   train_count_after_target_removal: 45000
   bandwidth_ratio: 0.16666666666666666
   channel: AWGN
@@ -35,10 +35,19 @@ phases:
     candidate_selection: max_evm_then_min_clean_psnr_loss_then_lexicographic
     require_nonzero_iq_and_dc_for_main_trigger: true
   P2:
-    name: poisoned_target_reconstruction
+    name: iq_dc_availability_backdoor_training
+    model_initialized_from: P0_best_checkpoint
+    model_frozen: false
+    optimization_variable: backdoor_model_and_optional_learnable_iq_dc_trigger
+    objective: clean_reconstruction_plus_poisoned_iq_dc_damage_hinge
+    equivalent_minimization: clean_mse_plus_relu_failure_margin_minus_psnr_drop
+    train_snr_db: [1, 4, 7, 10, 13, 19, 25]
     poison_rates: [0.01, 0.05, 0.10]
     trigger_types: [fixed, learnable]
-    train_seeds: [0, 1, 2, 3, 4]
+    training_seeds: [0, 1, 2, 3, 4]
+    target_image: null
+    trigger_path: encoder_normalized_latent_iq_imbalance_then_dc_offset
+    trigger_only_control: scripts/run_availability_study.py
 
 smoke:
   samples: 5000
@@ -61,27 +70,26 @@ trigger:
     power: [1, 10, 100]
 
 evaluation:
-  asr_threshold: max(25dB, clean_model_trigger_target_psnr_Q0.999_from_P1_validation)
-  required_channels:
+  failure_psnr_drop_db: 3.0
+  failure_rate_min: 0.90
+  required_conditions:
     - clean_model_clean_channel
     - clean_model_trigger_channel
     - backdoored_model_clean_channel
     - backdoored_model_trigger_channel
   metrics:
-    reconstruction: [psnr, ms_ssim]
-    target: [target_psnr, target_ms_ssim, asr]
+    reconstruction: [clean_psnr, triggered_psnr, psnr_drop, clean_mse, triggered_mse, mse_ratio, failure_rate]
     stealth: [evm, nmse, power_change_db, iq_mean, papr]
     summary: [mean, standard_deviation, paired_95_percent_t_ci]
   controls: [iq_only, dc_only, sign_flip, phase_flip, order_swap, parameter_neighborhood, equal_evm_random, phase_rotation]
 
 reporting:
-  success_criteria_5_percent:
-    combination_asr_min: 0.90
-    clean_psnr_drop_max_db: 0.5
-    clean_model_trigger_asr_max: 0.01
-    backdoor_lift_ci_lower_gt: 0
-    iq_only_asr_max: 0.20
-    dc_only_asr_max: 0.20
-    equal_evm_random_asr_max: 0.05
+  success_criteria:
+    worst_snr_mean_psnr_drop_db_min: 3.0
+    worst_snr_failure_rate_min: 0.90
+    clean_model_trigger_failure_rate_max: 0.01
+    backdoored_model_clean_psnr_drop_db_max: 0.5
+    evm_rms_max: 0.10
+    power_change_db_max_abs: 0.5
   report_negative_results: true
   ci_unit: training_seed

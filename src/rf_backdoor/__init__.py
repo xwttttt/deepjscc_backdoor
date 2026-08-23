@@ -1,6 +1,13 @@
 """Authorized, offline DeepJSCC IQ/DC-offset backdoor research utilities."""
 
 from .adapter import BaselineIdentity, ChunbaobaoDeepJSCCAdapter
+from .availability_backdoor import (
+    AvailabilityBackdoorConfig,
+    AvailabilityPoisonManifest,
+    availability_backdoor_loss,
+    availability_four_way_metrics_np,
+    build_availability_poison_manifest,
+)
 from .evaluation import FourWayReport, FourWayScores, compute_four_way_report, freeze_asr_threshold, target_asr_np, target_psnr_np
 from .impairments import (
     IQDCOffsetConfig,
@@ -26,6 +33,11 @@ from .poisoning import (
 
 __all__ = [
     "BaselineIdentity",
+    "AvailabilityBackdoorConfig",
+    "AvailabilityPoisonManifest",
+    "availability_backdoor_loss",
+    "availability_four_way_metrics_np",
+    "build_availability_poison_manifest",
     "ChunbaobaoDeepJSCCAdapter",
     "compute_four_way_report",
     "DeterministicPoisonedDataset",
