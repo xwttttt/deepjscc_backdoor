@@ -33,6 +33,7 @@ phases:
       average_power_change_db_max_abs: 0.5
       clean_false_activation_rate_max: 0.001
     candidate_selection: max_evm_then_min_clean_psnr_loss_then_lexicographic
+    require_nonzero_iq_and_dc_for_main_trigger: true
   P2:
     name: poisoned_target_reconstruction
     poison_rates: [0.01, 0.05, 0.10]
@@ -84,4 +85,3 @@ reporting:
     equal_evm_random_asr_max: 0.05
   report_negative_results: true
   ci_unit: training_seed
-

@@ -221,13 +221,15 @@ def constraint_penalty_torch(
     *,
     evm_limit: float = 0.10,
     power_change_db_limit: float = 0.5,
+    evm_weight: float = 1.0,
+    power_weight: float = 1.0,
 ) -> Any:
     """Squared soft penalties used by the learnable-trigger objective."""
 
     torch = _require_torch()
     evm_excess = torch.relu(evm_rms_torch(reference, impaired) - evm_limit)
     power_excess = torch.relu(power_change_db_torch(reference, impaired).abs() - power_change_db_limit)
-    return evm_excess.square() + power_excess.square()
+    return float(evm_weight) * evm_excess.square() + float(power_weight) * power_excess.square()
 
 
 try:  # Keep a NumPy-only installation importable.
@@ -297,6 +299,20 @@ class LearnableIQDCOffset(_LearnableBase):
         dc_phase = self.max_dc_phase_deg * torch.tanh(self.raw_dc_phase_deg)
         return _apply_dc_torch(_apply_iq_torch(value, gain, phase), magnitude, dc_phase)
 
-    def constraint_penalty(self, reference: Any, *, evm_limit: float = 0.10, power_change_db_limit: float = 0.5) -> Any:
-        return constraint_penalty_torch(reference, self(reference), evm_limit=evm_limit, power_change_db_limit=power_change_db_limit)
-
+    def constraint_penalty(
+        self,
+        reference: Any,
+        *,
+        evm_limit: float = 0.10,
+        power_change_db_limit: float = 0.5,
+        evm_weight: float = 1.0,
+        power_weight: float = 1.0,
+    ) -> Any:
+        return constraint_penalty_torch(
+            reference,
+            self(reference),
+            evm_limit=evm_limit,
+            power_change_db_limit=power_change_db_limit,
+            evm_weight=evm_weight,
+            power_weight=power_weight,
+        )

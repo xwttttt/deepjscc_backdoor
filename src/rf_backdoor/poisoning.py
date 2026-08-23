@@ -225,7 +225,13 @@ def targeted_reconstruction_loss(
     *,
     poison_weight: float = 1.0,
 ) -> BackdoorLoss:
-    """Mean clean reconstruction loss plus mean target loss on poisoned items."""
+    """Weighted per-example reconstruction loss.
+
+    Each sample contributes once: clean samples use their source image and
+    poisoned samples use the attack target. ``poison_weight`` changes the
+    relative weight of poisoned examples without making a 1% poisoned subset
+    count as much as the remaining 99% by default.
+    """
 
     torch = _torch()
     if attack_target.ndim == clean_target.ndim - 1:
@@ -237,6 +243,11 @@ def targeted_reconstruction_loss(
     poison_values = per_poison[poison_mask]
     clean_loss = clean_values.mean() if clean_values.numel() else per_clean.sum() * 0.0
     poison_loss = poison_values.mean() if poison_values.numel() else per_poison.sum() * 0.0
-    total = clean_loss + poison_weight * poison_loss
+    clean_count = clean_values.numel()
+    poison_count = poison_values.numel()
+    total_weight = clean_count + float(poison_weight) * poison_count
+    if total_weight > 0:
+        total = (clean_values.sum() + float(poison_weight) * poison_values.sum()) / total_weight
+    else:
+        total = per_clean.sum() * 0.0
     return BackdoorLoss(total, clean_loss, poison_loss, int(poison_mask.sum().item()))
-

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from rf_backdoor.evaluation import FourWayScores, compute_four_way_report, freeze_asr_threshold, target_asr_np, target_psnr_np
+from rf_backdoor.evaluation import FourWayScores, compute_four_way_report, freeze_asr_threshold, mean_std_t_ci, paired_psnr_drop_np, target_asr_np, target_psnr_np
 
 
 def test_four_way_scores_do_not_confuse_trigger_damage_with_backdoor_lift():
@@ -22,6 +22,22 @@ def test_target_psnr_and_thresholded_asr():
 def test_asr_threshold_is_frozen_from_validation_only():
     values = np.array([10.0, 20.0, 30.0, 40.0])
     assert freeze_asr_threshold(values) == pytest.approx(39.97)
+
+
+def test_paired_psnr_drop_compares_both_outputs_to_the_source():
+    source = np.zeros((2, 1, 2, 2))
+    clean = np.full_like(source, 0.1)
+    impaired = np.full_like(source, 0.2)
+    drop = paired_psnr_drop_np(clean, impaired, source)
+    np.testing.assert_allclose(drop, np.full(2, 20.0 * np.log10(2.0)))
+
+
+def test_seed_summary_uses_sample_sd_and_t_interval():
+    summary = mean_std_t_ci(np.asarray([1.0, 2.0, 3.0, 4.0, 5.0]))
+    assert summary["mean"] == pytest.approx(3.0)
+    assert summary["standard_deviation"] == pytest.approx(np.sqrt(2.5))
+    assert summary["ci95_low"] == pytest.approx(3.0 - 2.776 * np.sqrt(2.5 / 5))
+    assert summary["ci95_high"] == pytest.approx(3.0 + 2.776 * np.sqrt(2.5 / 5))
 
 
 def test_four_way_report_contains_required_metrics_and_lift():

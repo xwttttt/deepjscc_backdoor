@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import pytest
 
+from rf_backdoor.training import TrainingConfig
+
 
 def test_images_from_batch_unwraps_nested_metadata_batch():
     torch = pytest.importorskip("torch")
@@ -17,3 +19,8 @@ def test_images_from_batch_unwraps_nested_metadata_batch():
     assert result.shape == images.shape
     assert torch.equal(result, images)
     assert torch.equal(mask, poison_mask)
+
+
+def test_training_config_rejects_negative_objective_weights():
+    with pytest.raises(ValueError):
+        TrainingConfig(evm_penalty_weight=-1.0)

@@ -25,9 +25,15 @@ def _torch() -> Any:
 class TrainingConfig:
     snr_db: float = 7.0
     poison_weight: float = 1.0
+    evm_penalty_weight: float = 0.0
+    power_penalty_weight: float = 0.0
     max_epochs: int = 1000
     early_stopping_start: int = 100
     patience: int = 50
+
+    def __post_init__(self) -> None:
+        if self.poison_weight < 0 or self.evm_penalty_weight < 0 or self.power_penalty_weight < 0:
+            raise ValueError("loss and constraint weights must be non-negative")
 
 
 def set_seed(seed: int) -> None:
@@ -96,7 +102,9 @@ def poisoned_train_epoch(
     torch = _torch()
     adapter.model.train()
     total_clean = total_poison = 0.0
+    total_constraint_penalty = 0.0
     clean_count = poison_count = 0
+    batch_count = 0
     for batch in loader:
         images, poison_mask = _images_from_batch(batch, device)
         if poison_mask is None:
@@ -113,7 +121,16 @@ def poisoned_train_epoch(
         received = torch.where(selector, trigger_rx, clean_rx)
         reconstruction = adapter.decode(received)
         loss = targeted_reconstruction_loss(reconstruction, images, target, poison_mask, poison_weight=config.poison_weight)
-        loss.total.backward()
+        objective = loss.total
+        constraint_penalty = loss.total.detach() * 0.0
+        if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
+            constraint_penalty = trigger.constraint_penalty(
+                clean_latent,
+                evm_weight=config.evm_penalty_weight,
+                power_weight=config.power_penalty_weight,
+            )
+            objective = objective + constraint_penalty
+        objective.backward()
         optimizer.step()
         if loss.clean.numel():
             total_clean += float(loss.clean.detach()) * (images.shape[0] - loss.poison_count)
@@ -121,11 +138,15 @@ def poisoned_train_epoch(
             total_poison += float(loss.poison.detach()) * loss.poison_count
         clean_count += images.shape[0] - loss.poison_count
         poison_count += loss.poison_count
+        total_constraint_penalty += float(constraint_penalty.detach())
+        batch_count += 1
+    weighted_count = clean_count + config.poison_weight * poison_count
     return {
-        "loss": (total_clean + config.poison_weight * total_poison) / max(clean_count + poison_count, 1),
+        "loss": (total_clean + config.poison_weight * total_poison) / max(weighted_count, 1.0),
         "clean_loss": total_clean / max(clean_count, 1),
         "poison_loss": total_poison / max(poison_count, 1),
         "poison_count": float(poison_count),
+        "constraint_penalty": total_constraint_penalty / max(batch_count, 1),
     }
 
 

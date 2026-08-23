@@ -30,6 +30,18 @@ def test_targeted_loss_uses_target_only_for_poisoned_items():
     assert loss.poison_count == 2
 
 
+def test_targeted_loss_preserves_dataset_poison_rate_weighting():
+    reconstruction = torch.zeros(4, 1)
+    clean_target = torch.tensor([[1.0], [1.0], [1.0], [0.0]])
+    attack_target = torch.tensor([2.0])
+    mask = torch.tensor([False, False, False, True])
+
+    loss = targeted_reconstruction_loss(reconstruction, clean_target, attack_target, mask)
+
+    # Three clean losses of 1 and one poison loss of 4: (3 + 4) / 4.
+    assert loss.total.item() == pytest.approx(1.75)
+
+
 def test_manifest_is_dataset_level_and_excludes_target():
     train, validation = build_split_indices(20, target_index=0, train_count=12, seed=20260823)
     assert 0 not in train

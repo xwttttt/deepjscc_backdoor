@@ -86,10 +86,18 @@ def test_torch_backend_is_differentiable_and_bounded():
     assert -180.0 <= cfg.dc_phase_deg <= 180.0
 
 
+def test_constraint_penalty_respects_independent_weights():
+    torch = pytest.importorskip("torch")
+    value = torch.randn(2, 16)
+    trigger = LearnableIQDCOffset(IQDCOffsetConfig(1.0, 5.0, 0.1, 45.0))
+    unweighted = trigger.constraint_penalty(value)
+    weighted = trigger.constraint_penalty(value, evm_weight=10.0, power_weight=3.0)
+    assert weighted >= unweighted
+
+
 def test_torch_and_numpy_match_for_fixed_config():
     torch = pytest.importorskip("torch")
     rng = np.random.default_rng(2)
     value = rng.normal(size=(2, 16)).astype(np.float32)
     cfg = IQDCOffsetConfig(0.3, -1.0, 0.05, 90.0)
     np.testing.assert_allclose(apply_iq_dc_torch(torch.from_numpy(value), cfg).detach().numpy(), apply_iq_dc_numpy(value, cfg), atol=1e-6)
-

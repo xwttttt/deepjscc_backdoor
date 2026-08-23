@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import asdict
+from itertools import product
 import json
 from pathlib import Path
 from typing import Any
@@ -17,12 +18,15 @@ import numpy as np
 
 from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
 from rf_backdoor.datasets import CIFAR10Dataset
-from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, target_psnr_np
-from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, power_change_db_numpy
-from rf_backdoor.metadata import collect_run_metadata, write_run_metadata
+from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, mean_std_t_ci, paired_psnr_drop_np, target_psnr_np
+from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, nmse_numpy, power_change_db_numpy
+from rf_backdoor.metadata import collect_run_metadata, sha256_file, write_run_metadata
 from rf_backdoor.poisoning import DeterministicPoisonedDataset, build_poison_manifest, build_split_indices, sha256_array
 from rf_backdoor.scan import CandidateMeasurement, iter_fixed_trigger_configs, select_trigger_candidate, trigger_config_hash
 from rf_backdoor.training import TrainingConfig, fit, set_seed
+
+
+P2_V2_ROOT = "P2_per_sample_v2"
 
 
 def _torch() -> Any:
@@ -66,6 +70,41 @@ def _make_adapter(external: Path, device: Any) -> ChunbaobaoDeepJSCCAdapter:
     return adapter
 
 
+def _common_random_channel(items: list[tuple[Any, Any]], snr_db: float) -> list[Any]:
+    """Apply channels with one shared standardized AWGN realization.
+
+    The upstream channel scales noise to each latent's power. Replaying the RNG
+    state therefore keeps the Gaussian draw paired while preserving the proper
+    per-condition noise scale. The global RNG advances exactly once.
+    """
+
+    torch = _torch()
+    cpu_start = torch.random.get_rng_state()
+    cuda_start = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
+    cpu_end = None
+    cuda_end = None
+    outputs = []
+    for index, (adapter, latent) in enumerate(items):
+        torch.random.set_rng_state(cpu_start)
+        if cuda_start is not None:
+            torch.cuda.set_rng_state_all(cuda_start)
+        outputs.append(adapter.apply_channel(latent, snr_db))
+        if index == 0:
+            cpu_end = torch.random.get_rng_state()
+            cuda_end = torch.cuda.get_rng_state_all() if cuda_start is not None else None
+    if cpu_end is not None:
+        torch.random.set_rng_state(cpu_end)
+    if cuda_end is not None:
+        torch.cuda.set_rng_state_all(cuda_end)
+    return outputs
+
+
+def _is_joint_impairment(config: IQDCOffsetConfig) -> bool:
+    """Return whether both IQ imbalance and DC offset are materially enabled."""
+
+    return (config.gain_db != 0.0 or config.phase_deg != 0.0) and config.dc_magnitude != 0.0
+
+
 def run_p0(args: argparse.Namespace, root: Path, device: Any) -> Path:
     torch = _torch()
     set_seed(args.seed)
@@ -90,18 +129,21 @@ def _measure_candidate(adapter: Any, loader: Any, target: Any, config: IQDCOffse
     impaired_parts: list[np.ndarray] = []
     clean_parts: list[np.ndarray] = []
     triggered_parts: list[np.ndarray] = []
+    source_parts: list[np.ndarray] = []
     seen = 0
     with torch.no_grad():
         for batch in loader:
             images = batch[0].to(device, non_blocking=True)
             latent = adapter.encode(images)
             triggered = apply_iq_dc_torch(latent, config)
-            clean_output = adapter.decode(adapter.apply_channel(latent, 7.0))
-            triggered_output = adapter.decode(adapter.apply_channel(triggered, 7.0))
+            clean_rx, triggered_rx = _common_random_channel([(adapter, latent), (adapter, triggered)], 7.0)
+            clean_output = adapter.decode(clean_rx)
+            triggered_output = adapter.decode(triggered_rx)
             reference_parts.append(latent.detach().cpu().numpy())
             impaired_parts.append(triggered.detach().cpu().numpy())
             clean_parts.append(clean_output.detach().cpu().numpy())
             triggered_parts.append(triggered_output.detach().cpu().numpy())
+            source_parts.append(images.detach().cpu().numpy())
             seen += images.shape[0]
             if max_samples and seen >= max_samples:
                 break
@@ -109,13 +151,14 @@ def _measure_candidate(adapter: Any, loader: Any, target: Any, config: IQDCOffse
     impaired = np.concatenate(impaired_parts)[:max_samples]
     clean = np.concatenate(clean_parts)[:max_samples]
     triggered = np.concatenate(triggered_parts)[:max_samples]
+    source = np.concatenate(source_parts)[:max_samples]
     target_np = target.detach().cpu().numpy()
     trigger_target_psnr = target_psnr_np(triggered, target_np)
     return CandidateMeasurement(
         config=config,
         evm_rms=evm_rms_numpy(reference, impaired),
         power_change_db=power_change_db_numpy(reference, impaired),
-        clean_psnr_loss_db=float(np.mean(target_psnr_np(clean, clean)) - np.mean(target_psnr_np(triggered, clean))),
+        clean_psnr_loss_db=float(np.mean(paired_psnr_drop_np(clean, triggered, source))),
         clean_false_activation_rate=float(np.mean(trigger_target_psnr >= 25.0)),
     )
 
@@ -126,10 +169,22 @@ def run_p1(args: argparse.Namespace, root: Path, device: Any, clean_checkpoint: 
     adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
     _load_checkpoint(adapter, clean_checkpoint, device)
     measurements = [_measure_candidate(adapter, loaders[1], target, config, device, max_samples=args.scan_samples) for config in iter_fixed_trigger_configs()]
-    selected = select_trigger_candidate(measurements)
+    selection_pool = measurements if args.allow_single_impairment_selection else [item for item in measurements if _is_joint_impairment(item.config)]
+    if not selection_pool:
+        raise RuntimeError("no joint IQ+DC candidates were measured; cannot select the required combined trigger")
+    selected = select_trigger_candidate(selection_pool)
     phase_dir = root / "runs" / "P1"
     _dump(phase_dir / "measurements.json", [{**asdict(item), "config": asdict(item.config), "trigger_hash": trigger_config_hash(item.config)} for item in measurements])
-    _dump(phase_dir / "selected_trigger.json", {"config": asdict(selected.config), "trigger_hash": trigger_config_hash(selected.config), "evm_rms": selected.evm_rms, "power_change_db": selected.power_change_db, "clean_psnr_loss_db": selected.clean_psnr_loss_db, "clean_false_activation_rate": selected.clean_false_activation_rate})
+    _dump(phase_dir / "selected_trigger.json", {
+        "config": asdict(selected.config),
+        "trigger_hash": trigger_config_hash(selected.config),
+        "evm_rms": selected.evm_rms,
+        "power_change_db": selected.power_change_db,
+        "clean_psnr_loss_db": selected.clean_psnr_loss_db,
+        "clean_false_activation_rate": selected.clean_false_activation_rate,
+        "selection_policy": "max_evm_then_min_clean_psnr_loss_then_lexicographic_among_joint_nonzero_candidates" if not args.allow_single_impairment_selection else "max_evm_then_min_clean_psnr_loss_then_lexicographic_among_all_candidates",
+        "selection_pool_size": len(selection_pool),
+    })
     # The threshold is frozen exactly once for the selected candidate.
     trigger_scores: list[np.ndarray] = []
     with torch.no_grad():
@@ -150,32 +205,63 @@ def run_p2(args: argparse.Namespace, root: Path, device: Any, trigger_config: IQ
     torch = _torch()
     selected = trigger_config
     for trigger_kind in args.trigger_types:
-        for poison_rate in args.poison_rates:
-            for seed in args.seeds:
-                set_seed(seed)
-                base, target, _, train_indices, _ = _make_loaders(root, split_seed=args.split_seed, batch_size=args.batch_size, workers=args.workers)
-                target_sha = sha256_array(target)
-                manifest = build_poison_manifest("CIFAR10", len(base), poison_rate, seed=seed, target_index=0, target_sha256=target_sha, eligible_indices=train_indices)
-                _, _, loaders, _, _ = _make_loaders(root, split_seed=args.split_seed, batch_size=args.batch_size, workers=args.workers, manifest=manifest)
-                adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
-                trigger = selected
-                parameters = list(adapter.model.parameters())
-                if trigger_kind == "learnable":
-                    from rf_backdoor.impairments import LearnableIQDCOffset
+        penalty_pairs = [(0.0, 0.0)] if trigger_kind == "fixed" else list(product(args.evm_penalty_weights, args.power_penalty_weights))
+        for evm_penalty_weight, power_penalty_weight in penalty_pairs:
+            for poison_rate in args.poison_rates:
+                for seed in args.seeds:
+                    set_seed(seed)
+                    base, target, _, train_indices, _ = _make_loaders(root, split_seed=args.split_seed, batch_size=args.batch_size, workers=args.workers)
+                    target_sha = sha256_array(target)
+                    manifest = build_poison_manifest("CIFAR10", len(base), poison_rate, seed=seed, target_index=0, target_sha256=target_sha, eligible_indices=train_indices)
+                    _, _, loaders, _, _ = _make_loaders(root, split_seed=args.split_seed, batch_size=args.batch_size, workers=args.workers, manifest=manifest)
+                    adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
+                    trigger = selected
+                    parameters = list(adapter.model.parameters())
+                    if trigger_kind == "learnable":
+                        from rf_backdoor.impairments import LearnableIQDCOffset
 
-                    trigger = LearnableIQDCOffset(selected).to(device)
-                    parameters += list(trigger.parameters())
-                optimizer = torch.optim.Adam(parameters, lr=args.learning_rate, weight_decay=args.weight_decay)
-                config = TrainingConfig(snr_db=7.0, poison_weight=1.0, max_epochs=args.epochs, early_stopping_start=args.early_stopping_start, patience=args.patience)
-                run_dir = root / "runs" / "P2" / trigger_kind / f"poison_{poison_rate:g}" / f"seed_{seed}"
-                run_dir.mkdir(parents=True, exist_ok=True)
-                manifest.write_json(run_dir / "poison_manifest.json")
-                history = fit(adapter, loaders[0], loaders[1], optimizer, config=config, device=device, trigger=trigger, target=target.to(device), checkpoint_path=run_dir / "best.pt")
-                _dump(run_dir / "history.json", history)
-                _dump(run_dir / "trigger.json", {"kind": trigger_kind, "config": asdict(trigger.config()) if trigger_kind == "learnable" else asdict(trigger), "manifest_sha256": manifest.manifest_sha256})
-                metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
-                metadata.update({"phase": "P2", "trigger_kind": trigger_kind, "poison_rate": poison_rate, "manifest_sha256": manifest.manifest_sha256})
-                write_run_metadata(run_dir / "run_metadata.json", metadata, artifacts=[run_dir / "best.pt", run_dir / "history.json", run_dir / "poison_manifest.json"])
+                        trigger = LearnableIQDCOffset(selected).to(device)
+                        parameters += list(trigger.parameters())
+                    optimizer = torch.optim.Adam(parameters, lr=args.learning_rate, weight_decay=args.weight_decay)
+                    config = TrainingConfig(
+                        snr_db=7.0,
+                        poison_weight=1.0,
+                        evm_penalty_weight=evm_penalty_weight,
+                        power_penalty_weight=power_penalty_weight,
+                        max_epochs=args.epochs,
+                        early_stopping_start=args.early_stopping_start,
+                        patience=args.patience,
+                    )
+                    run_root = root / "runs" / P2_V2_ROOT / trigger_kind
+                    if trigger_kind == "learnable":
+                        run_root /= f"penalty_evm_{evm_penalty_weight:g}_power_{power_penalty_weight:g}"
+                    run_dir = run_root / f"poison_{poison_rate:g}" / f"seed_{seed}"
+                    run_dir.mkdir(parents=True, exist_ok=True)
+                    manifest.write_json(run_dir / "poison_manifest.json")
+                    history = fit(adapter, loaders[0], loaders[1], optimizer, config=config, device=device, trigger=trigger, target=target.to(device), checkpoint_path=run_dir / "best.pt")
+                    _dump(run_dir / "history.json", history)
+                    if trigger_kind == "learnable":
+                        best_payload = torch.load(run_dir / "best.pt", map_location=device)
+                        trigger.load_state_dict(best_payload["trigger"])
+                    _dump(run_dir / "trigger.json", {
+                        "kind": trigger_kind,
+                        "objective_version": "per_sample_v2",
+                        "config": asdict(trigger.config()) if trigger_kind == "learnable" else asdict(trigger),
+                        "manifest_sha256": manifest.manifest_sha256,
+                        "evm_penalty_weight": evm_penalty_weight,
+                        "power_penalty_weight": power_penalty_weight,
+                    })
+                    metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
+                    metadata.update({
+                        "phase": "P2",
+                        "trigger_kind": trigger_kind,
+                        "poison_rate": poison_rate,
+                        "manifest_sha256": manifest.manifest_sha256,
+                        "evm_penalty_weight": evm_penalty_weight,
+                        "power_penalty_weight": power_penalty_weight,
+                        "objective_version": "per_sample_v2",
+                    })
+                    write_run_metadata(run_dir / "run_metadata.json", metadata, artifacts=[run_dir / "best.pt", run_dir / "history.json", run_dir / "poison_manifest.json"])
 
 
 def _trigger_for_run(run_dir: Path, selected_config: IQDCOffsetConfig, checkpoint: dict[str, Any], device: Any) -> Any:
@@ -206,21 +292,27 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
     clean_checkpoint_path = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
     _load_checkpoint(clean_adapter, clean_checkpoint_path, device)
     clean_adapter.model.eval()
-    run_paths = sorted((root / "runs" / "P2").glob("*/*/seed_*/best.pt"))
+    run_paths = sorted((root / "runs" / P2_V2_ROOT).rglob("best.pt"))
     for checkpoint_path in run_paths:
         run_dir = checkpoint_path.parent
+        trigger_payload = json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))
+        if trigger_payload.get("objective_version") != "per_sample_v2" and not args.include_legacy_runs:
+            continue
         checkpoint = torch.load(checkpoint_path, map_location=device)
         backdoor_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
         backdoor_adapter.model.load_state_dict(checkpoint["model"])
         backdoor_adapter.model.eval()
         trigger = _trigger_for_run(run_dir, selected_config, checkpoint, device)
         scores = []
-        for snr_db in args.test_snr_db:
+        trigger_stealth: dict[str, Any] | None = None
+        for snr_index, snr_db in enumerate(args.test_snr_db):
             clean_clean_parts: list[np.ndarray] = []
             clean_trigger_parts: list[np.ndarray] = []
             backdoor_clean_parts: list[np.ndarray] = []
             backdoor_trigger_parts: list[np.ndarray] = []
             source_parts: list[np.ndarray] = []
+            latent_parts: list[np.ndarray] = []
+            trigger_latent_parts: list[np.ndarray] = []
             with torch.no_grad():
                 for batch in test_loader:
                     images = batch[0].to(device, non_blocking=True)
@@ -233,10 +325,35 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
                     else:
                         clean_trigger_latent = trigger(clean_latent)
                         backdoor_trigger_latent = trigger(backdoor_latent)
-                    clean_clean_parts.append(clean_adapter.decode(clean_adapter.apply_channel(clean_latent, snr_db)).cpu().numpy())
-                    clean_trigger_parts.append(clean_adapter.decode(clean_adapter.apply_channel(clean_trigger_latent, snr_db)).cpu().numpy())
-                    backdoor_clean_parts.append(backdoor_adapter.decode(backdoor_adapter.apply_channel(backdoor_latent, snr_db)).cpu().numpy())
-                    backdoor_trigger_parts.append(backdoor_adapter.decode(backdoor_adapter.apply_channel(backdoor_trigger_latent, snr_db)).cpu().numpy())
+                    if snr_index == 0:
+                        latent_parts.append(backdoor_latent.detach().cpu().numpy())
+                        trigger_latent_parts.append(backdoor_trigger_latent.detach().cpu().numpy())
+                    clean_clean_rx, clean_trigger_rx, backdoor_clean_rx, backdoor_trigger_rx = _common_random_channel(
+                        [
+                            (clean_adapter, clean_latent),
+                            (clean_adapter, clean_trigger_latent),
+                            (backdoor_adapter, backdoor_latent),
+                            (backdoor_adapter, backdoor_trigger_latent),
+                        ],
+                        snr_db,
+                    )
+                    clean_clean_parts.append(clean_adapter.decode(clean_clean_rx).cpu().numpy())
+                    clean_trigger_parts.append(clean_adapter.decode(clean_trigger_rx).cpu().numpy())
+                    backdoor_clean_parts.append(backdoor_adapter.decode(backdoor_clean_rx).cpu().numpy())
+                    backdoor_trigger_parts.append(backdoor_adapter.decode(backdoor_trigger_rx).cpu().numpy())
+            if snr_index == 0:
+                latent_array = np.concatenate(latent_parts)
+                trigger_latent_array = np.concatenate(trigger_latent_parts)
+                evm = evm_rms_numpy(latent_array, trigger_latent_array)
+                power_change = power_change_db_numpy(latent_array, trigger_latent_array)
+                trigger_stealth = {
+                    "evm_rms": evm,
+                    "nmse": nmse_numpy(latent_array, trigger_latent_array),
+                    "power_change_db": power_change,
+                    "evm_limit": 0.10,
+                    "power_change_db_max_abs": 0.5,
+                    "constraints_pass": evm <= 0.10 and abs(power_change) <= 0.5,
+                }
             source = np.concatenate(source_parts)
             report = compute_four_way_report(
                 np.concatenate(clean_clean_parts),
@@ -246,15 +363,147 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
                 source,
                 target,
                 asr_threshold_db=threshold,
-                metadata={"snr_db": snr_db, "trigger": json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))},
+                metadata={"snr_db": snr_db, "trigger": trigger_payload},
             )
             scores.append(report.to_dict())
-        _dump(run_dir / "four_way.json", {"asr_threshold_db": threshold, "scores": scores})
+        _dump(run_dir / "four_way.json", {"asr_threshold_db": threshold, "trigger_stealth": trigger_stealth, "scores": scores})
+
+
+def run_audit_baseline(args: argparse.Namespace, root: Path, device: Any) -> None:
+    """Recompute one P0 checkpoint on validation and test with explicit labels."""
+
+    torch = _torch()
+    from torch.utils.data import DataLoader
+    from rf_backdoor.training import evaluate_clean_epoch
+
+    _, _, loaders, _, validation_indices = _make_loaders(
+        root,
+        split_seed=args.split_seed,
+        batch_size=args.batch_size,
+        workers=args.workers,
+    )
+    test = CIFAR10Dataset(root / "data", train=False)
+    test_loader = DataLoader(test, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, persistent_workers=args.workers > 0)
+    checkpoint_path = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
+    adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
+    checkpoint = _load_checkpoint(adapter, checkpoint_path, device)
+    adapter.model.eval()
+
+    set_seed(args.evaluation_seed)
+    validation = evaluate_clean_epoch(adapter, loaders[1], snr_db=7.0, device=device)
+    set_seed(args.evaluation_seed)
+    test_metrics = evaluate_clean_epoch(adapter, test_loader, snr_db=7.0, device=device)
+
+    four_way_values: list[dict[str, Any]] = []
+    for path in sorted((root / "runs" / P2_V2_ROOT).rglob("four_way.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for score in payload.get("scores", []):
+            if float(score.get("metadata", {}).get("snr_db", float("nan"))) == 7.0:
+                metrics = score.get("metrics", {})
+                four_way_values.append({
+                    "path": str(path),
+                    "reconstruction_psnr_db": metrics.get("psnr", {}).get("clean_model_clean_channel"),
+                    "target_psnr_db": metrics.get("target_psnr", {}).get("clean_model_clean_channel"),
+                })
+
+    checkpoint_validation = checkpoint.get("metrics", {}).get("validation_psnr")
+    delta_db = float(test_metrics["psnr"] - validation["psnr"])
+    verdict = "PASS" if abs(delta_db) <= args.baseline_delta_tolerance_db else "FAIL"
+    _dump(root / "runs" / "baseline_audit.json", {
+        "verdict": verdict,
+        "tolerance_db": args.baseline_delta_tolerance_db,
+        "checkpoint": {
+            "path": str(checkpoint_path),
+            "sha256": sha256_file(checkpoint_path),
+            "epoch": checkpoint.get("epoch"),
+            "stored_validation_psnr_db": checkpoint_validation,
+        },
+        "evaluation": {
+            "seed": args.evaluation_seed,
+            "snr_db": 7.0,
+            "validation_count": len(validation_indices),
+            "test_count": len(test),
+            "validation": validation,
+            "test": test_metrics,
+            "test_minus_validation_psnr_db": delta_db,
+        },
+        "four_way_field_check": four_way_values,
+        "interpretation": "Compare reconstruction_psnr_db with P0 PSNR; target_psnr_db measures similarity to the fixed attack target and is not a clean reconstruction baseline.",
+    })
+
+
+def run_analyze(root: Path, *, include_legacy: bool = False) -> None:
+    """Aggregate four-way metrics across training seeds without pooling images."""
+
+    groups: dict[tuple[Any, ...], list[dict[str, float]]] = {}
+    skipped_legacy = 0
+    for path in sorted((root / "runs" / P2_V2_ROOT).rglob("four_way.json")):
+        run_dir = path.parent
+        trigger = json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))
+        metadata = json.loads((run_dir / "run_metadata.json").read_text(encoding="utf-8"))
+        if trigger.get("objective_version") != "per_sample_v2" and not include_legacy:
+            skipped_legacy += 1
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        stealth = payload.get("trigger_stealth") or {}
+        for score in payload.get("scores", []):
+            snr_db = float(score["metadata"]["snr_db"])
+            key = (
+                trigger["kind"],
+                float(metadata["poison_rate"]),
+                float(trigger.get("evm_penalty_weight", 0.0)),
+                float(trigger.get("power_penalty_weight", 0.0)),
+                snr_db,
+            )
+            metrics = score["metrics"]
+            groups.setdefault(key, []).append({
+                "seed": float(metadata["seed"]),
+                "asr": float(metrics["asr"]["backdoored_model_trigger_channel"]),
+                "clean_false_activation_rate": float(metrics["asr"]["clean_model_trigger_channel"]),
+                "backdoor_lift": float(metrics["asr"]["backdoor_lift"]),
+                "clean_psnr_drop_db": float(-metrics["psnr"]["clean_utility_delta"]),
+                "target_psnr_db": float(metrics["target_psnr"]["backdoored_model_trigger_channel"]),
+                "evm_rms": float(stealth.get("evm_rms", float("nan"))),
+                "power_change_db": float(stealth.get("power_change_db", float("nan"))),
+            })
+
+    summaries = []
+    for key, rows in sorted(groups.items()):
+        trigger_kind, poison_rate, evm_weight, power_weight, snr_db = key
+        seed_values = [int(row["seed"]) for row in rows]
+        if len(seed_values) != len(set(seed_values)):
+            raise ValueError(f"duplicate training seed in result group {key}")
+        summary: dict[str, Any] = {
+            "trigger_kind": trigger_kind,
+            "poison_rate": poison_rate,
+            "evm_penalty_weight": evm_weight,
+            "power_penalty_weight": power_weight,
+            "snr_db": snr_db,
+            "seeds": sorted(seed_values),
+        }
+        for metric in ("asr", "clean_false_activation_rate", "backdoor_lift", "clean_psnr_drop_db", "target_psnr_db"):
+            summary[metric] = mean_std_t_ci(np.asarray([row[metric] for row in rows]))
+        finite_evm = [row["evm_rms"] for row in rows if np.isfinite(row["evm_rms"])]
+        finite_power = [row["power_change_db"] for row in rows if np.isfinite(row["power_change_db"])]
+        summary["evm_rms"] = mean_std_t_ci(np.asarray(finite_evm)) if finite_evm else None
+        summary["power_change_db"] = mean_std_t_ci(np.asarray(finite_power)) if finite_power else None
+        summaries.append(summary)
+
+    _dump(root / "runs" / "summary.json", {
+        "objective_version": "per_sample_v2" if not include_legacy else "mixed_including_legacy",
+        "ci_unit": "training_seed",
+        "groups": summaries,
+        "skipped_legacy_runs": skipped_legacy,
+        "limitations": [
+            "Success controls (IQ-only, DC-only, equal-EVM random and other ablations) require separate result files.",
+            "A confidence interval is not available for groups with one seed.",
+        ],
+    })
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--phase", choices=["p0", "p1", "p2", "evaluate", "all"], default="all")
+    parser.add_argument("--phase", choices=["p0", "p1", "p2", "evaluate", "audit", "analyze", "all"], default="all")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--seed", type=int, default=0)
@@ -266,13 +515,22 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--weight-decay", type=float, default=5e-4)
-    parser.add_argument("--scan-samples", type=int, default=512)
+    parser.add_argument("--scan-samples", type=int, default=4999)
     parser.add_argument("--test-snr-db", type=float, nargs="+", default=[1, 4, 7, 10, 13, 19, 25])
     parser.add_argument("--poison-rates", type=float, nargs="+", default=[0.01, 0.05, 0.10])
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
     parser.add_argument("--trigger-types", nargs="+", choices=["fixed", "learnable"], default=["fixed", "learnable"])
+    parser.add_argument("--evm-penalty-weights", type=float, nargs="+", default=[100.0])
+    parser.add_argument("--power-penalty-weights", type=float, nargs="+", default=[10.0])
+    parser.add_argument("--evaluation-seed", type=int, default=20260823)
+    parser.add_argument("--baseline-delta-tolerance-db", type=float, default=1.0)
+    parser.add_argument("--include-legacy-runs", action="store_true")
+    parser.add_argument("--allow-single-impairment-selection", action="store_true")
     args = parser.parse_args()
     root = args.root.resolve()
+    if args.phase == "analyze":
+        run_analyze(root, include_legacy=args.include_legacy_runs)
+        return 0
     device = _torch().device(args.device)
     clean_checkpoint = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
     if args.phase in ("p0", "all"):
@@ -286,9 +544,13 @@ def main() -> int:
         trigger = IQDCOffsetConfig(**selected_payload["config"])
     if args.phase in ("p2", "all"):
         run_p2(args, root, device, trigger)
-    if args.phase == "evaluate":
+    if args.phase in ("evaluate", "all"):
         selected_payload = json.loads((root / "runs" / "P1" / "selected_trigger.json").read_text(encoding="utf-8"))
         run_evaluate(args, root, device, IQDCOffsetConfig(**selected_payload["config"]))
+    if args.phase in ("audit", "all"):
+        run_audit_baseline(args, root, device)
+    if args.phase == "all":
+        run_analyze(root, include_legacy=args.include_legacy_runs)
     return 0
 
 
