@@ -109,9 +109,6 @@ def main() -> int:
 
     root = args.root.resolve()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    torch.manual_seed(20260823)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(20260823)
     dataset = CIFAR10Dataset(root / "data", train=True)
     manifest_path = root / "runs" / "P2_per_sample_v2" / "fixed" / f"poison_{args.poison_rate:g}" / f"seed_{args.seed}" / "poison_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -131,6 +128,9 @@ def main() -> int:
     backdoor_checkpoint = torch.load(backdoor_checkpoint_path, map_location=device)
     clean_adapter.model.load_state_dict(clean_checkpoint["model"])
     backdoor_adapter.model.load_state_dict(backdoor_checkpoint["model"])
+    torch.manual_seed(20260823)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(20260823)
 
     source_batch = source.unsqueeze(0).to(device)
     with torch.no_grad():
