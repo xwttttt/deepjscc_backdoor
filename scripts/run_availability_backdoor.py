@@ -184,6 +184,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         "power_penalty_weight": power_weight,
                         "failure_drop_db": args.failure_drop_db,
                         "mixed_precision": not args.no_amp,
+                        "mixed_precision_dtype": "bfloat16" if not args.no_amp else "float32",
                     }
                     _dump(run_dir / "trigger.json", trigger_payload)
                     metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
@@ -199,6 +200,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         "evm_penalty_weight": evm_weight,
                         "power_penalty_weight": power_weight,
                         "mixed_precision": not args.no_amp,
+                        "mixed_precision_dtype": "bfloat16" if not args.no_amp else "float32",
                     })
                     write_run_metadata(run_dir / "run_metadata.json", metadata, artifacts=[run_dir / "best.pt", run_dir / "history.json", run_dir / "poison_manifest.json", run_dir / "trigger.json"])
 

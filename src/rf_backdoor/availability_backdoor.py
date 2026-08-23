@@ -157,7 +157,9 @@ def _autocast_context(device: Any, enabled: bool) -> Any:
     torch = _torch()
     device_type = getattr(device, "type", str(device).split(":", 1)[0])
     if enabled and device_type == "cuda":
-        return torch.autocast(device_type="cuda", dtype=torch.float16)
+        # BF16 keeps AMP's Tensor Core speed while avoiding FP16 activation
+        # overflow in the transposed-convolution decoder.
+        return torch.autocast(device_type="cuda", dtype=torch.bfloat16)
     return nullcontext()
 
 
@@ -333,6 +335,8 @@ def train_availability_backdoor_epoch(
 
 
 def _branch_metrics(clean_reconstruction: np.ndarray, triggered_reconstruction: np.ndarray, source: np.ndarray, failure_drop_db: float) -> dict[str, float]:
+    if not all(np.isfinite(array).all() for array in (clean_reconstruction, triggered_reconstruction, source)):
+        raise FloatingPointError("non-finite reconstruction encountered during availability evaluation")
     clean_psnr = psnr_np(clean_reconstruction, source)
     triggered_psnr = psnr_np(triggered_reconstruction, source)
     clean_mse = np.square(clean_reconstruction - source).reshape(source.shape[0], -1).mean(axis=1)
