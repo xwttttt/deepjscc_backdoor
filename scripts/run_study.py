@@ -142,6 +142,7 @@ def _evaluate_controls(
     target: np.ndarray,
     base_config: IQDCOffsetConfig,
     base_evm: float,
+    asr_threshold_db: float,
     device: Any,
     evaluation_seed: int,
 ) -> dict[str, Any]:
@@ -183,8 +184,8 @@ def _evaluate_controls(
         results[name] = {
             "snr_db": 7.0,
             "config": asdict(config) if config is not None else None,
-            "clean_model_asr": target_asr_np(clean_output, target, psnr_threshold_db=25.0),
-            "backdoored_model_asr": target_asr_np(backdoor_output, target, psnr_threshold_db=25.0),
+            "clean_model_asr": target_asr_np(clean_output, target, psnr_threshold_db=asr_threshold_db),
+            "backdoored_model_asr": target_asr_np(backdoor_output, target, psnr_threshold_db=asr_threshold_db),
             "evm_rms": evm_rms_numpy(reference, impaired),
             "nmse": nmse_numpy(reference, impaired),
             "power_change_db": power_change_db_numpy(reference, impaired),
@@ -477,6 +478,7 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
             target,
             base_config,
             float((trigger_stealth or {}).get("evm_rms", 0.0)),
+            threshold,
             device,
             args.evaluation_seed,
         )
