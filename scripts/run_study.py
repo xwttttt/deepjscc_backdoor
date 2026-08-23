@@ -201,6 +201,8 @@ def main() -> int:
     clean_checkpoint = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
     if args.phase in ("p0", "all"):
         clean_checkpoint = run_p0(args, root, device)
+        if args.phase == "p0":
+            return 0
     if args.phase in ("p1", "all"):
         trigger = run_p1(args, root, device, clean_checkpoint)
     else:
@@ -213,4 +215,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
