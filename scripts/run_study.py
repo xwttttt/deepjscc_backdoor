@@ -168,6 +168,7 @@ def run_p2(args: argparse.Namespace, root: Path, device: Any, trigger_config: IQ
                 optimizer = torch.optim.Adam(parameters, lr=args.learning_rate, weight_decay=args.weight_decay)
                 config = TrainingConfig(snr_db=7.0, poison_weight=1.0, max_epochs=args.epochs, early_stopping_start=args.early_stopping_start, patience=args.patience)
                 run_dir = root / "runs" / "P2" / trigger_kind / f"poison_{poison_rate:g}" / f"seed_{seed}"
+                run_dir.mkdir(parents=True, exist_ok=True)
                 manifest.write_json(run_dir / "poison_manifest.json")
                 history = fit(adapter, loaders[0], loaders[1], optimizer, config=config, device=device, trigger=trigger, target=target.to(device), checkpoint_path=run_dir / "best.pt")
                 _dump(run_dir / "history.json", history)
