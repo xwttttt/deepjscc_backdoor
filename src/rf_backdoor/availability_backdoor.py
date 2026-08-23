@@ -388,6 +388,12 @@ def _evaluate_branch_pairs(
     mixed_precision: bool = False,
 ) -> tuple[dict[float, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]], np.ndarray, np.ndarray]:
     torch = _torch()
+
+    def to_numpy(value: Any) -> np.ndarray:
+        # NumPy has no native bfloat16 conversion path; make the framework
+        # boundary explicit for AMP outputs and latents.
+        return value.detach().float().cpu().numpy()
+
     snrs = tuple(float(value) for value in snr_db_values)
     score_parts = {snr: [[] for _ in range(5)] for snr in snrs}
     latent_parts: list[np.ndarray] = []
@@ -417,9 +423,9 @@ def _evaluate_branch_pairs(
                     images,
                 )
                 for part, value in zip(score_parts[snr], values):
-                    part.append(value.detach().cpu().numpy())
-            latent_parts.append(backdoor_latent.detach().cpu().numpy())
-            impaired_parts.append(backdoor_trigger_latent.detach().cpu().numpy())
+                    part.append(to_numpy(value))
+            latent_parts.append(to_numpy(backdoor_latent))
+            impaired_parts.append(to_numpy(backdoor_trigger_latent))
     if not latent_parts:
         raise ValueError("evaluation loader produced no batches")
     scores = {

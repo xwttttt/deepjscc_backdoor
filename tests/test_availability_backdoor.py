@@ -123,3 +123,33 @@ def test_availability_backdoor_training_epoch_runs_through_iq_dc_trigger():
     )
     assert np.isfinite(metrics["objective"])
     assert metrics["poison_count"] == 1.0
+
+
+def test_availability_evaluation_converts_bfloat16_before_numpy():
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import _evaluate_branch_pairs
+    from rf_backdoor.impairments import IQDCOffsetConfig
+
+    class BFloatAdapter:
+        def __init__(self):
+            self.model = torch.nn.Identity()
+
+        def encode(self, images):
+            return images
+
+        def decode(self, received):
+            return received.to(torch.bfloat16)
+
+    images = torch.rand(2, 2, 2, 2)
+    loader = torch.utils.data.DataLoader(images, batch_size=2, shuffle=False)
+    scores, latent, impaired = _evaluate_branch_pairs(
+        BFloatAdapter(),
+        BFloatAdapter(),
+        loader,
+        IQDCOffsetConfig(),
+        (7.0,),
+        "cpu",
+    )
+    assert scores[7.0][0].dtype == np.float32
+    assert latent.dtype == np.float32
+    assert impaired.dtype == np.float32
