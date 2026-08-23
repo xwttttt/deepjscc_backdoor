@@ -18,8 +18,8 @@ import numpy as np
 
 from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
 from rf_backdoor.datasets import CIFAR10Dataset
-from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, mean_std_t_ci, paired_psnr_drop_np, target_psnr_np
-from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, nmse_numpy, power_change_db_numpy
+from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, mean_std_t_ci, paired_psnr_drop_np, target_asr_np, target_psnr_np
+from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, iq_mean_numpy, nmse_numpy, papr_numpy, power_change_db_numpy
 from rf_backdoor.metadata import collect_run_metadata, sha256_file, write_run_metadata
 from rf_backdoor.poisoning import DeterministicPoisonedDataset, build_poison_manifest, build_split_indices, sha256_array
 from rf_backdoor.scan import CandidateMeasurement, iter_fixed_trigger_configs, select_trigger_candidate, trigger_config_hash
@@ -104,6 +104,103 @@ def _is_joint_impairment(config: IQDCOffsetConfig) -> bool:
     """Return whether both IQ imbalance and DC offset are materially enabled."""
 
     return (config.gain_db != 0.0 or config.phase_deg != 0.0) and config.dc_magnitude != 0.0
+
+
+def _control_configs(base: IQDCOffsetConfig) -> dict[str, IQDCOffsetConfig]:
+    """Build pre-registered channel controls from the frozen trigger."""
+
+    clamp = lambda value, low, high: max(low, min(high, value))
+    return {
+        "iq_only": IQDCOffsetConfig(base.gain_db, base.phase_deg, 0.0, 0.0, base.order),
+        "dc_only": IQDCOffsetConfig(0.0, 0.0, base.dc_magnitude, base.dc_phase_deg, base.order),
+        "sign_flip": IQDCOffsetConfig(-base.gain_db, base.phase_deg, base.dc_magnitude, base.dc_phase_deg + 180.0, base.order),
+        "phase_flip": IQDCOffsetConfig(base.gain_db, -base.phase_deg, base.dc_magnitude, base.dc_phase_deg + 180.0, base.order),
+        "order_swap": IQDCOffsetConfig(base.gain_db, base.phase_deg, base.dc_magnitude, base.dc_phase_deg, "dc_then_iq" if base.order == "iq_then_dc" else "iq_then_dc"),
+        "parameter_neighborhood": IQDCOffsetConfig(
+            clamp(base.gain_db + 0.25, -1.0, 1.0),
+            clamp(base.phase_deg + 1.0, -5.0, 5.0),
+            clamp(base.dc_magnitude + 0.01, 0.0, 0.1),
+            base.dc_phase_deg,
+            base.order,
+        ),
+        "phase_rotation": IQDCOffsetConfig(base.gain_db, base.phase_deg, base.dc_magnitude, base.dc_phase_deg + 45.0, base.order),
+    }
+
+
+def _equal_evm_random_torch(value: Any, evm_target: float) -> Any:
+    torch = _torch()
+    noise = torch.randn_like(value)
+    reference_rms = torch.sqrt(value.square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
+    noise_rms = torch.sqrt(noise.square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
+    return value + float(evm_target) * reference_rms * noise / noise_rms
+
+
+def _evaluate_controls(
+    clean_adapter: Any,
+    backdoor_adapter: Any,
+    test_loader: Any,
+    target: np.ndarray,
+    base_config: IQDCOffsetConfig,
+    base_evm: float,
+    device: Any,
+    evaluation_seed: int,
+) -> dict[str, Any]:
+    """Evaluate registered trigger controls at the training SNR."""
+
+    controls: dict[str, IQDCOffsetConfig | None] = _control_configs(base_config)
+    controls["equal_evm_random"] = None
+    results: dict[str, Any] = {}
+    torch = _torch()
+    for control_index, (name, config) in enumerate(controls.items()):
+        set_seed(evaluation_seed + control_index)
+        clean_outputs: list[np.ndarray] = []
+        backdoor_outputs: list[np.ndarray] = []
+        reference_parts: list[np.ndarray] = []
+        impaired_parts: list[np.ndarray] = []
+        with torch.no_grad():
+            for batch in test_loader:
+                images = batch[0].to(device, non_blocking=True)
+                clean_latent = clean_adapter.encode(images)
+                backdoor_latent = backdoor_adapter.encode(images)
+                if config is None:
+                    clean_trigger_latent = _equal_evm_random_torch(clean_latent, base_evm)
+                    backdoor_trigger_latent = _equal_evm_random_torch(backdoor_latent, base_evm)
+                else:
+                    clean_trigger_latent = apply_iq_dc_torch(clean_latent, config)
+                    backdoor_trigger_latent = apply_iq_dc_torch(backdoor_latent, config)
+                clean_rx, backdoor_rx = _common_random_channel(
+                    [(clean_adapter, clean_trigger_latent), (backdoor_adapter, backdoor_trigger_latent)],
+                    7.0,
+                )
+                clean_outputs.append(clean_adapter.decode(clean_rx).detach().cpu().numpy())
+                backdoor_outputs.append(backdoor_adapter.decode(backdoor_rx).detach().cpu().numpy())
+                reference_parts.append(backdoor_latent.detach().cpu().numpy())
+                impaired_parts.append(backdoor_trigger_latent.detach().cpu().numpy())
+        reference = np.concatenate(reference_parts)
+        impaired = np.concatenate(impaired_parts)
+        clean_output = np.concatenate(clean_outputs)
+        backdoor_output = np.concatenate(backdoor_outputs)
+        results[name] = {
+            "snr_db": 7.0,
+            "config": asdict(config) if config is not None else None,
+            "clean_model_asr": target_asr_np(clean_output, target, psnr_threshold_db=25.0),
+            "backdoored_model_asr": target_asr_np(backdoor_output, target, psnr_threshold_db=25.0),
+            "evm_rms": evm_rms_numpy(reference, impaired),
+            "nmse": nmse_numpy(reference, impaired),
+            "power_change_db": power_change_db_numpy(reference, impaired),
+        }
+    return {
+        "snr_db": 7.0,
+        "base_config": asdict(base_config),
+        "base_evm_rms": base_evm,
+        "definitions": {
+            "sign_flip": "IQ gain sign and DC phase shifted by 180 degrees",
+            "phase_flip": "IQ phase sign and DC phase shifted by 180 degrees",
+            "parameter_neighborhood": "+0.25 dB gain, +1 degree IQ phase, +0.01 DC magnitude, clamped to scan bounds",
+            "equal_evm_random": "independent Gaussian latent perturbation normalized per sample to the base trigger EVM",
+        },
+        "controls": results,
+    }
 
 
 def run_p0(args: argparse.Namespace, root: Path, device: Any) -> Path:
@@ -304,6 +401,7 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
         backdoor_adapter.model.load_state_dict(checkpoint["model"])
         backdoor_adapter.model.eval()
         trigger = _trigger_for_run(run_dir, selected_config, checkpoint, device)
+        base_config = trigger if isinstance(trigger, IQDCOffsetConfig) else trigger.config()
         scores = []
         trigger_stealth: dict[str, Any] | None = None
         for snr_index, snr_db in enumerate(args.test_snr_db):
@@ -351,6 +449,10 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
                     "evm_rms": evm,
                     "nmse": nmse_numpy(latent_array, trigger_latent_array),
                     "power_change_db": power_change,
+                    "reference_iq_mean": iq_mean_numpy(latent_array),
+                    "trigger_iq_mean": iq_mean_numpy(trigger_latent_array),
+                    "reference_papr": papr_numpy(latent_array),
+                    "trigger_papr": papr_numpy(trigger_latent_array),
                     "evm_limit": 0.10,
                     "power_change_db_max_abs": 0.5,
                     "constraints_pass": evm <= 0.10 and abs(power_change) <= 0.5,
@@ -368,6 +470,17 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
             )
             scores.append(report.to_dict())
         _dump(run_dir / "four_way.json", {"asr_threshold_db": threshold, "trigger_stealth": trigger_stealth, "scores": scores})
+        controls = _evaluate_controls(
+            clean_adapter,
+            backdoor_adapter,
+            test_loader,
+            target,
+            base_config,
+            float((trigger_stealth or {}).get("evm_rms", 0.0)),
+            device,
+            args.evaluation_seed,
+        )
+        _dump(run_dir / "controls.json", controls)
 
 
 def run_audit_baseline(args: argparse.Namespace, root: Path, device: Any) -> None:
@@ -437,6 +550,7 @@ def run_analyze(root: Path, *, include_legacy: bool = False) -> None:
     """Aggregate four-way metrics across training seeds without pooling images."""
 
     groups: dict[tuple[Any, ...], list[dict[str, float]]] = {}
+    control_groups: dict[tuple[Any, ...], list[dict[str, float]]] = {}
     skipped_legacy = 0
     for path in sorted((root / "runs" / P2_V2_ROOT).rglob("four_way.json")):
         run_dir = path.parent
@@ -467,6 +581,26 @@ def run_analyze(root: Path, *, include_legacy: bool = False) -> None:
                 "evm_rms": float(stealth.get("evm_rms", float("nan"))),
                 "power_change_db": float(stealth.get("power_change_db", float("nan"))),
             })
+        controls_path = run_dir / "controls.json"
+        if controls_path.exists():
+            controls_payload = json.loads(controls_path.read_text(encoding="utf-8"))
+            for control_name, control in controls_payload.get("controls", {}).items():
+                if float(control.get("snr_db", float("nan"))) != 7.0:
+                    continue
+                control_key = (
+                    trigger["kind"],
+                    float(metadata["poison_rate"]),
+                    float(trigger.get("evm_penalty_weight", 0.0)),
+                    float(trigger.get("power_penalty_weight", 0.0)),
+                    control_name,
+                )
+                control_groups.setdefault(control_key, []).append({
+                    "seed": float(metadata["seed"]),
+                    "clean_model_asr": float(control["clean_model_asr"]),
+                    "backdoored_model_asr": float(control["backdoored_model_asr"]),
+                    "evm_rms": float(control["evm_rms"]),
+                    "power_change_db": float(control["power_change_db"]),
+                })
 
     summaries = []
     for key, rows in sorted(groups.items()):
@@ -490,13 +624,32 @@ def run_analyze(root: Path, *, include_legacy: bool = False) -> None:
         summary["power_change_db"] = mean_std_t_ci(np.asarray(finite_power)) if finite_power else None
         summaries.append(summary)
 
-    _dump(root / "runs" / "summary.json", {
+    control_summaries = []
+    for key, rows in sorted(control_groups.items()):
+        trigger_kind, poison_rate, evm_weight, power_weight, control_name = key
+        seeds = [int(row["seed"]) for row in rows]
+        if len(seeds) != len(set(seeds)):
+            raise ValueError(f"duplicate training seed in control result group {key}")
+        control_summaries.append({
+            "trigger_kind": trigger_kind,
+            "poison_rate": poison_rate,
+            "evm_penalty_weight": evm_weight,
+            "power_penalty_weight": power_weight,
+            "control": control_name,
+            "seeds": sorted(seeds),
+            "clean_model_asr": mean_std_t_ci(np.asarray([row["clean_model_asr"] for row in rows])),
+            "backdoored_model_asr": mean_std_t_ci(np.asarray([row["backdoored_model_asr"] for row in rows])),
+            "evm_rms": mean_std_t_ci(np.asarray([row["evm_rms"] for row in rows])),
+            "power_change_db": mean_std_t_ci(np.asarray([row["power_change_db"] for row in rows])),
+        })
+
+    _dump(root / "runs" / P2_V2_ROOT / "summary.json", {
         "objective_version": "per_sample_v2" if not include_legacy else "mixed_including_legacy",
         "ci_unit": "training_seed",
         "groups": summaries,
+        "controls": control_summaries,
         "skipped_legacy_runs": skipped_legacy,
         "limitations": [
-            "Success controls (IQ-only, DC-only, equal-EVM random and other ablations) require separate result files.",
             "A confidence interval is not available for groups with one seed.",
         ],
     })
