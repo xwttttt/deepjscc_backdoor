@@ -31,7 +31,11 @@ def _latent_magnitude(value: object) -> np.ndarray:
     channels = array.shape[1] // 2
     i = array[:, :channels]
     q = array[:, channels:]
-    return np.sqrt(i**2 + q**2).mean(axis=(0, 1))
+    magnitude = np.sqrt(i**2 + q**2)
+    if array.ndim == 3:
+        # Actual DeepJSCC output is [batch, 2*I/Q channels, symbol position].
+        return magnitude[0]
+    return magnitude.mean(axis=(0, 1))
 
 
 def main() -> int:
