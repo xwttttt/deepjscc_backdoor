@@ -1,0 +1,87 @@
+study:
+  name: deepjscc_iq_dc_offset_channel_trigger
+  scope: authorized_offline_digital_simulation_only
+  seed: 20260823
+  dataset: CIFAR10
+  target_train_index: 0
+  train_count_after_target_removal: 45000
+  bandwidth_ratio: 0.16666666666666666
+  channel: AWGN
+  train_snr_db: 7
+  test_snr_db: [1, 4, 7, 10, 13, 19, 25]
+  test_extras: false
+
+baseline:
+  repository: https://github.com/chunbaobao/Deep-JSCC-PyTorch.git
+  commit: 2665e0dc6d8bf216daf9442c5d6e5d69c5ad2f06
+  checkout_policy: external_checkout_only
+  modify_upstream: false
+
+phases:
+  P0:
+    name: clean_baseline_reproduction
+    dataset: CIFAR10
+    conditions: [clean_model_clean_channel]
+    epochs: 1000
+    early_stopping_start: 100
+    patience: 50
+  P1:
+    name: impairment_sensitivity_and_stealth_scan
+    conditions: [iq_only, dc_only, iq_plus_dc, order_swap, equal_evm_random]
+    candidate_constraints:
+      evm_rms_max: 0.10
+      average_power_change_db_max_abs: 0.5
+      clean_false_activation_rate_max: 0.001
+    candidate_selection: max_evm_then_min_clean_psnr_loss_then_lexicographic
+  P2:
+    name: poisoned_target_reconstruction
+    poison_rates: [0.01, 0.05, 0.10]
+    trigger_types: [fixed, learnable]
+    train_seeds: [0, 1, 2, 3, 4]
+
+smoke:
+  samples: 5000
+  epochs: 2
+  seeds: [0]
+
+trigger:
+  default_order: iq_then_dc
+  gain_db: [-1, -0.5, -0.25, 0, 0.25, 0.5, 1]
+  phase_deg: [-5, -2, -1, 0, 1, 2, 5]
+  dc_magnitude: [0, 0.01, 0.02, 0.05, 0.1]
+  dc_phase_deg: [0, 45, 90, 135, 180, 225, 270, 315]
+  learnable_bounds:
+    gain_db: [-1, 1]
+    phase_deg: [-5, 5]
+    dc_magnitude: [0, 0.1]
+    dc_phase_deg: [-180, 180]
+  penalty_grid:
+    evm: [10, 100, 1000]
+    power: [1, 10, 100]
+
+evaluation:
+  asr_threshold: max(25dB, clean_model_trigger_target_psnr_Q0.999_from_P1_validation)
+  required_channels:
+    - clean_model_clean_channel
+    - clean_model_trigger_channel
+    - backdoored_model_clean_channel
+    - backdoored_model_trigger_channel
+  metrics:
+    reconstruction: [psnr, ms_ssim]
+    target: [target_psnr, target_ms_ssim, asr]
+    stealth: [evm, nmse, power_change_db, iq_mean, papr]
+    summary: [mean, standard_deviation, paired_95_percent_t_ci]
+  controls: [iq_only, dc_only, sign_flip, phase_flip, order_swap, parameter_neighborhood, equal_evm_random, phase_rotation]
+
+reporting:
+  success_criteria_5_percent:
+    combination_asr_min: 0.90
+    clean_psnr_drop_max_db: 0.5
+    clean_model_trigger_asr_max: 0.01
+    backdoor_lift_ci_lower_gt: 0
+    iq_only_asr_max: 0.20
+    dc_only_asr_max: 0.20
+    equal_evm_random_asr_max: 0.05
+  report_negative_results: true
+  ci_unit: training_seed
+

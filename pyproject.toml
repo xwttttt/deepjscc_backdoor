@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepjscc-rf-backdoor-research"
+version = "0.1.0"
+description = "Offline research utilities for IQ-imbalance/DCFO triggers in DeepJSCC"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+torch = ["torch>=2.1"]
+test = ["pytest>=7"]
+
+[project.scripts]
+fetch-baseline = "rf_backdoor.cli:fetch_baseline_main"
+run-p0 = "rf_backdoor.cli:run_p0_main"
+run-p1-scan = "rf_backdoor.cli:run_p1_main"
+run-p2 = "rf_backdoor.cli:run_p2_main"
+evaluate-four-way = "rf_backdoor.cli:evaluate_four_way_main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

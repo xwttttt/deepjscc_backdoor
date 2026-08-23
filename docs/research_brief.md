@@ -1,0 +1,38 @@
+# DeepJSCC 中 IQ imbalance/DC offset 信道触发后门：实施边界
+
+本项目只研究授权的离线数字仿真。目标是判断：少量训练样本被固定目标投毒后，DeepJSCC 是否能在正常信道保持重构质量，并在特定 IQ imbalance 与 DC offset 组合出现时重构到固定目标。
+
+## 信号模型
+
+上游基线提交为 `2665e0dc6d8bf216daf9442c5d6e5d69c5ad2f06`。其编码器归一化输出按扁平化后的前后半段解释为 `I`、`Q`，形成 `z=I+jQ`。触发只放在归一化之后、AWGN 之前。
+
+IQ imbalance 使用广义镜像模型：
+
+```text
+r = 10^(gain_db/20)
+epsilon = (r - 1)/(r + 1)
+mu = cos(phi/2) + j*epsilon*sin(phi/2)
+nu = epsilon*cos(phi/2) + j*sin(phi/2)
+z_iq = mu*z + nu*conj(z)
+```
+
+零增益差、零相位差时严格得到 `mu=1, nu=0`。DC offset 对每个样本的所有复信道使用同一个常量：
+
+```text
+d = dc_magnitude * sqrt(mean(|z_iq|^2)) * exp(j*dc_phase)
+z_trigger = z_iq + d
+```
+
+默认顺序是 IQ → DC；DC → IQ 只作为顺序消融。旧的 DifferentialCFO/DCFO 代理已从代码、配置和公共接口移除，避免把“DC offset”误称为差分 CFO。
+
+## 投毒与评估
+
+目标图像为官方 CIFAR-10 训练集索引 0；目标从普通训练池排除。其余数据按种子 `20260823` 确定性划分为 45,000 训练和验证集。每个投毒率先生成 `PoisonManifest`，记录索引、实际比例、目标 SHA-256、随机种子和 manifest 哈希。
+
+必须报告四路：干净模型/干净信道、干净模型/触发信道、后门模型/干净信道、后门模型/触发信道。ASR 阈值在 P1 验证集冻结为 `max(25 dB, Q_0.999(干净模型+触发信道的 target PSNR))`，测试时不得重调。
+
+P0 是干净基线；P1 扫描固定触发器并执行 EVM、功率变化、干净误激活约束；P2 使用 1%、5%、10% 投毒率，固定/可学习触发器各用训练种子 0–4。成功与否都保留完整结果，统计单位为训练种子。
+
+## 风险与披露
+
+IQ/DC offset 是可解释的 RF 失真模型，但本项目不声称复现依赖协议观测的 RF 指纹论文。连续图像重构 ASR 也不能由分类后门结果外推。论文应公开失败结果、固定提交、许可证状态、目标哈希、环境和生成式 AI 辅助情况。
