@@ -65,8 +65,9 @@ def test_availability_backdoor_loss_uses_only_poisoned_trigger_branch():
 
     source = torch.zeros(2, 1, 2, 2)
     clean = torch.full_like(source, 0.1)
-    triggered = torch.full_like(source, 0.1, requires_grad=True)
+    triggered = torch.full_like(source, 0.1)
     triggered[1] = 0.11
+    triggered.requires_grad_()
     mask = torch.tensor([False, True])
     loss = availability_backdoor_loss(clean, triggered, source, mask, min_psnr_drop_db=3.0)
     assert loss.poison_count == 1
