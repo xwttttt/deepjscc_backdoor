@@ -71,7 +71,7 @@ def test_availability_backdoor_loss_uses_only_poisoned_trigger_branch():
     mask = torch.tensor([False, True])
     loss = availability_backdoor_loss(clean, triggered, source, mask, min_psnr_drop_db=3.0)
     assert loss.poison_count == 1
-    assert float(loss.clean) == pytest.approx(0.01)
-    assert float(loss.damage) > 0.0
+    assert float(loss.clean.detach()) == pytest.approx(0.01)
+    assert float(loss.damage.detach()) > 0.0
     loss.total.backward()
     assert triggered.grad is not None
