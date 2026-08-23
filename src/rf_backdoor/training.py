@@ -178,7 +178,10 @@ def fit(
             if checkpoint_path:
                 torch = _torch()
                 Path(checkpoint_path).parent.mkdir(parents=True, exist_ok=True)
-                torch.save({"epoch": epoch, "model": adapter.model.state_dict(), "optimizer": optimizer.state_dict(), "metrics": row}, checkpoint_path)
+                payload = {"epoch": epoch, "model": adapter.model.state_dict(), "optimizer": optimizer.state_dict(), "metrics": row}
+                if hasattr(trigger, "state_dict"):
+                    payload["trigger"] = trigger.state_dict()
+                torch.save(payload, checkpoint_path)
         elif epoch + 1 >= config.early_stopping_start:
             stale += 1
             if stale >= config.patience:

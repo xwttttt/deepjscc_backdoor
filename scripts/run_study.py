@@ -17,7 +17,7 @@ import numpy as np
 
 from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
 from rf_backdoor.datasets import CIFAR10Dataset
-from rf_backdoor.evaluation import freeze_asr_threshold, target_psnr_np
+from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, target_psnr_np
 from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, power_change_db_numpy
 from rf_backdoor.metadata import collect_run_metadata, write_run_metadata
 from rf_backdoor.poisoning import DeterministicPoisonedDataset, build_poison_manifest, build_split_indices, sha256_array
@@ -177,9 +177,81 @@ def run_p2(args: argparse.Namespace, root: Path, device: Any, trigger_config: IQ
                 write_run_metadata(run_dir / "run_metadata.json", metadata, artifacts=[run_dir / "best.pt", run_dir / "history.json", run_dir / "poison_manifest.json"])
 
 
+def _trigger_for_run(run_dir: Path, selected_config: IQDCOffsetConfig, checkpoint: dict[str, Any], device: Any) -> Any:
+    torch = _torch()
+    payload = json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))
+    if payload["kind"] == "fixed":
+        return selected_config
+    from rf_backdoor.impairments import LearnableIQDCOffset
+
+    trigger = LearnableIQDCOffset(selected_config).to(device)
+    if "trigger" not in checkpoint:
+        raise RuntimeError(f"learnable trigger state missing from checkpoint: {run_dir / 'best.pt'}")
+    trigger.load_state_dict(checkpoint["trigger"])
+    trigger.eval()
+    return trigger
+
+
+def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_config: IQDCOffsetConfig) -> None:
+    torch = _torch()
+    from torch.utils.data import DataLoader
+
+    data = CIFAR10Dataset(root / "data", train=True)
+    test = CIFAR10Dataset(root / "data", train=False)
+    target = data[0][0].numpy()
+    threshold = json.loads((root / "runs" / "P1" / "asr_threshold.json").read_text(encoding="utf-8"))["threshold_db"]
+    test_loader = DataLoader(test, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, persistent_workers=args.workers > 0)
+    clean_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
+    clean_checkpoint_path = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
+    _load_checkpoint(clean_adapter, clean_checkpoint_path, device)
+    run_paths = sorted((root / "runs" / "P2").glob("*/*/seed_*/best.pt"))
+    for checkpoint_path in run_paths:
+        run_dir = checkpoint_path.parent
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        backdoor_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
+        backdoor_adapter.model.load_state_dict(checkpoint["model"])
+        trigger = _trigger_for_run(run_dir, selected_config, checkpoint, device)
+        scores = []
+        for snr_db in args.test_snr_db:
+            clean_clean_parts: list[np.ndarray] = []
+            clean_trigger_parts: list[np.ndarray] = []
+            backdoor_clean_parts: list[np.ndarray] = []
+            backdoor_trigger_parts: list[np.ndarray] = []
+            source_parts: list[np.ndarray] = []
+            with torch.no_grad():
+                for batch in test_loader:
+                    images = batch[0].to(device, non_blocking=True)
+                    source_parts.append(images.cpu().numpy())
+                    clean_latent = clean_adapter.encode(images)
+                    backdoor_latent = backdoor_adapter.encode(images)
+                    if isinstance(trigger, IQDCOffsetConfig):
+                        clean_trigger_latent = apply_iq_dc_torch(clean_latent, trigger)
+                        backdoor_trigger_latent = apply_iq_dc_torch(backdoor_latent, trigger)
+                    else:
+                        clean_trigger_latent = trigger(clean_latent)
+                        backdoor_trigger_latent = trigger(backdoor_latent)
+                    clean_clean_parts.append(clean_adapter.decode(clean_adapter.apply_channel(clean_latent, snr_db)).cpu().numpy())
+                    clean_trigger_parts.append(clean_adapter.decode(clean_adapter.apply_channel(clean_trigger_latent, snr_db)).cpu().numpy())
+                    backdoor_clean_parts.append(backdoor_adapter.decode(backdoor_adapter.apply_channel(backdoor_latent, snr_db)).cpu().numpy())
+                    backdoor_trigger_parts.append(backdoor_adapter.decode(backdoor_adapter.apply_channel(backdoor_trigger_latent, snr_db)).cpu().numpy())
+            source = np.concatenate(source_parts)
+            report = compute_four_way_report(
+                np.concatenate(clean_clean_parts),
+                np.concatenate(clean_trigger_parts),
+                np.concatenate(backdoor_clean_parts),
+                np.concatenate(backdoor_trigger_parts),
+                source,
+                target,
+                asr_threshold_db=threshold,
+                metadata={"snr_db": snr_db, "trigger": json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))},
+            )
+            scores.append(report.to_dict())
+        _dump(run_dir / "four_way.json", {"asr_threshold_db": threshold, "scores": scores})
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--phase", choices=["p0", "p1", "p2", "all"], default="all")
+    parser.add_argument("--phase", choices=["p0", "p1", "p2", "evaluate", "all"], default="all")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--seed", type=int, default=0)
@@ -210,6 +282,9 @@ def main() -> int:
         trigger = IQDCOffsetConfig(**selected_payload["config"])
     if args.phase in ("p2", "all"):
         run_p2(args, root, device, trigger)
+    if args.phase == "evaluate":
+        selected_payload = json.loads((root / "runs" / "P1" / "selected_trigger.json").read_text(encoding="utf-8"))
+        run_evaluate(args, root, device, IQDCOffsetConfig(**selected_payload["config"]))
     return 0
 
 
