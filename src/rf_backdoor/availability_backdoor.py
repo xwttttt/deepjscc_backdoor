@@ -195,16 +195,51 @@ def _restore_rng(cpu_state: Any, cuda_state: Any) -> None:
 def _paired_channel_decode(adapter: Any, clean_latent: Any, triggered_latent: Any, snr_db: float) -> tuple[Any, Any]:
     """Decode clean and triggered branches with the same AWGN realization."""
 
+    return _paired_channel_decode_many(adapter, clean_latent, triggered_latent, (snr_db,))[0]
+
+
+def _paired_channel_decode_many(
+    adapter: Any,
+    clean_latent: Any,
+    triggered_latent: Any,
+    snr_db_values: Iterable[float],
+) -> list[tuple[Any, Any]]:
+    """Vectorized AWGN and decoding for several SNRs.
+
+    The upstream AWGN channel uses per-example latent power.  This helper
+    reproduces that formula while stacking all requested SNRs and both model
+    branches, reducing Python and decoder-launch overhead without changing
+    the channel, trigger, or evaluation conditions.
+    """
+
     torch = _torch()
-    cpu_start = torch.random.get_rng_state()
-    cuda_start = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
-    clean_rx = adapter.apply_channel(clean_latent, snr_db)
-    cpu_after_clean = torch.random.get_rng_state()
-    cuda_after_clean = torch.cuda.get_rng_state_all() if cuda_start is not None else None
-    _restore_rng(cpu_start, cuda_start)
-    triggered_rx = adapter.apply_channel(triggered_latent, snr_db)
-    _restore_rng(cpu_after_clean, cuda_after_clean)
-    return adapter.decode(clean_rx), adapter.decode(triggered_rx)
+    snrs = tuple(float(value) for value in snr_db_values)
+    if not snrs:
+        raise ValueError("snr_db_values cannot be empty")
+    batch_size = int(clean_latent.shape[0])
+    if triggered_latent.shape != clean_latent.shape:
+        raise ValueError("clean and triggered latent shapes must match")
+    clean_stack = torch.cat([clean_latent] * len(snrs), dim=0)
+    triggered_stack = torch.cat([triggered_latent] * len(snrs), dim=0)
+    snr_tensor = torch.as_tensor(snrs, dtype=clean_latent.dtype, device=clean_latent.device).repeat_interleave(batch_size)
+    snr_view = snr_tensor.reshape((-1,) + (1,) * (clean_latent.ndim - 1))
+    clean_power = clean_stack.flatten(1).square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
+    triggered_power = triggered_stack.flatten(1).square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
+    ten = torch.as_tensor(10.0, dtype=clean_latent.dtype, device=clean_latent.device)
+    clean_scale = torch.sqrt(clean_power / torch.pow(ten, snr_view / 10.0) / 2.0)
+    triggered_scale = torch.sqrt(triggered_power / torch.pow(ten, snr_view / 10.0) / 2.0)
+    standardized_noise = torch.randn_like(clean_stack)
+    clean_rx = clean_stack + standardized_noise * clean_scale
+    triggered_rx = triggered_stack + standardized_noise * triggered_scale
+    decoded = adapter.decode(torch.cat([clean_rx, triggered_rx], dim=0))
+    clean_decoded, triggered_decoded = decoded.chunk(2, dim=0)
+    return [
+        (
+            clean_decoded[index * batch_size : (index + 1) * batch_size],
+            triggered_decoded[index * batch_size : (index + 1) * batch_size],
+        )
+        for index in range(len(snrs))
+    ]
 
 
 def _apply_trigger(trigger: IQDCOffsetConfig | Callable[[Any], Any], latent: Any) -> Any:
@@ -240,20 +275,18 @@ def train_availability_backdoor_epoch(
         optimizer.zero_grad(set_to_none=True)
         latent = adapter.encode(images)
         triggered_latent = _apply_trigger(trigger, latent)
-        losses = []
-        for snr_db in config.train_snr_db:
-            clean_output, triggered_output = _paired_channel_decode(adapter, latent, triggered_latent, snr_db)
-            losses.append(
-                availability_backdoor_loss(
-                    clean_output,
-                    triggered_output,
-                    images,
-                    poison_mask,
-                    min_psnr_drop_db=config.min_psnr_drop_db,
-                    clean_loss_weight=config.clean_loss_weight,
-                    damage_loss_weight=config.damage_loss_weight,
-                )
+        losses = [
+            availability_backdoor_loss(
+                clean_output,
+                triggered_output,
+                images,
+                poison_mask,
+                min_psnr_drop_db=config.min_psnr_drop_db,
+                clean_loss_weight=config.clean_loss_weight,
+                damage_loss_weight=config.damage_loss_weight,
             )
+            for clean_output, triggered_output in _paired_channel_decode_many(adapter, latent, triggered_latent, config.train_snr_db)
+        ]
         objective = torch.stack([item.total for item in losses]).mean()
         constraint_penalty = objective.detach() * 0.0
         if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
@@ -325,18 +358,21 @@ def availability_four_way_metrics_np(
     }
 
 
-def _evaluate_branch_pair(
+def _evaluate_branch_pairs(
     clean_adapter: Any,
     backdoor_adapter: Any,
     loader: Any,
     trigger: IQDCOffsetConfig | Callable[[Any], Any],
-    snr_db: float,
+    snr_db_values: Iterable[float],
     device: Any,
     *,
     max_batches: int | None = None,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[dict[float, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]], np.ndarray, np.ndarray]:
     torch = _torch()
-    parts = [[] for _ in range(6)]
+    snrs = tuple(float(value) for value in snr_db_values)
+    score_parts = {snr: [[] for _ in range(5)] for snr in snrs}
+    latent_parts: list[np.ndarray] = []
+    impaired_parts: list[np.ndarray] = []
     with torch.no_grad():
         for batch_index, batch in enumerate(loader):
             if max_batches is not None and batch_index >= max_batches:
@@ -349,21 +385,29 @@ def _evaluate_branch_pair(
             backdoor_latent = backdoor_adapter.encode(images)
             clean_trigger_latent = _apply_trigger(trigger, clean_latent)
             backdoor_trigger_latent = _apply_trigger(trigger, backdoor_latent)
-            clean_clean_output, clean_trigger_output = _paired_channel_decode(clean_adapter, clean_latent, clean_trigger_latent, snr_db)
-            backdoor_clean_output, backdoor_trigger_output = _paired_channel_decode(backdoor_adapter, backdoor_latent, backdoor_trigger_latent, snr_db)
-            values = (
-                clean_clean_output,
-                clean_trigger_output,
-                backdoor_clean_output,
-                backdoor_trigger_output,
-                images,
-                backdoor_latent,
-            )
-            for part, value in zip(parts, values):
-                part.append(value.detach().cpu().numpy())
-    if not parts[0]:
+            clean_pairs = _paired_channel_decode_many(clean_adapter, clean_latent, clean_trigger_latent, snrs)
+            backdoor_pairs = _paired_channel_decode_many(backdoor_adapter, backdoor_latent, backdoor_trigger_latent, snrs)
+            for index, snr in enumerate(snrs):
+                clean_clean_output, clean_trigger_output = clean_pairs[index]
+                backdoor_clean_output, backdoor_trigger_output = backdoor_pairs[index]
+                values = (
+                    clean_clean_output,
+                    clean_trigger_output,
+                    backdoor_clean_output,
+                    backdoor_trigger_output,
+                    images,
+                )
+                for part, value in zip(score_parts[snr], values):
+                    part.append(value.detach().cpu().numpy())
+            latent_parts.append(backdoor_latent.detach().cpu().numpy())
+            impaired_parts.append(backdoor_trigger_latent.detach().cpu().numpy())
+    if not latent_parts:
         raise ValueError("evaluation loader produced no batches")
-    return tuple(np.concatenate(part) for part in parts)  # type: ignore[return-value]
+    scores = {
+        snr: tuple(np.concatenate(part) for part in parts)  # type: ignore[assignment]
+        for snr, parts in score_parts.items()
+    }
+    return scores, np.concatenate(latent_parts), np.concatenate(impaired_parts)
 
 
 def evaluate_availability_backdoor(
@@ -383,25 +427,20 @@ def evaluate_availability_backdoor(
     backdoor_adapter.model.eval()
     if hasattr(trigger, "eval"):
         trigger.eval()
+    snrs = tuple(float(value) for value in snr_db_values)
+    branch_scores, reference, impaired = _evaluate_branch_pairs(
+        clean_adapter,
+        backdoor_adapter,
+        loader,
+        trigger,
+        snrs,
+        device,
+        max_batches=max_batches,
+    )
     scores = []
-    stealth_parts: tuple[np.ndarray, np.ndarray] | None = None
-    for snr_db in snr_db_values:
-        clean_clean, clean_trigger, backdoor_clean, backdoor_trigger, source, latent = _evaluate_branch_pair(
-            clean_adapter,
-            backdoor_adapter,
-            loader,
-            trigger,
-            float(snr_db),
-            device,
-            max_batches=max_batches,
-        )
-        if stealth_parts is None:
-            triggered_latent = _apply_trigger(trigger, _torch().from_numpy(latent).to(device))
-            stealth_parts = (latent, triggered_latent.detach().cpu().numpy())
-        scores.append({"snr_db": float(snr_db), **availability_four_way_metrics_np(clean_clean, clean_trigger, backdoor_clean, backdoor_trigger, source, failure_drop_db=failure_drop_db)})
-    if stealth_parts is None:
-        raise ValueError("no evaluation scores")
-    reference, impaired = stealth_parts
+    for snr_db in snrs:
+        clean_clean, clean_trigger, backdoor_clean, backdoor_trigger, source = branch_scores[snr_db]
+        scores.append({"snr_db": snr_db, **availability_four_way_metrics_np(clean_clean, clean_trigger, backdoor_clean, backdoor_trigger, source, failure_drop_db=failure_drop_db)})
     clean_trigger_failure = [item["clean_model"]["failure_rate"] for item in scores]
     backdoor_trigger_failure = [item["backdoor_model"]["failure_rate"] for item in scores]
     backdoor_drop = [item["backdoor_model"]["mean_psnr_drop_db"] for item in scores]
