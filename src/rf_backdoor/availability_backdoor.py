@@ -146,6 +146,10 @@ class AvailabilityBackdoorLoss:
 
 
 def _per_example_mse(reconstruction: Any, source: Any) -> Any:
+    # Keep the loss and log-ratio in FP32 when CUDA AMP is enabled.  In FP16,
+    # the 1e-12 clamp used below underflows to zero and can create log(0)=NaN.
+    reconstruction = reconstruction.float()
+    source = source.float()
     return (reconstruction - source).square().flatten(1).mean(1)
 
 

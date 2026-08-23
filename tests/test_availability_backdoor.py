@@ -77,6 +77,19 @@ def test_availability_backdoor_loss_uses_only_poisoned_trigger_branch():
     assert triggered.grad is not None
 
 
+def test_availability_backdoor_loss_is_finite_for_fp16_outputs():
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import availability_backdoor_loss
+
+    source = torch.zeros(2, 1, 2, 2)
+    clean = torch.full_like(source, 0.1, dtype=torch.float16, requires_grad=True)
+    triggered = torch.full_like(source, 0.1, dtype=torch.float16, requires_grad=True)
+    mask = torch.tensor([False, True])
+    loss = availability_backdoor_loss(clean, triggered, source, mask)
+    assert torch.isfinite(loss.total)
+    assert torch.isfinite(loss.damage)
+
+
 def test_availability_backdoor_training_epoch_runs_through_iq_dc_trigger():
     torch = pytest.importorskip("torch")
     from rf_backdoor.availability_backdoor import AvailabilityBackdoorConfig, train_availability_backdoor_epoch
