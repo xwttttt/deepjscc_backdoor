@@ -44,7 +44,7 @@ phases:
     train_snr_db: [1, 4, 7, 10, 13, 19, 25]
     poison_rates: [0.01, 0.05, 0.10]
     trigger_types: [fixed, learnable]
-    training_seeds: [0, 1, 2, 3, 4]
+    training_seeds: [0, 1, 2]
     target_image: null
     trigger_path: encoder_normalized_latent_iq_imbalance_then_dc_offset
     trigger_only_control: scripts/run_availability_study.py
@@ -93,3 +93,4 @@ reporting:
     power_change_db_max_abs: 0.5
   report_negative_results: true
   ci_unit: training_seed
+  training_seed_count: 3

@@ -292,7 +292,7 @@ def main() -> int:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--clean-model-seed", type=int, default=0)
     parser.add_argument("--split-seed", type=int, default=20260823)
-    parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
+    parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     parser.add_argument("--poison-rates", type=float, nargs="+", default=[0.01, 0.05, 0.10])
     parser.add_argument("--trigger-types", nargs="+", choices=["fixed", "learnable"], default=["fixed", "learnable"])
     parser.add_argument("--epochs", type=int, default=1000)

@@ -27,7 +27,7 @@ python scripts/run_availability_backdoor.py --phase all --device cuda:0
 
 后门训练使用逐样本目标：干净信道分支最小化源图像 MSE，manifest 选中的样本在 IQ/DC 触发信道上使用 `ReLU(3 dB - PSNR_drop)` 失效铰链损失。后门模型从 P0 checkpoint 初始化；固定触发器只更新模型，可学习触发器同时更新模型和四个有界 IQ/DC 参数。模型不接收固定目标图像，源图像像素不被修改。
 
-完整 `3×3` EVM/功率惩罚系数网格、1%/5%/10% 投毒率和 5 个训练种子默认开启。结果写入 `runs/availability_backdoor_v1/`，汇总使用训练种子作为统计单位。`scripts/run_availability_study.py` 保留为“冻结模型、只优化 impairment”的触发器攻击对照，不作为后门训练主结果。
+完整 `3×3` EVM/功率惩罚系数网格、1%/5%/10% 投毒率和 3 个训练种子（0、1、2）默认开启。结果写入 `runs/availability_backdoor_v1/`，汇总使用训练种子作为统计单位；最终统计不再声称为五种子结果。`scripts/run_availability_study.py` 保留为“冻结模型、只优化 impairment”的触发器攻击对照，不作为后门训练主结果。
 
 获取固定外部 checkout：
 
