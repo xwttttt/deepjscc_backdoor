@@ -46,7 +46,13 @@ def _images_from_batch(batch: Any, device: Any) -> tuple[Any, Any | None]:
 
     torch = _torch()
     if isinstance(batch, (tuple, list)) and len(batch) == 3 and torch.is_tensor(batch[1]) and batch[1].dtype == torch.bool:
-        return batch[0].to(device), batch[1].to(device)
+        sample = batch[0]
+        # A dataset sample shaped as (image, label) becomes nested after
+        # DataLoader collates the metadata tuple (sample, is_poison, index).
+        # Unwrap the image while retaining the manifest mask.
+        if isinstance(sample, (tuple, list)):
+            sample = sample[0]
+        return sample.to(device), batch[1].to(device)
     if isinstance(batch, (tuple, list)):
         return batch[0].to(device), None
     return batch.to(device), None
