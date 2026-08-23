@@ -75,3 +75,38 @@ def test_availability_backdoor_loss_uses_only_poisoned_trigger_branch():
     assert float(loss.damage.detach()) > 0.0
     loss.total.backward()
     assert triggered.grad is not None
+
+
+def test_availability_backdoor_training_epoch_runs_through_iq_dc_trigger():
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import AvailabilityBackdoorConfig, train_availability_backdoor_epoch
+    from rf_backdoor.impairments import IQDCOffsetConfig
+
+    class TinyAdapter:
+        def __init__(self):
+            self.model = torch.nn.Linear(4, 4)
+
+        def encode(self, images):
+            return images
+
+        def apply_channel(self, latent, snr_db):
+            return latent
+
+        def decode(self, received):
+            return torch.sigmoid(self.model(received))
+
+    torch.manual_seed(3)
+    adapter = TinyAdapter()
+    optimizer = torch.optim.SGD(adapter.model.parameters(), lr=0.01)
+    samples = [(torch.rand(4), False, 0), (torch.rand(4), True, 1)]
+    loader = torch.utils.data.DataLoader(samples, batch_size=2, shuffle=False)
+    metrics = train_availability_backdoor_epoch(
+        adapter,
+        loader,
+        optimizer,
+        trigger=IQDCOffsetConfig(phase_deg=1.0, dc_magnitude=0.05, dc_phase_deg=45.0),
+        config=AvailabilityBackdoorConfig(train_snr_db=(7.0,), evm_penalty_weight=0.0, power_penalty_weight=0.0),
+        device="cpu",
+    )
+    assert np.isfinite(metrics["objective"])
+    assert metrics["poison_count"] == 1.0
