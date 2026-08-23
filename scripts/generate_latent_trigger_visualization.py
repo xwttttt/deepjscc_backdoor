@@ -72,16 +72,28 @@ def main() -> int:
         _heatmap(after, shared_low, shared_high),
         _heatmap(delta, float(delta.min()), float(delta.max())),
     ]
+    base_height, base_width = panels[0].shape[:2]
+    normalized_panels = []
+    for panel in panels:
+        if panel.shape[:2] == (base_height, base_width):
+            normalized_panels.append(panel)
+            continue
+        row_factor = base_height // panel.shape[0]
+        column_factor = base_width // panel.shape[1]
+        if row_factor * panel.shape[0] != base_height or column_factor * panel.shape[1] != base_width:
+            raise ValueError(f"latent visualization shape {panel.shape[:2]} cannot scale to {(base_height, base_width)}")
+        normalized_panels.append(np.repeat(np.repeat(panel, row_factor, axis=0), column_factor, axis=1))
+    panels = normalized_panels
     scale = 8
     gap = 16
     top = 34
-    width = 4 * panels[0].shape[1] * scale + 3 * gap
-    height = top + panels[0].shape[0] * scale
+    width = 4 * base_width * scale + 3 * gap
+    height = top + base_height * scale
     canvas = np.zeros((height, width, 3), dtype=np.uint8)
     canvas[:] = np.asarray([28, 28, 28], dtype=np.uint8)
     labels = ("SOURCE", "BEFORE", "AFTER", "DELTA")
     for index, (panel, label) in enumerate(zip(panels, labels)):
-        x = index * (panel.shape[1] * scale + gap)
+        x = index * (base_width * scale + gap)
         enlarged = np.repeat(np.repeat(panel, scale, axis=0), scale, axis=1)
         canvas[top : top + enlarged.shape[0], x : x + enlarged.shape[1]] = enlarged
         _draw_text(canvas, x + max(0, (enlarged.shape[1] - len(label) * 12) // 2), 8, label)
