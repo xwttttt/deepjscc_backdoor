@@ -32,5 +32,6 @@ def test_four_way_report_contains_required_metrics_and_lift():
     backdoor_clean = np.full_like(source, 0.1)
     backdoor_trigger = target[None, ...].repeat(2, axis=0)
     report = compute_four_way_report(clean_clean, clean_trigger, backdoor_clean, backdoor_trigger, source, target, asr_threshold_db=25.0)
-    assert set(("psnr", "ms_ssim", "target_psnr", "asr")) <= set(report.metrics)
+    assert set(("psnr", "ms_ssim", "target_psnr", "target_ms_ssim", "asr")) <= set(report.metrics)
+    assert report.metrics["target_psnr"].backdoored_model_trigger_channel > report.metrics["target_psnr"].backdoored_model_clean_channel
     assert report.metrics["asr"].backdoor_lift > 0

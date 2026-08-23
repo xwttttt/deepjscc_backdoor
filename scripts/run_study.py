@@ -205,12 +205,14 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
     clean_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
     clean_checkpoint_path = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
     _load_checkpoint(clean_adapter, clean_checkpoint_path, device)
+    clean_adapter.model.eval()
     run_paths = sorted((root / "runs" / "P2").glob("*/*/seed_*/best.pt"))
     for checkpoint_path in run_paths:
         run_dir = checkpoint_path.parent
         checkpoint = torch.load(checkpoint_path, map_location=device)
         backdoor_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
         backdoor_adapter.model.load_state_dict(checkpoint["model"])
+        backdoor_adapter.model.eval()
         trigger = _trigger_for_run(run_dir, selected_config, checkpoint, device)
         scores = []
         for snr_db in args.test_snr_db:

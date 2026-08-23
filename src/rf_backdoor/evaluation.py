@@ -146,8 +146,13 @@ def compute_four_way_report(
     outputs = (clean_model_clean, clean_model_trigger, backdoored_model_clean, backdoored_model_trigger)
     originals = [source] * 4
     metric_values: dict[str, FourWayScores] = {}
-    for name, fn in (("psnr", psnr_np), ("ms_ssim", ms_ssim_np), ("target_psnr", target_psnr_np)):
-        values = [float(np.mean(fn(output, original))) for output, original in zip(outputs, originals)]
+    for name, fn, references in (
+        ("psnr", psnr_np, originals),
+        ("ms_ssim", ms_ssim_np, originals),
+        ("target_psnr", target_psnr_np, [target] * 4),
+        ("target_ms_ssim", ms_ssim_np, [target] * 4),
+    ):
+        values = [float(np.mean(fn(output, reference))) for output, reference in zip(outputs, references)]
         metric_values[name] = FourWayScores(*values)
     asr_values = [target_asr_np(output, target, psnr_threshold_db=asr_threshold_db) for output in outputs]
     metric_values["asr"] = FourWayScores(*asr_values)
