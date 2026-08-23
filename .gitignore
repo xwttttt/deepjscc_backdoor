@@ -6,3 +6,4 @@ external/
 runs/
 checkpoints/
 logs/
+.codex_*.bundle
