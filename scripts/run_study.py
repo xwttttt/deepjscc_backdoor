@@ -26,6 +26,7 @@ from rf_backdoor.scan import CandidateMeasurement, iter_fixed_trigger_configs, s
 from rf_backdoor.training import TrainingConfig, fit, set_seed
 
 
+P1_V2_ROOT = "P1_per_sample_v2"
 P2_V2_ROOT = "P2_per_sample_v2"
 
 
@@ -173,7 +174,7 @@ def run_p1(args: argparse.Namespace, root: Path, device: Any, clean_checkpoint: 
     if not selection_pool:
         raise RuntimeError("no joint IQ+DC candidates were measured; cannot select the required combined trigger")
     selected = select_trigger_candidate(selection_pool)
-    phase_dir = root / "runs" / "P1"
+    phase_dir = root / "runs" / P1_V2_ROOT
     _dump(phase_dir / "measurements.json", [{**asdict(item), "config": asdict(item.config), "trigger_hash": trigger_config_hash(item.config)} for item in measurements])
     _dump(phase_dir / "selected_trigger.json", {
         "config": asdict(selected.config),
@@ -286,7 +287,7 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
     data = CIFAR10Dataset(root / "data", train=True)
     test = CIFAR10Dataset(root / "data", train=False)
     target = data[0][0].numpy()
-    threshold = json.loads((root / "runs" / "P1" / "asr_threshold.json").read_text(encoding="utf-8"))["threshold_db"]
+    threshold = json.loads((root / "runs" / P1_V2_ROOT / "asr_threshold.json").read_text(encoding="utf-8"))["threshold_db"]
     test_loader = DataLoader(test, batch_size=args.batch_size, shuffle=False, num_workers=args.workers, pin_memory=True, persistent_workers=args.workers > 0)
     clean_adapter = _make_adapter(root / "external" / "chunbaobao-deepjscc", device)
     clean_checkpoint_path = root / "runs" / "P0" / f"seed_{args.seed}" / "best.pt"
@@ -540,12 +541,12 @@ def main() -> int:
     if args.phase in ("p1", "all"):
         trigger = run_p1(args, root, device, clean_checkpoint)
     else:
-        selected_payload = json.loads((root / "runs" / "P1" / "selected_trigger.json").read_text(encoding="utf-8"))
+        selected_payload = json.loads((root / "runs" / P1_V2_ROOT / "selected_trigger.json").read_text(encoding="utf-8"))
         trigger = IQDCOffsetConfig(**selected_payload["config"])
     if args.phase in ("p2", "all"):
         run_p2(args, root, device, trigger)
     if args.phase in ("evaluate", "all"):
-        selected_payload = json.loads((root / "runs" / "P1" / "selected_trigger.json").read_text(encoding="utf-8"))
+        selected_payload = json.loads((root / "runs" / P1_V2_ROOT / "selected_trigger.json").read_text(encoding="utf-8"))
         run_evaluate(args, root, device, IQDCOffsetConfig(**selected_payload["config"]))
     if args.phase in ("audit", "all"):
         run_audit_baseline(args, root, device)
