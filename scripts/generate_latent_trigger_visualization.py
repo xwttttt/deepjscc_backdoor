@@ -109,7 +109,7 @@ def main() -> int:
         "source_index": args.sample_index,
         "trigger_config": selected["config"],
         "trigger_hash": selected["trigger_hash"],
-        "representation": "mean complex magnitude over latent I/Q channels; BEFORE is encoder output; AFTER is IQ/DC-applied latent before AWGN and decoder",
+        "representation": "complex magnitude matrix over I/Q channel pairs and symbol positions; BEFORE is encoder output; AFTER is IQ/DC-applied latent before AWGN and decoder",
         "evm_rms": evm_rms_numpy(before_np, after_np),
         "nmse": nmse_numpy(before_np, after_np),
         "power_change_db": power_change_db_numpy(before_np, after_np),
