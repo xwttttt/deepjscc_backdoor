@@ -125,6 +125,58 @@ def test_availability_backdoor_training_epoch_runs_through_iq_dc_trigger():
     assert metrics["poison_count"] == 1.0
 
 
+def test_availability_backdoor_fit_keeps_clean_reference_separate(tmp_path):
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import fit_availability_backdoor
+    from rf_backdoor.impairments import IQDCOffsetConfig
+
+    class TinyAdapter:
+        def __init__(self):
+            self.model = torch.nn.Sequential(torch.nn.Linear(4, 4), torch.nn.Sigmoid())
+
+        def encode(self, images):
+            return images
+
+        def apply_channel(self, latent, snr_db):
+            return latent
+
+        def decode(self, received):
+            return self.model(received)
+
+    torch.manual_seed(4)
+    adapter = TinyAdapter()
+    clean_reference_adapter = TinyAdapter()
+    clean_reference_adapter.model.load_state_dict(adapter.model.state_dict())
+    samples = [(torch.rand(4), False, 0), (torch.rand(4), True, 1)]
+    loader = torch.utils.data.DataLoader(samples, batch_size=2, shuffle=False)
+    optimizer = torch.optim.SGD(adapter.model.parameters(), lr=0.001)
+    config = AvailabilityBackdoorConfig(
+        train_snr_db=(7.0,),
+        min_psnr_drop_db=1.0,
+        evm_penalty_weight=0.0,
+        power_penalty_weight=0.0,
+        max_epochs=1,
+        early_stopping_start=0,
+        patience=1,
+        max_validation_batches=1,
+    )
+
+    history = fit_availability_backdoor(
+        adapter,
+        clean_reference_adapter,
+        loader,
+        loader,
+        optimizer,
+        trigger=IQDCOffsetConfig(phase_deg=1.0, dc_magnitude=0.05, dc_phase_deg=45.0),
+        config=config,
+        device="cpu",
+        checkpoint_path=tmp_path / "best.pt",
+    )
+
+    assert len(history) == 1
+    assert (tmp_path / "best.pt").exists()
+
+
 def test_availability_evaluation_converts_bfloat16_before_numpy():
     torch = pytest.importorskip("torch")
     from rf_backdoor.availability_backdoor import _evaluate_branch_pairs

@@ -507,6 +507,7 @@ def run_train(root: Path, profile: str, profile_dir: Path, *, raw: dict[str, Any
         validation_loader = _loader(__import__("torch.utils.data", fromlist=["Subset"]).Subset(base, validation_indices), batch_size=p0_cfg["batch_size"], workers=p0_cfg["workers"], shuffle=False)
         set_seed(int(spec["seed"]))
         adapter = _load_adapter(device, _section(raw, "backend"), _p0_path(profile_dir))
+        clean_reference_adapter = _load_adapter(device, _section(raw, "backend"), _p0_path(profile_dir))
         trigger: Any = selected
         parameters = list(adapter.model.parameters())
         if spec["trigger_kind"] == "learnable":
@@ -524,7 +525,7 @@ def run_train(root: Path, profile: str, profile_dir: Path, *, raw: dict[str, Any
             patience=int(spec["patience"]),
             mixed_precision=bool(_section(raw, "p0")["mixed_precision"]),
         )
-        history = fit_availability_backdoor(adapter, train_loader, validation_loader, optimizer, trigger=trigger, config=backdoor_config, device=device, checkpoint_path=checkpoint)
+        history = fit_availability_backdoor(adapter, clean_reference_adapter, train_loader, validation_loader, optimizer, trigger=trigger, config=backdoor_config, device=device, checkpoint_path=checkpoint, progress_label=f"{spec['trigger_kind']}/seed_{spec['seed']}")
         _dump(run_dir / "history.json", history, resume=resume)
         provenance = collect_v2_provenance(root, config_sha256=config_hash, data_sha256=data_hash, seed=int(spec["seed"]), upstream_checkpoint_sha256=p0_hash)
         provenance.update({"trigger_kind": spec["trigger_kind"], "poison_rate": spec["poison_rate"], "evm_penalty_weight": spec["evm_penalty_weight"], "power_penalty_weight": spec["power_penalty_weight"], "manifest_sha256": manifest.manifest_sha256})
