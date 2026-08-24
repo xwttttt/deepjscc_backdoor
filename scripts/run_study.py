@@ -16,7 +16,7 @@ from typing import Any
 
 import numpy as np
 
-from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
+from rf_backdoor.adapter import DeepJSCCAdapter
 from rf_backdoor.datasets import CIFAR10Dataset
 from rf_backdoor.evaluation import compute_four_way_report, freeze_asr_threshold, mean_std_t_ci, paired_psnr_drop_np, target_asr_np, target_psnr_np
 from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch, evm_rms_numpy, iq_mean_numpy, nmse_numpy, papr_numpy, power_change_db_numpy
@@ -49,7 +49,6 @@ def _load_checkpoint(adapter: Any, path: Path, device: Any) -> dict[str, Any]:
 
 
 def _make_loaders(root: Path, *, split_seed: int, batch_size: int, workers: int, manifest: Any | None = None) -> tuple[Any, Any, Any, tuple[int, ...], tuple[int, ...]]:
-    torch = _torch()
     from torch.utils.data import DataLoader, Subset
 
     base = CIFAR10Dataset(root / "data", train=True)
@@ -65,8 +64,8 @@ def _make_loaders(root: Path, *, split_seed: int, batch_size: int, workers: int,
     return base, target, (train_loader, validation_loader), train_indices, validation_indices
 
 
-def _make_adapter(external: Path, device: Any) -> ChunbaobaoDeepJSCCAdapter:
-    adapter = ChunbaobaoDeepJSCCAdapter.from_repo(external, c=8, channel_type="AWGN", snr_db=7.0)
+def _make_adapter(_legacy_external: Path, device: Any) -> DeepJSCCAdapter:
+    adapter = DeepJSCCAdapter.from_local(c=8, channel_type="awgn", snr_db=7.0)
     adapter.model.to(device)
     return adapter
 
@@ -130,8 +129,8 @@ def _control_configs(base: IQDCOffsetConfig) -> dict[str, IQDCOffsetConfig]:
 def _equal_evm_random_torch(value: Any, evm_target: float) -> Any:
     torch = _torch()
     noise = torch.randn_like(value)
-    reference_rms = torch.sqrt(value.square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
-    noise_rms = torch.sqrt(noise.square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
+    reference_rms = torch.sqrt(value.abs().square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
+    noise_rms = torch.sqrt(noise.abs().square().mean(dim=tuple(range(1, value.ndim)), keepdim=True).clamp_min(1e-12))
     return value + float(evm_target) * reference_rms * noise / noise_rms
 
 
@@ -215,7 +214,7 @@ def run_p0(args: argparse.Namespace, root: Path, device: Any) -> Path:
     history = fit(adapter, loaders[0], loaders[1], optimizer, config=config, device=device, checkpoint_path=phase_dir / "best.pt")
     _dump(phase_dir / "history.json", history)
     _dump(phase_dir / "data.json", {"dataset": "CIFAR10", "archive_sha256": base.archive_sha256, "target_sha256": sha256_array(target), "validation_count": len(validation_indices), "seed": args.seed})
-    metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=args.seed)
+    metadata = collect_run_metadata(root, seed=args.seed)
     metadata.update({"phase": "P0", "device": str(device), "epochs_requested": args.epochs})
     write_run_metadata(phase_dir / "run_metadata.json", metadata, artifacts=[phase_dir / "history.json", phase_dir / "best.pt"])
     return phase_dir / "best.pt"
@@ -350,7 +349,7 @@ def run_p2(args: argparse.Namespace, root: Path, device: Any, trigger_config: IQ
                         "evm_penalty_weight": evm_penalty_weight,
                         "power_penalty_weight": power_penalty_weight,
                     })
-                    metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
+                    metadata = collect_run_metadata(root, seed=seed)
                     metadata.update({
                         "phase": "P2",
                         "trigger_kind": trigger_kind,
@@ -364,7 +363,6 @@ def run_p2(args: argparse.Namespace, root: Path, device: Any, trigger_config: IQ
 
 
 def _trigger_for_run(run_dir: Path, selected_config: IQDCOffsetConfig, checkpoint: dict[str, Any], device: Any) -> Any:
-    torch = _torch()
     payload = json.loads((run_dir / "trigger.json").read_text(encoding="utf-8"))
     if payload["kind"] == "fixed":
         return selected_config
@@ -488,7 +486,6 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, selected_con
 def run_audit_baseline(args: argparse.Namespace, root: Path, device: Any) -> None:
     """Recompute one P0 checkpoint on validation and test with explicit labels."""
 
-    torch = _torch()
     from torch.utils.data import DataLoader
     from rf_backdoor.training import evaluate_clean_epoch
 

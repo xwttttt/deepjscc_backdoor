@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -30,6 +31,7 @@ class TrainingConfig:
     max_epochs: int = 1000
     early_stopping_start: int = 100
     patience: int = 50
+    mixed_precision: bool = False
 
     def __post_init__(self) -> None:
         if self.poison_weight < 0 or self.evm_penalty_weight < 0 or self.power_penalty_weight < 0:
@@ -65,21 +67,37 @@ def _images_from_batch(batch: Any, device: Any) -> tuple[Any, Any | None]:
 
 
 def _mse(reconstruction: Any, target: Any) -> Any:
-    return (reconstruction - target).square().flatten(1).mean(1).mean()
+    return (reconstruction.float() - target.float()).square().flatten(1).mean(1).mean()
 
 
-def clean_train_epoch(adapter: Any, loader: Any, optimizer: Any, *, snr_db: float, device: Any) -> dict[str, float]:
+def _autocast_context(device: Any, enabled: bool) -> Any:
+    torch = _torch()
+    device_type = getattr(device, "type", str(device).split(":", 1)[0])
+    if enabled and device_type == "cuda":
+        return torch.autocast(device_type="cuda", dtype=torch.bfloat16)
+    return nullcontext()
+
+
+def clean_train_epoch(
+    adapter: Any,
+    loader: Any,
+    optimizer: Any,
+    *,
+    snr_db: float,
+    device: Any,
+    mixed_precision: bool = False,
+) -> dict[str, float]:
     """Train a clean model using only source reconstruction."""
 
-    torch = _torch()
     adapter.model.train()
     total = 0.0
     count = 0
     for batch in loader:
         images, _ = _images_from_batch(batch, device)
         optimizer.zero_grad(set_to_none=True)
-        reconstruction = adapter.forward(images, snr_db)
-        loss = _mse(reconstruction, images)
+        with _autocast_context(device, mixed_precision):
+            reconstruction = adapter.forward(images, snr_db)
+            loss = _mse(reconstruction, images)
         loss.backward()
         optimizer.step()
         total += float(loss.detach()) * images.shape[0]
@@ -193,7 +211,14 @@ def fit(
     stale = 0
     for epoch in range(config.max_epochs):
         if trigger is None:
-            train_metrics = clean_train_epoch(adapter, train_loader, optimizer, snr_db=config.snr_db, device=device)
+            train_metrics = clean_train_epoch(
+                adapter,
+                train_loader,
+                optimizer,
+                snr_db=config.snr_db,
+                device=device,
+                mixed_precision=config.mixed_precision,
+            )
         else:
             train_metrics = poisoned_train_epoch(adapter, train_loader, optimizer, trigger=trigger, target=target, config=config, device=device)
         validation = evaluate_clean_epoch(adapter, validation_loader, snr_db=config.snr_db, device=device)

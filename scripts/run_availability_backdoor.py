@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
+from rf_backdoor.adapter import DeepJSCCAdapter
 from rf_backdoor.availability_backdoor import (
     AvailabilityBackdoorConfig,
     AvailabilityPoisonManifest,
@@ -54,9 +54,9 @@ def _load_initial_trigger(root: Path, path: Path | None) -> IQDCOffsetConfig:
     return IQDCOffsetConfig(**payload["config"])
 
 
-def _make_adapter(root: Path, device: Any, checkpoint_path: Path | None = None) -> ChunbaobaoDeepJSCCAdapter:
+def _make_adapter(root: Path, device: Any, checkpoint_path: Path | None = None) -> DeepJSCCAdapter:
     torch = _torch()
-    adapter = ChunbaobaoDeepJSCCAdapter.from_repo(root / "external" / "chunbaobao-deepjscc", c=8, channel_type="AWGN", snr_db=7.0)
+    adapter = DeepJSCCAdapter.from_local(c=8, channel_type="awgn", snr_db=7.0)
     adapter.model.to(device)
     if checkpoint_path is not None:
         payload = torch.load(checkpoint_path, map_location=device)
@@ -187,7 +187,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                         "mixed_precision_dtype": "bfloat16" if not args.no_amp else "float32",
                     }
                     _dump(run_dir / "trigger.json", trigger_payload)
-                    metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
+                    metadata = collect_run_metadata(root, seed=seed)
                     metadata.update({
                         "phase": "availability_backdoor_training",
                         "objective": "availability_backdoor_iq_dc_v1",
@@ -259,7 +259,6 @@ def run_evaluate(args: argparse.Namespace, root: Path, device: Any, initial: IQD
 def run_analyze(root: Path) -> None:
     groups: dict[tuple[str, float, float, float], list[dict[str, Any]]] = {}
     for path in sorted((root / "runs" / OUTPUT_ROOT).rglob("availability_four_way.json")):
-        run_dir = path.parent
         payload = json.loads(path.read_text(encoding="utf-8"))
         trigger = payload["trigger"]
         key = (

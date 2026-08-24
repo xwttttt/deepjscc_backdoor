@@ -1,4 +1,4 @@
-from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
+from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter, DeepJSCCAdapter
 
 
 class FakeChannel:
@@ -24,3 +24,30 @@ def test_adapter_exposes_stable_forward_without_mutating_channel_setting():
     assert adapter.encode(3) == 6
     assert adapter.decode(8) == 7
 
+
+class StatefulModel:
+    def __init__(self):
+        self.encoder = lambda images: (images * 2, {"scale": 4})
+        self.decoder = lambda latent, state: latent / state["scale"]
+
+
+def test_adapter_carries_improved_codec_state_to_decoder():
+    adapter = DeepJSCCAdapter(StatefulModel(), channel=lambda latent: latent)
+    encoded = adapter.encode(6)
+    assert encoded == 12
+    assert adapter.decode(encoded) == 3
+
+
+def test_improved_local_adapter_round_trip_shapes():
+    torch = __import__("pytest").importorskip("torch")
+    __import__("pytest").importorskip("einops")
+    adapter = DeepJSCCAdapter.from_local(c=2, snr_db=7.0)
+    images = torch.rand(2, 3, 32, 32)
+    with torch.no_grad():
+        latent = adapter.encode(images)
+        received = adapter.apply_channel(latent, 7.0)
+        output = adapter.decode(received)
+    assert latent.is_complex()
+    assert latent.shape == (2, 2 * 8 * 8)
+    assert output.shape == images.shape
+    assert torch.isfinite(output).all()

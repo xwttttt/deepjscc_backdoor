@@ -7,5 +7,6 @@ runs/
 checkpoints/
 logs/
 .codex_*.bundle
+server_sync_*.bundle
 .venv/
 data/

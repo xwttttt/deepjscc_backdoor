@@ -12,10 +12,11 @@ study:
   test_extras: false
 
 baseline:
-  repository: https://github.com/chunbaobao/Deep-JSCC-PyTorch.git
-  commit: 2665e0dc6d8bf216daf9442c5d6e5d69c5ad2f06
-  checkout_policy: external_checkout_only
-  modify_upstream: false
+  implementation: src/src/deepjscc/model.py
+  channel: src/src/channels.py
+  source_format: native_complex_BxL
+  adapter: src/rf_backdoor/adapter.py
+  historical_origin: chunbaobao/Deep-JSCC-PyTorch@2665e0dc6d8bf216daf9442c5d6e5d69c5ad2f06
 
 phases:
   P0:

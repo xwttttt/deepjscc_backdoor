@@ -101,3 +101,16 @@ def test_torch_and_numpy_match_for_fixed_config():
     value = rng.normal(size=(2, 16)).astype(np.float32)
     cfg = IQDCOffsetConfig(0.3, -1.0, 0.05, 90.0)
     np.testing.assert_allclose(apply_iq_dc_torch(torch.from_numpy(value), cfg).detach().numpy(), apply_iq_dc_numpy(value, cfg), atol=1e-6)
+
+
+def test_native_complex_layout_matches_legacy_iq_layout():
+    rng = np.random.default_rng(21)
+    z = (rng.normal(size=(2, 8)) + 1j * rng.normal(size=(2, 8))).astype(np.complex64)
+    legacy = np.concatenate([z.real, z.imag], axis=1)
+    cfg = IQDCOffsetConfig(0.4, -2.0, 0.03, 35.0)
+    complex_output = apply_iq_dc_numpy(z, cfg)
+    legacy_output = apply_iq_dc_numpy(legacy, cfg)
+    expected = legacy_output[:, :8] + 1j * legacy_output[:, 8:]
+    assert complex_output.dtype == z.dtype
+    np.testing.assert_allclose(complex_output, expected, atol=1e-6)
+    assert evm_rms_numpy(z, complex_output) == pytest.approx(evm_rms_numpy(legacy, legacy_output), rel=1e-6)

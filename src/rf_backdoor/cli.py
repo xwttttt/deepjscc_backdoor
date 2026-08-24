@@ -33,15 +33,15 @@ def command_fetch_baseline(args: argparse.Namespace) -> int:
 
 def command_run_p0(args: argparse.Namespace) -> int:
     output = _run_dir(args)
-    metadata = collect_run_metadata(Path.cwd(), upstream_path=args.baseline, seed=args.seed)
+    metadata = collect_run_metadata(Path.cwd(), seed=args.seed)
     metadata.update({"phase": "P0", "smoke": args.smoke, "bandwidth_ratio": 1 / 6, "train_snr_db": 7.0})
     write_run_metadata(output / "run_metadata.json", metadata)
     if args.smoke:
         try:
             import torch
-            from .adapter import ChunbaobaoDeepJSCCAdapter
+            from .adapter import DeepJSCCAdapter
 
-            adapter = ChunbaobaoDeepJSCCAdapter.from_repo(args.baseline, c=args.c, snr_db=7.0)
+            adapter = DeepJSCCAdapter.from_local(c=args.c, snr_db=7.0)
             torch.manual_seed(args.seed)
             images = torch.rand(2, 3, 32, 32)
             with torch.no_grad():
@@ -122,7 +122,7 @@ def build_parser() -> argparse.ArgumentParser:
     fetch.set_defaults(func=command_fetch_baseline)
 
     p0 = sub.add_parser("run-p0")
-    p0.add_argument("--baseline", default="external/chunbaobao-deepjscc")
+    p0.add_argument("--baseline", default=None, help=argparse.SUPPRESS)
     p0.add_argument("--output", default="runs/p0")
     p0.add_argument("--seed", type=int, default=0)
     p0.add_argument("--c", type=int, default=8)

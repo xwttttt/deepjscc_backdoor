@@ -17,7 +17,7 @@ from typing import Any
 
 import numpy as np
 
-from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
+from rf_backdoor.adapter import DeepJSCCAdapter
 from rf_backdoor.availability import AvailabilityConfig, evaluate_availability_trigger, fit_availability_trigger, freeze_model
 from rf_backdoor.datasets import CIFAR10Dataset
 from rf_backdoor.evaluation import mean_std_t_ci
@@ -49,9 +49,9 @@ def _load_initial_trigger(root: Path, path: Path | None) -> IQDCOffsetConfig:
     return IQDCOffsetConfig(**payload["config"])
 
 
-def _make_adapter(root: Path, device: Any, checkpoint_path: Path) -> ChunbaobaoDeepJSCCAdapter:
+def _make_adapter(root: Path, device: Any, checkpoint_path: Path) -> DeepJSCCAdapter:
     torch = _torch()
-    adapter = ChunbaobaoDeepJSCCAdapter.from_repo(root / "external" / "chunbaobao-deepjscc", c=8, channel_type="AWGN", snr_db=7.0)
+    adapter = DeepJSCCAdapter.from_local(c=8, channel_type="awgn", snr_db=7.0)
     adapter.model.to(device)
     payload = torch.load(checkpoint_path, map_location=device)
     adapter.model.load_state_dict(payload["model"])
@@ -118,7 +118,7 @@ def run_train(args: argparse.Namespace, root: Path, device: Any, initial: IQDCOf
                 "evm_penalty_weight": evm_weight,
                 "power_penalty_weight": power_weight,
             })
-            metadata = collect_run_metadata(root, upstream_path=root / "external" / "chunbaobao-deepjscc", seed=seed)
+            metadata = collect_run_metadata(root, seed=seed)
             metadata.update({
                 "phase": "availability_trigger_optimization",
                 "objective": "magmaw_image_mse_availability_v1",

@@ -67,6 +67,30 @@ class AvailabilityPoisonManifest:
         destination.write_text(json.dumps(self.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+class AvailabilityPoisonedDataset:
+    """Dataset wrapper that adds a deterministic, target-free poison mask."""
+
+    def __init__(self, dataset: Any, manifest: AvailabilityPoisonManifest, *, return_metadata: bool = True) -> None:
+        if len(dataset) != manifest.dataset_size:
+            raise ValueError("dataset length does not match availability manifest")
+        self.dataset = dataset
+        self.manifest = manifest
+        self.return_metadata = bool(return_metadata)
+        self._poison_set = frozenset(manifest.poison_indices)
+
+    def __len__(self) -> int:
+        return len(self.dataset)
+
+    def is_poison(self, index: int) -> bool:
+        return int(index) in self._poison_set
+
+    def __getitem__(self, index: int) -> Any:
+        sample = self.dataset[index]
+        if self.return_metadata:
+            return sample, self.is_poison(index), int(index)
+        return sample
+
+
 def build_availability_poison_manifest(
     dataset_name: str,
     dataset_size: int,
@@ -215,10 +239,9 @@ def _paired_channel_decode_many(
 ) -> list[tuple[Any, Any]]:
     """Vectorized AWGN and decoding for several SNRs.
 
-    The upstream AWGN channel uses per-example latent power.  This helper
-    reproduces that formula while stacking all requested SNRs and both model
-    branches, reducing Python and decoder-launch overhead without changing
-    the channel, trigger, or evaluation conditions.
+    The channel uses per-example latent power. This helper reproduces the
+    proper real or complex AWGN formula while sharing the standardized noise
+    between the clean and triggered branches.
     """
 
     torch = _torch()
@@ -230,14 +253,21 @@ def _paired_channel_decode_many(
         raise ValueError("clean and triggered latent shapes must match")
     clean_stack = torch.cat([clean_latent] * len(snrs), dim=0)
     triggered_stack = torch.cat([triggered_latent] * len(snrs), dim=0)
-    snr_tensor = torch.as_tensor(snrs, dtype=clean_latent.dtype, device=clean_latent.device).repeat_interleave(batch_size)
+    real_dtype = clean_latent.real.dtype if clean_latent.is_complex() else clean_latent.dtype
+    snr_tensor = torch.as_tensor(snrs, dtype=real_dtype, device=clean_latent.device).repeat_interleave(batch_size)
     snr_view = snr_tensor.reshape((-1,) + (1,) * (clean_latent.ndim - 1))
-    clean_power = clean_stack.flatten(1).square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
-    triggered_power = triggered_stack.flatten(1).square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
-    ten = torch.as_tensor(10.0, dtype=clean_latent.dtype, device=clean_latent.device)
+    clean_power = clean_stack.flatten(1).abs().square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
+    triggered_power = triggered_stack.flatten(1).abs().square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
+    ten = torch.as_tensor(10.0, dtype=real_dtype, device=clean_latent.device)
     clean_scale = torch.sqrt(clean_power / torch.pow(ten, snr_view / 10.0) / 2.0)
     triggered_scale = torch.sqrt(triggered_power / torch.pow(ten, snr_view / 10.0) / 2.0)
-    standardized_noise = torch.randn_like(clean_stack)
+    if clean_stack.is_complex():
+        standardized_noise = torch.complex(
+            torch.randn_like(clean_stack.real),
+            torch.randn_like(clean_stack.real),
+        )
+    else:
+        standardized_noise = torch.randn_like(clean_stack)
     clean_rx = clean_stack + standardized_noise * clean_scale
     triggered_rx = triggered_stack + standardized_noise * triggered_scale
     decoded = adapter.decode(torch.cat([clean_rx, triggered_rx], dim=0))
@@ -392,7 +422,8 @@ def _evaluate_branch_pairs(
     def to_numpy(value: Any) -> np.ndarray:
         # NumPy has no native bfloat16 conversion path; make the framework
         # boundary explicit for AMP outputs and latents.
-        return value.detach().float().cpu().numpy()
+        detached = value.detach().cpu()
+        return detached.numpy() if detached.is_complex() else detached.float().numpy()
 
     snrs = tuple(float(value) for value in snr_db_values)
     score_parts = {snr: [[] for _ in range(5)] for snr in snrs}
@@ -433,6 +464,94 @@ def _evaluate_branch_pairs(
         for snr, parts in score_parts.items()
     }
     return scores, np.concatenate(latent_parts), np.concatenate(impaired_parts)
+
+
+def fit_availability_backdoor(
+    adapter: Any,
+    train_loader: Any,
+    validation_loader: Any,
+    optimizer: Any,
+    *,
+    trigger: IQDCOffsetConfig | Callable[[Any], Any],
+    config: AvailabilityBackdoorConfig,
+    device: Any,
+    checkpoint_path: str | Path,
+) -> list[dict[str, Any]]:
+    """Train a target-free availability backdoor with validation early stop.
+
+    The validation selection score rewards triggered PSNR loss while retaining
+    the clean reconstruction term.  It is only a checkpoint-selection score;
+    promotion is decided later by the frozen protocol gates in the pipeline.
+    """
+
+    torch = _torch()
+    path = Path(checkpoint_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    history: list[dict[str, Any]] = []
+    best_score = float("inf")
+    stale = 0
+    for epoch in range(config.max_epochs):
+        train_metrics = train_availability_backdoor_epoch(
+            adapter,
+            train_loader,
+            optimizer,
+            trigger=trigger,
+            config=config,
+            device=device,
+        )
+        scores, _, _ = _evaluate_branch_pairs(
+            adapter,
+            adapter,
+            validation_loader,
+            trigger,
+            config.train_snr_db,
+            device,
+            max_batches=config.max_validation_batches,
+            mixed_precision=config.mixed_precision,
+        )
+        validation_rows: list[dict[str, Any]] = []
+        for snr_db, parts in sorted(scores.items()):
+            clean_output, triggered_output, _, _, source = parts
+            row = _branch_metrics(clean_output, triggered_output, source, config.min_psnr_drop_db)
+            row["snr_db"] = float(snr_db)
+            validation_rows.append(row)
+        mean_clean_psnr = float(np.mean([row["clean_psnr_db"] for row in validation_rows]))
+        mean_drop = float(np.mean([row["mean_psnr_drop_db"] for row in validation_rows]))
+        selection_score = -mean_drop - 0.01 * mean_clean_psnr
+        validation = {
+            "scores": validation_rows,
+            "mean_clean_psnr_db": mean_clean_psnr,
+            "mean_psnr_drop_db": mean_drop,
+            "selection_score": selection_score,
+        }
+        row = {"epoch": epoch, "train": train_metrics, "validation": validation}
+        history.append(row)
+        if not np.isfinite(selection_score):
+            raise FloatingPointError("non-finite availability validation score")
+        if selection_score < best_score:
+            best_score = selection_score
+            stale = 0
+            payload: dict[str, Any] = {
+                "epoch": epoch,
+                "model": adapter.model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "metrics": row,
+                "objective": "availability_v2_source_relative_reconstruction_damage",
+            }
+            if hasattr(trigger, "state_dict"):
+                payload["trigger"] = trigger.state_dict()
+            torch.save(payload, path)
+        elif epoch + 1 >= config.early_stopping_start:
+            stale += 1
+            if stale >= config.patience:
+                break
+    if not path.exists():
+        raise RuntimeError(f"availability backdoor training produced no checkpoint: {path}")
+    payload = torch.load(path, map_location=device)
+    adapter.model.load_state_dict(payload["model"])
+    if hasattr(trigger, "load_state_dict") and "trigger" in payload:
+        trigger.load_state_dict(payload["trigger"])
+    return history
 
 
 def evaluate_availability_backdoor(

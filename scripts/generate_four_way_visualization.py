@@ -10,7 +10,7 @@ import zlib
 
 import numpy as np
 
-from rf_backdoor.adapter import ChunbaobaoDeepJSCCAdapter
+from rf_backdoor.adapter import DeepJSCCAdapter
 from rf_backdoor.datasets import CIFAR10Dataset
 from rf_backdoor.evaluation import psnr_np, target_psnr_np
 from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_torch
@@ -120,8 +120,8 @@ def main() -> int:
 
     selected = json.loads((root / "runs" / "P1_per_sample_v2" / "selected_trigger.json").read_text(encoding="utf-8"))
     trigger_config = IQDCOffsetConfig(**selected["config"])
-    clean_adapter = ChunbaobaoDeepJSCCAdapter.from_repo(root / "external" / "chunbaobao-deepjscc", c=8, channel_type="AWGN", snr_db=args.snr_db)
-    backdoor_adapter = ChunbaobaoDeepJSCCAdapter.from_repo(root / "external" / "chunbaobao-deepjscc", c=8, channel_type="AWGN", snr_db=args.snr_db)
+    clean_adapter = DeepJSCCAdapter.from_local(c=8, channel_type="awgn", snr_db=args.snr_db)
+    backdoor_adapter = DeepJSCCAdapter.from_local(c=8, channel_type="awgn", snr_db=args.snr_db)
     clean_adapter.model.to(device).eval()
     backdoor_adapter.model.to(device).eval()
     clean_checkpoint = torch.load(root / "runs" / "P0" / "seed_0" / "best.pt", map_location=device)

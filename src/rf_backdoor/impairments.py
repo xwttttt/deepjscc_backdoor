@@ -1,10 +1,9 @@
-"""Differentiable IQ-imbalance and DC-offset channel triggers.
+"""Differentiable IQ-imbalance and DC-offset transmitter triggers.
 
-The DeepJSCC bottleneck is represented as ``[I..., Q...]``: the first half of
-the flattened tensor is I and the second half is Q. The trigger stays after
-encoder power normalisation and before AWGN. The old DCFO proxy is intentionally
-not part of this public module: DC offset here means a constant complex offset
-per sample, as specified by the study protocol.
+The improved DeepJSCC backend emits native complex ``[B, L]`` samples.  The
+helpers also retain support for the legacy real ``[I..., Q...]`` layout so old
+saved measurements remain readable.  In both cases the trigger is inserted
+after encoder power normalisation and before the propagation channel.
 """
 
 from __future__ import annotations
@@ -41,6 +40,9 @@ def _split_half_np(value: np.ndarray) -> tuple[np.ndarray, np.ndarray, tuple[int
     if array.ndim < 2:
         raise ValueError("expected a batched array with shape [batch, ...]")
     shape = array.shape
+    if np.iscomplexobj(array):
+        flat = array.reshape(array.shape[0], -1)
+        return flat.real, flat.imag, shape
     flat = array.reshape(array.shape[0], -1)
     if flat.shape[1] % 2:
         raise ValueError("the bottleneck must contain 2k real values per sample")
@@ -49,11 +51,18 @@ def _split_half_np(value: np.ndarray) -> tuple[np.ndarray, np.ndarray, tuple[int
 
 
 def _to_complex_np(value: np.ndarray) -> tuple[np.ndarray, tuple[int, ...]]:
+    array = np.asarray(value)
+    if np.iscomplexobj(array):
+        if array.ndim < 2:
+            raise ValueError("expected a batched array with shape [batch, ...]")
+        return array.reshape(array.shape[0], -1), array.shape
     i, q, shape = _split_half_np(value)
     return i.astype(np.result_type(i.dtype, np.float32)) + 1j * q, shape
 
 
 def _from_complex_np(value: np.ndarray, shape: tuple[int, ...], dtype: np.dtype[Any]) -> np.ndarray:
+    if np.issubdtype(dtype, np.complexfloating):
+        return value.reshape(shape).astype(dtype, copy=False)
     flat = np.concatenate([value.real, value.imag], axis=1)
     return flat.reshape(shape).astype(dtype, copy=False)
 
@@ -118,6 +127,9 @@ def _split_half_torch(value: Any) -> tuple[Any, Any, tuple[int, ...]]:
     if value.ndim < 2:
         raise ValueError("expected a batched tensor with shape [batch, ...]")
     shape = tuple(value.shape)
+    if value.is_complex():
+        flat = value.flatten(1)
+        return flat.real, flat.imag, shape
     flat = value.flatten(1)
     if flat.shape[1] % 2:
         raise ValueError("the bottleneck must contain 2k real values per sample")
@@ -128,9 +140,10 @@ def _split_half_torch(value: Any) -> tuple[Any, Any, tuple[int, ...]]:
 def _apply_iq_torch(value: Any, gain_db: Any, phase_deg: Any) -> Any:
     torch = _require_torch()
     i, q, shape = _split_half_torch(value)
-    ten = torch.as_tensor(10.0, dtype=value.dtype, device=value.device)
-    gain = torch.as_tensor(gain_db, dtype=value.dtype, device=value.device)
-    phase = torch.as_tensor(phase_deg, dtype=value.dtype, device=value.device)
+    real_dtype = value.real.dtype if value.is_complex() else value.dtype
+    ten = torch.as_tensor(10.0, dtype=real_dtype, device=value.device)
+    gain = torch.as_tensor(gain_db, dtype=real_dtype, device=value.device)
+    phase = torch.as_tensor(phase_deg, dtype=real_dtype, device=value.device)
     ratio = torch.pow(ten, gain / 20.0)
     epsilon = (ratio - 1.0) / (ratio + 1.0)
     half = torch.deg2rad(phase) / 2.0
@@ -140,6 +153,8 @@ def _apply_iq_torch(value: Any, gain_db: Any, phase_deg: Any) -> Any:
     nu_imag = torch.sin(half)
     out_i = (mu_real + nu_real) * i + (-mu_imag + nu_imag) * q
     out_q = (mu_imag + nu_imag) * i + (mu_real - nu_real) * q
+    if value.is_complex():
+        return torch.complex(out_i, out_q).reshape(shape).to(value.dtype)
     return torch.cat([out_i, out_q], dim=1).reshape(shape)
 
 
@@ -147,10 +162,15 @@ def _apply_dc_torch(value: Any, magnitude: Any, phase_deg: Any) -> Any:
     torch = _require_torch()
     i, q, shape = _split_half_torch(value)
     rms = torch.sqrt(torch.mean(i.square() + q.square(), dim=1, keepdim=True))
-    magnitude_t = torch.as_tensor(magnitude, dtype=value.dtype, device=value.device)
-    phase_t = torch.deg2rad(torch.as_tensor(phase_deg, dtype=value.dtype, device=value.device))
+    real_dtype = value.real.dtype if value.is_complex() else value.dtype
+    magnitude_t = torch.as_tensor(magnitude, dtype=real_dtype, device=value.device)
+    phase_t = torch.deg2rad(torch.as_tensor(phase_deg, dtype=real_dtype, device=value.device))
+    out_i = i + magnitude_t * rms * torch.cos(phase_t)
+    out_q = q + magnitude_t * rms * torch.sin(phase_t)
+    if value.is_complex():
+        return torch.complex(out_i, out_q).reshape(shape).to(value.dtype)
     return torch.cat(
-        [i + magnitude_t * rms * torch.cos(phase_t), q + magnitude_t * rms * torch.sin(phase_t)],
+        [out_i, out_q],
         dim=1,
     ).reshape(shape)
 
@@ -164,6 +184,10 @@ def apply_iq_dc_torch(value: Any, cfg: IQDCOffsetConfig) -> Any:
 
 
 def _as_complex_torch(value: Any) -> Any:
+    if value.is_complex():
+        if value.ndim < 2:
+            raise ValueError("expected a batched tensor with shape [batch, ...]")
+        return value.flatten(1)
     i, q, _ = _split_half_torch(value)
     return i + 1j * q
 
