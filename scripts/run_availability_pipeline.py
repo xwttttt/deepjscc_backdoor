@@ -126,10 +126,27 @@ def _loader(dataset: Any, *, batch_size: int, workers: int, shuffle: bool) -> An
 
 
 def _load_adapter(device: Any, backend: dict[str, Any], checkpoint: Path | None = None) -> DeepJSCCAdapter:
-    adapter = DeepJSCCAdapter.from_local(
-        c=int(backend["c"]),
-        channel_type="awgn",
-        snr_db=float(backend["train_snr_db"]),
+    """Wrap the supplied DeepJSCC model/channel for the attack pipeline.
+
+    Model and channel construction stays here, at the experiment entrypoint;
+    ``rf_backdoor`` only receives their public encode/transmit/decode seam.
+    """
+
+    from src.channels import Channel, ChannelConfig
+    from src.deepjscc.model import DeepJSCC
+
+    snr_db = float(backend["train_snr_db"])
+    channel = Channel(
+        ChannelConfig(
+            channel_type="awgn",
+            snr_min=snr_db,
+            snr_max=snr_db,
+        )
+    )
+    adapter = DeepJSCCAdapter(
+        DeepJSCC(c=int(backend["c"])),
+        channel=channel,
+        baseline_path=Path(__file__).resolve().parents[1] / "src" / "src",
     )
     adapter.model.to(device)
     if checkpoint is not None:

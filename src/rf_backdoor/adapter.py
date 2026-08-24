@@ -1,8 +1,8 @@
-"""Adapters for the local, improved DeepJSCC implementation.
+"""The small seam between the supplied codec/channel and attack code.
 
-The improved implementation uses native complex baseband samples and carries
-spatial codec state between its encoder and decoder.  This module preserves
-the experiment-facing ``encode/apply_channel/decode`` interface.
+The model and channel remain owned by the DeepJSCC implementation.  This
+adapter only carries codec state and forwards channel calls; it does not
+reimplement propagation, AWGN, or decoder behaviour.
 """
 
 from __future__ import annotations
@@ -115,28 +115,49 @@ class DeepJSCCAdapter:
         self._codec_state = None
         return encoded
 
-    def apply_channel(self, latent: Any, snr_db: float) -> Any:
+    def sample_channel_state(self, latent: Any, snr_db: float, *, generator: Any | None = None) -> Any:
+        """Ask the supplied channel for one state, without changing it."""
+
+        if self.channel is None:
+            raise RuntimeError("DeepJSCC adapter has no channel")
+        sampler = getattr(self.channel, "sampling_channel_state", None)
+        if sampler is None:
+            return None
+        if latent.ndim != 2 or not latent.is_complex():
+            raise ValueError("the supplied channel expects complex [batch, sequence] samples")
+        state = sampler(
+            batch_size=int(latent.shape[0]),
+            seq_len=int(latent.shape[1]),
+            device=latent.device,
+            dtype=latent.dtype,
+            generator=generator,
+        )
+        import torch
+
+        state["snr_db"] = torch.full(
+            (latent.shape[0],),
+            float(snr_db),
+            dtype=latent.real.dtype,
+            device=latent.device,
+        )
+        return state
+
+    def apply_channel(
+        self,
+        latent: Any,
+        snr_db: float,
+        *,
+        channel_state: Any | None = None,
+        generator: Any | None = None,
+    ) -> Any:
+        """Forward one latent batch through the supplied channel."""
+
         if self.channel is None:
             raise RuntimeError("DeepJSCC adapter has no channel")
 
         if hasattr(self.channel, "sampling_channel_state"):
-            if latent.ndim != 2 or not latent.is_complex():
-                raise ValueError("the improved channel expects complex [batch, sequence] samples")
-            state = self.channel.sampling_channel_state(
-                batch_size=int(latent.shape[0]),
-                seq_len=int(latent.shape[1]),
-                device=latent.device,
-                dtype=latent.dtype,
-            )
-            import torch
-
-            state["snr_db"] = torch.full(
-                (latent.shape[0],),
-                float(snr_db),
-                dtype=latent.real.dtype,
-                device=latent.device,
-            )
-            return self.channel(latent, state)
+            state = channel_state if channel_state is not None else self.sample_channel_state(latent, snr_db)
+            return self.channel(latent, state, generator=generator)
 
         old_snr = getattr(self.channel, "snr", None)
         if old_snr is not None:
@@ -146,6 +167,61 @@ class DeepJSCCAdapter:
         finally:
             if old_snr is not None:
                 self.channel.snr = old_snr
+
+    def apply_channel_pair(
+        self,
+        clean_latent: Any,
+        triggered_latent: Any,
+        snr_db: float,
+        *,
+        channel_state: Any | None = None,
+        generator: Any | None = None,
+    ) -> tuple[Any, Any]:
+        """Transmit clean/triggered latents with one supplied channel state.
+
+        The channel implementation remains the single source of truth.  The
+        RNG state is restored between the two calls so stochastic channels
+        consume the same random realization for the pair.
+        """
+
+        if clean_latent.shape != triggered_latent.shape:
+            raise ValueError("clean and triggered latents must have identical shapes")
+        if channel_state is None:
+            channel_state = self.sample_channel_state(clean_latent, snr_db, generator=generator)
+
+        rng_state = None
+        torch = None
+        if generator is None:
+            try:
+                import torch as _torch
+
+                torch = _torch
+                rng_state = torch.cuda.get_rng_state(clean_latent.device) if clean_latent.is_cuda else torch.get_rng_state()
+            except (ImportError, AttributeError):
+                rng_state = None
+        else:
+            rng_state = generator.get_state()
+
+        clean_received = self.apply_channel(
+            clean_latent,
+            snr_db,
+            channel_state=channel_state,
+            generator=generator,
+        )
+        if generator is None and rng_state is not None and torch is not None:
+            if clean_latent.is_cuda:
+                torch.cuda.set_rng_state(rng_state, clean_latent.device)
+            else:
+                torch.set_rng_state(rng_state)
+        elif generator is not None:
+            generator.set_state(rng_state)
+        triggered_received = self.apply_channel(
+            triggered_latent,
+            snr_db,
+            channel_state=channel_state,
+            generator=generator,
+        )
+        return clean_received, triggered_received
 
     def decode(self, received_latent: Any) -> Any:
         if self._codec_state is not None:

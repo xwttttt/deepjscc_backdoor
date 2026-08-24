@@ -237,11 +237,13 @@ def _paired_channel_decode_many(
     triggered_latent: Any,
     snr_db_values: Iterable[float],
 ) -> list[tuple[Any, Any]]:
-    """Vectorized AWGN and decoding for several SNRs.
+    """Decode clean/triggered pairs through the caller-supplied channel.
 
-    The channel uses per-example latent power. This helper reproduces the
-    proper real or complex AWGN formula while sharing the standardized noise
-    between the clean and triggered branches.
+    The attack module deliberately does not implement AWGN, fading, or any
+    other channel equation.  ``DeepJSCCAdapter.apply_channel_pair`` delegates
+    both transmissions to the supplied channel while preserving one random
+    realization for the pair.  The fallback keeps small test adapters that
+    expose only ``apply_channel`` usable.
     """
 
     torch = _torch()
@@ -251,26 +253,26 @@ def _paired_channel_decode_many(
     batch_size = int(clean_latent.shape[0])
     if triggered_latent.shape != clean_latent.shape:
         raise ValueError("clean and triggered latent shapes must match")
-    clean_stack = torch.cat([clean_latent] * len(snrs), dim=0)
-    triggered_stack = torch.cat([triggered_latent] * len(snrs), dim=0)
-    real_dtype = clean_latent.real.dtype if clean_latent.is_complex() else clean_latent.dtype
-    snr_tensor = torch.as_tensor(snrs, dtype=real_dtype, device=clean_latent.device).repeat_interleave(batch_size)
-    snr_view = snr_tensor.reshape((-1,) + (1,) * (clean_latent.ndim - 1))
-    clean_power = clean_stack.flatten(1).abs().square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
-    triggered_power = triggered_stack.flatten(1).abs().square().mean(dim=1, keepdim=True).reshape(snr_view.shape)
-    ten = torch.as_tensor(10.0, dtype=real_dtype, device=clean_latent.device)
-    clean_scale = torch.sqrt(clean_power / torch.pow(ten, snr_view / 10.0) / 2.0)
-    triggered_scale = torch.sqrt(triggered_power / torch.pow(ten, snr_view / 10.0) / 2.0)
-    if clean_stack.is_complex():
-        standardized_noise = torch.complex(
-            torch.randn_like(clean_stack.real),
-            torch.randn_like(clean_stack.real),
+    received_pairs = []
+    for snr_db in snrs:
+        if hasattr(adapter, "apply_channel_pair"):
+            clean_rx, triggered_rx = adapter.apply_channel_pair(
+                clean_latent,
+                triggered_latent,
+                snr_db,
+            )
+        else:
+            clean_rx = adapter.apply_channel(clean_latent, snr_db)
+            triggered_rx = adapter.apply_channel(triggered_latent, snr_db)
+        received_pairs.append((clean_rx, triggered_rx))
+
+    decoded = adapter.decode(
+        torch.cat(
+            [clean_rx for clean_rx, _ in received_pairs]
+            + [triggered_rx for _, triggered_rx in received_pairs],
+            dim=0,
         )
-    else:
-        standardized_noise = torch.randn_like(clean_stack)
-    clean_rx = clean_stack + standardized_noise * clean_scale
-    triggered_rx = triggered_stack + standardized_noise * triggered_scale
-    decoded = adapter.decode(torch.cat([clean_rx, triggered_rx], dim=0))
+    )
     clean_decoded, triggered_decoded = decoded.chunk(2, dim=0)
     return [
         (

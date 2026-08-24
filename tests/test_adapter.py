@@ -51,3 +51,22 @@ def test_improved_local_adapter_round_trip_shapes():
     assert latent.shape == (2, 2 * 8 * 8)
     assert output.shape == images.shape
     assert torch.isfinite(output).all()
+
+
+def test_adapter_channel_pair_reuses_supplied_channel_noise():
+    torch = __import__("pytest").importorskip("torch")
+
+    class StatefulChannel:
+        def sampling_channel_state(self, batch_size, seq_len, device, dtype, generator=None):
+            return {"snr_db": torch.full((batch_size,), 7.0, device=device)}
+
+        def __call__(self, signal, state, generator=None):
+            real = torch.randn(signal.shape, device=signal.device, generator=generator)
+            imag = torch.randn(signal.shape, device=signal.device, generator=generator)
+            return signal + torch.complex(real, imag).to(signal.dtype)
+
+    adapter = DeepJSCCAdapter(object(), channel=StatefulChannel())
+    clean = torch.ones(2, 4, dtype=torch.complex64)
+    triggered = torch.full_like(clean, 2.0)
+    clean_rx, triggered_rx = adapter.apply_channel_pair(clean, triggered, 7.0)
+    assert torch.equal(clean_rx - clean, triggered_rx - triggered)
