@@ -323,9 +323,9 @@ def _candidate_measurement(adapter: Any, loader: Any, config: IQDCOffsetConfig, 
             clean_psnr = psnr_np(clean_np, source_np)
             triggered_psnr = psnr_np(triggered_np, source_np)
             drop = clean_psnr - triggered_psnr
-            ref_power += float(np.abs(reference_np).astype(np.float64).square().sum())
-            error_power += float(np.abs(impaired_np - reference_np).astype(np.float64).square().sum())
-            out_power += float(np.abs(impaired_np).astype(np.float64).square().sum())
+            ref_power += float(np.square(np.abs(reference_np).astype(np.float64)).sum())
+            error_power += float(np.square(np.abs(impaired_np - reference_np).astype(np.float64)).sum())
+            out_power += float(np.square(np.abs(impaired_np).astype(np.float64)).sum())
             clean_drop_sum += float(drop.sum())
             failures += int(np.sum(drop >= failure_drop_db))
             total += int(drop.size)
