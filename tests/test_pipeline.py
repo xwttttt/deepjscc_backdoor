@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 
 from rf_backdoor.impairments import IQDCOffsetConfig
 
@@ -32,3 +33,20 @@ def test_candidate_measurement_accepts_numpy_power_arrays():
     assert measurement.power_change_db == pytest.approx(0.0)
     assert measurement.clean_psnr_loss_db == pytest.approx(0.0)
     assert measurement.clean_false_activation_rate == pytest.approx(0.0)
+
+
+def test_evaluation_constraints_map_pilot_physical_limits_from_trigger():
+    from rf_backdoor.availability_v2 import load_toml
+    from scripts.run_availability_pipeline import _evaluation_constraints
+
+    root = Path(__file__).resolve().parents[1]
+    pilot = load_toml(root / "configs" / "availability_v2_pilot.toml")
+    full = load_toml(root / "configs" / "availability_v2_full.toml")
+
+    pilot_limits = _evaluation_constraints(pilot, "pilot")
+    full_limits = _evaluation_constraints(full, "full-dev")
+
+    assert pilot_limits["evm_limit"] == pytest.approx(0.10)
+    assert pilot_limits["power_change_db_limit"] == pytest.approx(0.5)
+    assert full_limits["evm_limit"] == pytest.approx(0.10)
+    assert full_limits["power_change_db_limit"] == pytest.approx(0.5)

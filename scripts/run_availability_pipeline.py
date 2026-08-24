@@ -564,6 +564,34 @@ def _equal_evm_random(value: Any, evm: float) -> Any:
     return value + float(evm) * ref_rms * noise / noise_rms.clamp_min(1e-12)
 
 
+def _evaluation_constraints(raw: dict[str, Any], profile: str) -> dict[str, float]:
+    """Map profile-specific config tables to one evaluation contract."""
+
+    trigger_cfg = _section(raw, "trigger")
+    if profile == "pilot":
+        success_cfg = _section(raw, "g3")
+        return {
+            "minimum_worst_snr_psnr_drop_db": float(success_cfg["minimum_snr7_psnr_drop_db"]),
+            "minimum_worst_snr_failure_rate": float(success_cfg["minimum_snr7_failure_rate"]),
+            "maximum_clean_trigger_failure_rate": float(success_cfg["maximum_clean_trigger_failure_rate"]),
+            "maximum_clean_utility_drop_db": float(success_cfg["maximum_clean_utility_drop_db"]),
+            "evm_limit": float(trigger_cfg["evm_limit"]),
+            "power_change_db_limit": float(trigger_cfg["power_change_db_limit"]),
+            "minimum_snr7_psnr_drop_db": float(success_cfg["minimum_snr7_psnr_drop_db"]),
+            "minimum_snr7_failure_rate": float(success_cfg["minimum_snr7_failure_rate"]),
+            "minimum_cross_snr_drop_db": float(success_cfg["minimum_cross_snr_drop_db"]),
+        }
+    success_cfg = _section(raw, "success")
+    return {
+        "minimum_worst_snr_psnr_drop_db": float(success_cfg["minimum_worst_snr_psnr_drop_db"]),
+        "minimum_worst_snr_failure_rate": float(success_cfg["minimum_worst_snr_failure_rate"]),
+        "maximum_clean_trigger_failure_rate": float(success_cfg["maximum_clean_trigger_failure_rate"]),
+        "maximum_clean_utility_drop_db": float(success_cfg["maximum_clean_utility_drop_db"]),
+        "evm_limit": float(success_cfg["evm_limit"]),
+        "power_change_db_limit": float(success_cfg["power_change_db_limit"]),
+    }
+
+
 def _evaluate_one(root: Path, profile: str, profile_dir: Path, run_dir: Path, *, raw: dict[str, Any], config_hash: str, device: Any, resume: bool) -> dict[str, Any]:
     spec = json.loads((run_dir / "run_identity.json").read_text(encoding="utf-8"))
     checkpoint = run_dir / "best.pt"
@@ -592,31 +620,31 @@ def _evaluate_one(root: Path, profile: str, profile_dir: Path, run_dir: Path, *,
     worst_failure = min(row["backdoor_model"]["failure_rate"] for row in metric_rows)
     clean_failure = max(row["clean_model"]["failure_rate"] for row in metric_rows)
     clean_utility = max(row["backdoor_clean_utility_drop_db"] for row in metric_rows)
-    success_cfg = _section(raw, "g3") if profile == "pilot" else _section(raw, "success")
+    constraints = _evaluation_constraints(raw, profile)
     row_by_snr = {float(row["snr_db"]): row for row in metric_rows}
     checks = {
         "worst_snr_psnr_drop_db": worst_drop,
-        "minimum_worst_snr_psnr_drop_db": float(success_cfg["minimum_snr7_psnr_drop_db"] if profile == "pilot" else success_cfg["minimum_worst_snr_psnr_drop_db"]),
+        "minimum_worst_snr_psnr_drop_db": constraints["minimum_worst_snr_psnr_drop_db"],
         "worst_snr_failure_rate": worst_failure,
-        "minimum_worst_snr_failure_rate": float(success_cfg["minimum_snr7_failure_rate"] if profile == "pilot" else success_cfg["minimum_worst_snr_failure_rate"]),
+        "minimum_worst_snr_failure_rate": constraints["minimum_worst_snr_failure_rate"],
         "clean_model_trigger_failure_rate": clean_failure,
-        "maximum_clean_model_trigger_failure_rate": float(success_cfg["maximum_clean_trigger_failure_rate"]),
+        "maximum_clean_model_trigger_failure_rate": constraints["maximum_clean_trigger_failure_rate"],
         "backdoor_clean_utility_drop_db": clean_utility,
-        "maximum_backdoor_clean_utility_drop_db": float(success_cfg["maximum_clean_utility_drop_db"]),
+        "maximum_backdoor_clean_utility_drop_db": constraints["maximum_clean_utility_drop_db"],
         "evm": stealth["evm"],
-        "maximum_evm": float(success_cfg["evm_limit"]),
+        "maximum_evm": constraints["evm_limit"],
         "absolute_power_change_db": abs(stealth["power_change_db"]),
-        "maximum_absolute_power_change_db": float(success_cfg["power_change_db_limit"]),
+        "maximum_absolute_power_change_db": constraints["power_change_db_limit"],
     }
     if profile == "pilot":
         checks.update({
             "snr7_psnr_drop_db": row_by_snr[7.0]["backdoor_model"]["psnr_drop_db"],
-            "minimum_snr7_psnr_drop_db": float(success_cfg["minimum_snr7_psnr_drop_db"]),
+            "minimum_snr7_psnr_drop_db": constraints["minimum_snr7_psnr_drop_db"],
             "snr7_failure_rate": row_by_snr[7.0]["backdoor_model"]["failure_rate"],
-            "minimum_snr7_failure_rate": float(success_cfg["minimum_snr7_failure_rate"]),
+            "minimum_snr7_failure_rate": constraints["minimum_snr7_failure_rate"],
             "snr4_psnr_drop_db": row_by_snr[4.0]["backdoor_model"]["psnr_drop_db"],
             "snr13_psnr_drop_db": row_by_snr[13.0]["backdoor_model"]["psnr_drop_db"],
-            "minimum_cross_snr_drop_db": float(success_cfg["minimum_cross_snr_drop_db"]),
+            "minimum_cross_snr_drop_db": constraints["minimum_cross_snr_drop_db"],
         })
     passed = all(
         checks[key] <= checks[limit]
