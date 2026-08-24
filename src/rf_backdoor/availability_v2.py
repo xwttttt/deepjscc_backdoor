@@ -20,7 +20,7 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 
-from .evaluation import mean_std_t_ci, psnr_np
+from .metrics import mean_std_t_ci, psnr_np
 from .impairments import (
     IQDCOffsetConfig,
     LearnableIQDCOffset,

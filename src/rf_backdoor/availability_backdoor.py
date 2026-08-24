@@ -19,9 +19,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 import numpy as np
-
-from .availability import _torch
-from .evaluation import mean_std_t_ci, psnr_np
+from .metrics import mean_std_t_ci, psnr_np
 from .impairments import (
     IQDCOffsetConfig,
     apply_iq_dc_torch,
@@ -32,6 +30,14 @@ from .impairments import (
     power_change_db_numpy,
 )
 from .training import _images_from_batch
+
+
+def _torch() -> Any:
+    try:
+        import torch
+    except ImportError as exc:  # pragma: no cover
+        raise ImportError("availability_v2 requires PyTorch") from exc
+    return torch
 
 
 @dataclass(frozen=True)

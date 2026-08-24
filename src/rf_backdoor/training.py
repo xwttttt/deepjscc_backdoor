@@ -1,17 +1,15 @@
-"""PyTorch training loops for clean and target-reconstruction DeepJSCC runs."""
+"""Clean P0 training utilities for the availability_v2 pipeline."""
 
 from __future__ import annotations
 
 from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import numpy as np
 
-from .evaluation import psnr_np
-from .impairments import IQDCOffsetConfig, apply_iq_dc_torch
-from .poisoning import targeted_reconstruction_loss
+from .metrics import psnr_np
 
 
 def _torch() -> Any:
@@ -25,17 +23,14 @@ def _torch() -> Any:
 @dataclass(frozen=True)
 class TrainingConfig:
     snr_db: float = 7.0
-    poison_weight: float = 1.0
-    evm_penalty_weight: float = 0.0
-    power_penalty_weight: float = 0.0
     max_epochs: int = 1000
     early_stopping_start: int = 100
     patience: int = 50
     mixed_precision: bool = False
 
     def __post_init__(self) -> None:
-        if self.poison_weight < 0 or self.evm_penalty_weight < 0 or self.power_penalty_weight < 0:
-            raise ValueError("loss and constraint weights must be non-negative")
+        if self.max_epochs <= 0 or self.early_stopping_start < 0 or self.patience <= 0:
+            raise ValueError("epoch settings must be positive")
 
 
 def set_seed(seed: int) -> None:
@@ -105,69 +100,6 @@ def clean_train_epoch(
     return {"loss": total / max(count, 1)}
 
 
-def poisoned_train_epoch(
-    adapter: Any,
-    loader: Any,
-    optimizer: Any,
-    *,
-    trigger: IQDCOffsetConfig | Callable[[Any], Any],
-    target: Any,
-    config: TrainingConfig,
-    device: Any,
-) -> dict[str, float]:
-    """Train clean samples to themselves and manifest-poisoned samples to target."""
-
-    torch = _torch()
-    adapter.model.train()
-    total_clean = total_poison = 0.0
-    total_constraint_penalty = 0.0
-    clean_count = poison_count = 0
-    batch_count = 0
-    for batch in loader:
-        images, poison_mask = _images_from_batch(batch, device)
-        if poison_mask is None:
-            raise ValueError("poisoned_train_epoch requires a manifest metadata loader")
-        optimizer.zero_grad(set_to_none=True)
-        clean_latent = adapter.encode(images)
-        if isinstance(trigger, IQDCOffsetConfig):
-            triggered_latent = apply_iq_dc_torch(clean_latent, trigger)
-        else:
-            triggered_latent = trigger(clean_latent)
-        clean_rx = adapter.apply_channel(clean_latent, config.snr_db)
-        trigger_rx = adapter.apply_channel(triggered_latent, config.snr_db)
-        selector = poison_mask.reshape((-1,) + (1,) * (clean_rx.ndim - 1))
-        received = torch.where(selector, trigger_rx, clean_rx)
-        reconstruction = adapter.decode(received)
-        loss = targeted_reconstruction_loss(reconstruction, images, target, poison_mask, poison_weight=config.poison_weight)
-        objective = loss.total
-        constraint_penalty = loss.total.detach() * 0.0
-        if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
-            constraint_penalty = trigger.constraint_penalty(
-                clean_latent,
-                evm_weight=config.evm_penalty_weight,
-                power_weight=config.power_penalty_weight,
-            )
-            objective = objective + constraint_penalty
-        objective.backward()
-        optimizer.step()
-        if loss.clean.numel():
-            total_clean += float(loss.clean.detach()) * (images.shape[0] - loss.poison_count)
-        if loss.poison.numel():
-            total_poison += float(loss.poison.detach()) * loss.poison_count
-        clean_count += images.shape[0] - loss.poison_count
-        poison_count += loss.poison_count
-        total_constraint_penalty += float(constraint_penalty.detach())
-        batch_count += 1
-    weighted_count = clean_count + config.poison_weight * poison_count
-    return {
-        "loss": (total_clean + config.poison_weight * total_poison) / max(weighted_count, 1.0),
-        "clean_loss": total_clean / max(clean_count, 1),
-        "poison_loss": total_poison / max(poison_count, 1),
-        "poison_count": float(poison_count),
-        "constraint_penalty": total_constraint_penalty / max(batch_count, 1),
-    }
-
-
 def evaluate_clean_epoch(adapter: Any, loader: Any, *, snr_db: float, device: Any) -> dict[str, float]:
     """Evaluate clean reconstruction without requiring torch at import time."""
 
@@ -198,29 +130,22 @@ def fit(
     *,
     config: TrainingConfig,
     device: Any,
-    trigger: IQDCOffsetConfig | Callable[[Any], Any] | None = None,
-    target: Any | None = None,
     checkpoint_path: str | Path | None = None,
 ) -> list[dict[str, float]]:
-    """Run epoch training with P0/P2 early stopping and best checkpoint."""
+    """Run clean P0 training with early stopping and best checkpoint."""
 
-    if (trigger is None) != (target is None):
-        raise ValueError("trigger and target must be provided together")
     history: list[dict[str, float]] = []
     best_psnr = -float("inf")
     stale = 0
     for epoch in range(config.max_epochs):
-        if trigger is None:
-            train_metrics = clean_train_epoch(
-                adapter,
-                train_loader,
-                optimizer,
-                snr_db=config.snr_db,
-                device=device,
-                mixed_precision=config.mixed_precision,
-            )
-        else:
-            train_metrics = poisoned_train_epoch(adapter, train_loader, optimizer, trigger=trigger, target=target, config=config, device=device)
+        train_metrics = clean_train_epoch(
+            adapter,
+            train_loader,
+            optimizer,
+            snr_db=config.snr_db,
+            device=device,
+            mixed_precision=config.mixed_precision,
+        )
         validation = evaluate_clean_epoch(adapter, validation_loader, snr_db=config.snr_db, device=device)
         row = {"epoch": float(epoch), **{f"train_{key}": value for key, value in train_metrics.items()}, **{f"validation_{key}": value for key, value in validation.items()}}
         history.append(row)
@@ -231,8 +156,6 @@ def fit(
                 torch = _torch()
                 Path(checkpoint_path).parent.mkdir(parents=True, exist_ok=True)
                 payload = {"epoch": epoch, "model": adapter.model.state_dict(), "optimizer": optimizer.state_dict(), "metrics": row}
-                if hasattr(trigger, "state_dict"):
-                    payload["trigger"] = trigger.state_dict()
                 torch.save(payload, checkpoint_path)
         elif epoch + 1 >= config.early_stopping_start:
             stale += 1

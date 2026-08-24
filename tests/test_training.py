@@ -21,6 +21,6 @@ def test_images_from_batch_unwraps_nested_metadata_batch():
     assert torch.equal(mask, poison_mask)
 
 
-def test_training_config_rejects_negative_objective_weights():
+def test_training_config_rejects_invalid_epoch_settings():
     with pytest.raises(ValueError):
-        TrainingConfig(evm_penalty_weight=-1.0)
+        TrainingConfig(max_epochs=0)

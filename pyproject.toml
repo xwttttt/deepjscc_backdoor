@@ -25,12 +25,6 @@ radio = [
 ]
 test = ["pytest>=7"]
 
-[project.scripts]
-fetch-baseline = "rf_backdoor.cli:fetch_baseline_main"
-run-p0 = "rf_backdoor.cli:run_p0_main"
-run-p1-scan = "rf_backdoor.cli:run_p1_main"
-run-p2 = "rf_backdoor.cli:run_p2_main"
-evaluate-four-way = "rf_backdoor.cli:evaluate_four_way_main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

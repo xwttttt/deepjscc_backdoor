@@ -48,7 +48,6 @@ phases:
     training_seeds: [0, 1, 2]
     target_image: null
     trigger_path: encoder_normalized_latent_iq_imbalance_then_dc_offset
-    trigger_only_control: scripts/run_availability_study.py
 
 smoke:
   samples: 5000

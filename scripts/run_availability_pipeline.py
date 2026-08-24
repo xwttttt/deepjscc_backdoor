@@ -27,10 +27,10 @@ from rf_backdoor.availability_backdoor import (
     build_availability_poison_manifest,
     fit_availability_backdoor,
 )
-from rf_backdoor.evaluation import mean_std_t_ci, psnr_np
+from rf_backdoor.metrics import mean_std_t_ci, psnr_np
 from rf_backdoor.impairments import IQDCOffsetConfig, LearnableIQDCOffset, apply_iq_dc_torch
 from rf_backdoor.metadata import sha256_file
-from rf_backdoor.poisoning import build_split_indices, sha256_array
+from rf_backdoor.data_protocol import build_split_indices, sha256_array
 from rf_backdoor.scan import CandidateMeasurement, iter_fixed_trigger_configs, trigger_config_hash
 from rf_backdoor.training import TrainingConfig, evaluate_clean_epoch, fit, set_seed
 from rf_backdoor.availability_v2 import (
@@ -95,7 +95,7 @@ def _data_bundle(root: Path, raw: dict[str, Any]) -> tuple[Any, tuple[int, ...],
     base = __import__("rf_backdoor.datasets", fromlist=["CIFAR10Dataset"]).CIFAR10Dataset(root / "data", train=True)
     train_indices, validation_indices = build_split_indices(
         len(base),
-        target_index=int(dataset_cfg["excluded_index"]),
+        excluded_index=int(dataset_cfg["excluded_index"]),
         train_count=int(dataset_cfg["train_count"]),
         seed=int(dataset_cfg["split_seed"]),
     )
