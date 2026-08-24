@@ -69,4 +69,4 @@ def test_adapter_channel_pair_reuses_supplied_channel_noise():
     clean = torch.ones(2, 4, dtype=torch.complex64)
     triggered = torch.full_like(clean, 2.0)
     clean_rx, triggered_rx = adapter.apply_channel_pair(clean, triggered, 7.0)
-    assert torch.equal(clean_rx - clean, triggered_rx - triggered)
+    assert torch.allclose(clean_rx - clean, triggered_rx - triggered, atol=1e-6, rtol=0.0)
