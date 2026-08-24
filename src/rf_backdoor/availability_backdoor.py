@@ -267,9 +267,15 @@ def _paired_channel_decode_many(
                 triggered_latent,
                 snr_db,
             )
-        else:
+        elif hasattr(adapter, "apply_channel"):
             clean_rx = adapter.apply_channel(clean_latent, snr_db)
             triggered_rx = adapter.apply_channel(triggered_latent, snr_db)
+        else:
+            # Small protocol adapters used by CPU tests may intentionally omit
+            # a channel.  Treat that seam as an identity channel; real
+            # DeepJSCC adapters always provide apply_channel_pair().
+            clean_rx = clean_latent
+            triggered_rx = triggered_latent
         received_pairs.append((clean_rx, triggered_rx))
 
     decoded = adapter.decode(
