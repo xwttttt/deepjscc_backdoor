@@ -1,5 +1,7 @@
 # DeepJSCC IQ 不平衡与 DC Offset 可用性攻击研究工具包
 
+2026-10-16 上传状态：完整项目快照已推送到 `codex/project-upload-20261016`，首次上传提交为 `44806d342c76ac931db92bfde96097077b691556`，已通过远程 SHA 核对；原默认分支未修改。
+
 2026-10-16 项目快照的 GitHub 目标为 [`xwttttt/deepjscc_backdoor` 的 `codex/project-upload-20261016` 分支](https://github.com/xwttttt/deepjscc_backdoor/tree/codex/project-upload-20261016)。上传范围包括源码、配置、测试、文档、实验结果/图表和包含固定测试集及两份模型的完整部署 ZIP；临时目录、缓存、服务器训练目录和重复解压副本不纳入 Git。详细范围与本地检查见 [`docs/github_upload_20261016.md`](docs/github_upload_20261016.md)。该快照不增加新的训练或实机验证结果。
 
 ## Magmaw 参考的 OTA 对抗攻击（2026-10-13）
