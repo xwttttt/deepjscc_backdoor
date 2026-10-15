@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "checkedAt": "2026-09-02T07:55:38.915Z",
+  "workspace": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k",
+  "finalPptx": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\deepjscc_c16_capped_psnr_drop_80k_final_report.pptx",
+  "starterPptx": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-starter.pptx",
+  "mapPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-frame-map.json",
+  "starterLayoutDir": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-starter-layout",
+  "finalLayoutDir": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\final-layout",
+  "editDir": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k",
+  "issueCount": 0,
+  "issues": []
+}

@@ -142,6 +142,12 @@ class AvailabilityBackdoorConfig:
     power_penalty_weight: float = 10.0
     max_clean_utility_drop_db: float = 0.5
     max_clean_trigger_failure_rate: float = 0.01
+    attack_grad_norm_ratio: float = 0.25
+    attack_grad_max_norm: float = 1.0
+    parameter_anchor_weight: float = 1e-3
+    max_parameter_relative_change: float = 0.10
+    learning_rate_scale: float = 0.10
+    hard_stop_on_clean_utility_excess: bool = True
     max_epochs: int = 1000
     early_stopping_start: int = 100
     patience: int = 50
@@ -160,6 +166,12 @@ class AvailabilityBackdoorConfig:
             raise ValueError("physical limits must be positive")
         if min(self.evm_penalty_weight, self.power_penalty_weight) < 0:
             raise ValueError("penalty weights must be non-negative")
+        if self.attack_grad_norm_ratio <= 0 or self.attack_grad_max_norm <= 0:
+            raise ValueError("attack gradient limits must be positive")
+        if self.parameter_anchor_weight < 0 or self.max_parameter_relative_change <= 0:
+            raise ValueError("parameter anchor settings are invalid")
+        if self.learning_rate_scale <= 0:
+            raise ValueError("learning_rate_scale must be positive")
         if self.max_clean_utility_drop_db < 0 or not 0 <= self.max_clean_trigger_failure_rate <= 1:
             raise ValueError("clean utility limits are invalid")
         if self.max_epochs <= 0 or self.early_stopping_start < 0 or self.patience <= 0:
@@ -205,10 +217,11 @@ def availability_backdoor_loss(
 ) -> AvailabilityBackdoorLoss:
     """Keep clean reconstruction good and hinge-triggered reconstruction bad.
 
-    The damage hinge is expressed as a PSNR drop.  For a poisoned example the
-    model is penalized until ``MSE(triggered) / MSE(clean)`` reaches the ratio
-    corresponding to ``min_psnr_drop_db``.  The clean MSE is detached inside
-    the hinge, so the model cannot satisfy the attack by degrading both paths.
+    The damage term uses a target MSE ratio rather than a log-ratio hinge.  For
+    a poisoned example the model is penalized until ``MSE(triggered)`` reaches
+    the ratio corresponding to ``min_psnr_drop_db``.  The clean MSE is detached
+    and the derivative with respect to triggered MSE is constant, avoiding the
+    ``1 / MSE(triggered)`` gradient spike of a logarithmic hinge.
     """
 
     torch = _torch()
@@ -220,15 +233,104 @@ def availability_backdoor_loss(
     poison_clean_mse = clean_mse.detach()[poison_mask]
     poison_triggered_mse = triggered_mse[poison_mask]
     if poison_triggered_mse.numel():
-        psnr_drop = (10.0 / np.log(10.0)) * (torch.log(poison_triggered_mse) - torch.log(poison_clean_mse))
-        damage_loss = torch.relu(float(min_psnr_drop_db) - psnr_drop).mean()
-        mean_drop = psnr_drop.mean()
+        target_ratio = float(10.0 ** (float(min_psnr_drop_db) / 10.0))
+        target_triggered_mse = poison_clean_mse * target_ratio
+        damage_loss = torch.relu(target_triggered_mse - poison_triggered_mse).mean()
+        mean_drop = (10.0 / np.log(10.0)) * (torch.log(poison_triggered_mse) - torch.log(poison_clean_mse)).mean()
     else:
         zero = triggered_mse.sum() * 0.0
         damage_loss = zero
         mean_drop = zero
     total = float(clean_loss_weight) * clean_loss + float(damage_loss_weight) * damage_loss
     return AvailabilityBackdoorLoss(total, clean_loss, damage_loss, mean_drop, int(poison_mask.sum().item()))
+
+
+def _parameter_anchor_loss(adapter: Any, initial_parameters: dict[str, Any] | None) -> Any:
+    """Return a normalized quadratic distance from the P0 model parameters."""
+
+    torch = _torch()
+    if not initial_parameters:
+        first_parameter = next(adapter.model.parameters(), None)
+        if first_parameter is None:
+            return torch.zeros((), device="cpu")
+        return first_parameter.sum() * 0.0
+    terms = []
+    for name, parameter in adapter.model.named_parameters():
+        initial = initial_parameters.get(name)
+        if initial is None:
+            continue
+        initial = initial.to(parameter.device)
+        scale = initial.float().square().mean().clamp_min(1e-8)
+        terms.append((parameter.float() - initial.float()).square().mean() / scale)
+    if not terms:
+        first_parameter = next(adapter.model.parameters(), None)
+        return first_parameter.sum() * 0.0 if first_parameter is not None else torch.zeros((), device="cpu")
+    return torch.stack(terms).mean()
+
+
+def _optimizer_parameters(optimizer: Any) -> list[Any]:
+    parameters = []
+    seen: set[int] = set()
+    for group in optimizer.param_groups:
+        for parameter in group["params"]:
+            if parameter.requires_grad and id(parameter) not in seen:
+                parameters.append(parameter)
+                seen.add(id(parameter))
+    if not parameters:
+        raise ValueError("availability backdoor optimizer has no trainable parameters")
+    return parameters
+
+
+def _gradient_norm(gradients: Iterable[Any]) -> Any:
+    torch = _torch()
+    terms = [gradient.float().square().sum() for gradient in gradients if gradient is not None]
+    if not terms:
+        return torch.zeros((), dtype=torch.float32)
+    return torch.sqrt(torch.stack(terms).sum().clamp_min(1e-24))
+
+
+def _merge_branch_gradients(
+    parameters: list[Any],
+    clean_gradients: tuple[Any | None, ...],
+    attack_gradients: tuple[Any | None, ...],
+    *,
+    attack_grad_norm_ratio: float,
+    attack_grad_max_norm: float,
+) -> tuple[list[Any], dict[str, float]]:
+    """Protect clean gradients from a conflicting or oversized attack branch."""
+
+    torch = _torch()
+    clean = [gradient if gradient is not None else torch.zeros_like(parameter) for parameter, gradient in zip(parameters, clean_gradients)]
+    attack = [gradient if gradient is not None else torch.zeros_like(parameter) for parameter, gradient in zip(parameters, attack_gradients)]
+    clean_norm = _gradient_norm(clean)
+    attack_norm_before = _gradient_norm(attack)
+    clean_square = sum(gradient.float().square().sum() for gradient in clean)
+    dot = sum(clean_gradient.float().mul(attack_gradient.float()).sum() for clean_gradient, attack_gradient in zip(clean, attack))
+    conflict = bool(float(dot.detach()) < 0.0 and float(clean_square.detach()) > 1e-24)
+    if conflict:
+        coefficient = dot / clean_square.clamp_min(1e-24)
+        attack = [attack_gradient - coefficient * clean_gradient for clean_gradient, attack_gradient in zip(clean, attack)]
+    attack_norm_after_projection = _gradient_norm(attack)
+    allowed_norm = torch.tensor(float(attack_grad_max_norm), device=attack_norm_after_projection.device)
+    if float(clean_norm.detach()) > 0.0:
+        allowed_norm = torch.minimum(allowed_norm, clean_norm.detach() * float(attack_grad_norm_ratio))
+    if float(attack_norm_after_projection.detach()) > float(allowed_norm.detach()):
+        scale = allowed_norm / attack_norm_after_projection.clamp_min(1e-24)
+        attack = [attack_gradient * scale for attack_gradient in attack]
+    attack_norm_after = _gradient_norm(attack)
+    merged = [clean_gradient + attack_gradient for clean_gradient, attack_gradient in zip(clean, attack)]
+    return merged, {
+        "clean_grad_norm": float(clean_norm.detach()),
+        "attack_grad_norm_before": float(attack_norm_before.detach()),
+        "attack_grad_norm_after": float(attack_norm_after.detach()),
+        "attack_gradient_conflict": float(conflict),
+    }
+
+
+def _assign_gradients(parameters: list[Any], gradients: list[Any], scaler: Any | None) -> None:
+    scale = float(scaler.get_scale()) if scaler is not None else 1.0
+    for parameter, gradient in zip(parameters, gradients):
+        parameter.grad = gradient.detach() * scale
 
 
 def _paired_channel_decode(adapter: Any, clean_latent: Any, triggered_latent: Any, snr_db: float) -> tuple[Any, Any]:
@@ -310,6 +412,7 @@ def train_availability_backdoor_epoch(
     config: AvailabilityBackdoorConfig,
     device: Any,
     scaler: Any | None = None,
+    initial_parameters: dict[str, Any] | None = None,
 ) -> dict[str, float]:
     """Train the model on clean and manifest-selected IQ/DC-triggered samples."""
 
@@ -317,9 +420,22 @@ def train_availability_backdoor_epoch(
     adapter.model.train()
     if hasattr(trigger, "train"):
         trigger.train()
-    totals = {"objective": 0.0, "clean_loss": 0.0, "damage_loss": 0.0, "constraint_penalty": 0.0, "poison_drop_db": 0.0}
+    totals = {
+        "objective": 0.0,
+        "clean_loss": 0.0,
+        "damage_loss": 0.0,
+        "constraint_penalty": 0.0,
+        "parameter_anchor_loss": 0.0,
+        "poison_drop_db": 0.0,
+        "clean_grad_norm": 0.0,
+        "attack_grad_norm_before": 0.0,
+        "attack_grad_norm_after": 0.0,
+        "attack_gradient_conflict": 0.0,
+    }
     batches = 0
+    sample_count = 0
     poison_count = 0
+    parameters = _optimizer_parameters(optimizer)
     for batch_index, batch in enumerate(loader):
         if config.max_train_batches is not None and batch_index >= config.max_train_batches:
             break
@@ -342,8 +458,11 @@ def train_availability_backdoor_epoch(
                 )
                 for clean_output, triggered_output in _paired_channel_decode_many(adapter, latent, triggered_latent, config.train_snr_db)
             ]
-            objective = torch.stack([item.total for item in losses]).mean()
-            constraint_penalty = objective.detach() * 0.0
+            clean_objective = float(config.clean_loss_weight) * torch.stack([item.clean for item in losses]).mean()
+            damage_objective = float(config.damage_loss_weight) * torch.stack([item.damage for item in losses]).mean()
+            parameter_anchor = _parameter_anchor_loss(adapter, initial_parameters)
+            clean_objective = clean_objective + float(config.parameter_anchor_weight) * parameter_anchor
+            constraint_penalty = clean_objective.detach() * 0.0
             if hasattr(trigger, "constraint_penalty") and (config.evm_penalty_weight > 0 or config.power_penalty_weight > 0):
                 constraint_penalty = trigger.constraint_penalty(
                     latent,
@@ -352,27 +471,60 @@ def train_availability_backdoor_epoch(
                     evm_weight=config.evm_penalty_weight,
                     power_weight=config.power_penalty_weight,
                 )
-                objective = objective + constraint_penalty
+            attack_objective = damage_objective + constraint_penalty
+            objective = clean_objective + attack_objective
+        clean_gradients = torch.autograd.grad(clean_objective, parameters, retain_graph=True, allow_unused=True)
+        attack_gradients = torch.autograd.grad(attack_objective, parameters, allow_unused=True)
+        merged_gradients, gradient_metrics = _merge_branch_gradients(
+            parameters,
+            clean_gradients,
+            attack_gradients,
+            attack_grad_norm_ratio=config.attack_grad_norm_ratio,
+            attack_grad_max_norm=config.attack_grad_max_norm,
+        )
         if scaler is not None:
-            scaler.scale(objective).backward()
+            # GradScaler initializes its lazy scale state only through scale().
+            # The branch gradients are already merged manually, so the scaled
+            # tensor is intentionally not backpropagated; it only initializes
+            # the scaler before the manually scaled gradients are assigned.
+            scaler.scale(objective)
+        _assign_gradients(parameters, merged_gradients, scaler)
+        if scaler is not None:
             scaler.step(optimizer)
             scaler.update()
         else:
-            objective.backward()
             optimizer.step()
         batch_size = int(images.shape[0])
+        batch_poison_count = int(poison_mask.sum().item())
         totals["objective"] += float(objective.detach()) * batch_size
         totals["clean_loss"] += float(torch.stack([item.clean.detach() for item in losses]).mean()) * batch_size
-        totals["damage_loss"] += float(torch.stack([item.damage.detach() for item in losses]).mean()) * batch_size
+        totals["damage_loss"] += float(torch.stack([item.damage.detach() for item in losses]).mean()) * batch_poison_count
         totals["constraint_penalty"] += float(constraint_penalty.detach()) * batch_size
+        totals["parameter_anchor_loss"] += float(parameter_anchor.detach()) * batch_size
+        totals["clean_grad_norm"] += gradient_metrics["clean_grad_norm"]
+        totals["attack_grad_norm_before"] += gradient_metrics["attack_grad_norm_before"]
+        totals["attack_grad_norm_after"] += gradient_metrics["attack_grad_norm_after"]
+        totals["attack_gradient_conflict"] += gradient_metrics["attack_gradient_conflict"]
         drop_values = [float(item.mean_poison_drop_db.detach()) for item in losses if item.poison_count]
         if drop_values:
-            totals["poison_drop_db"] += float(np.mean(drop_values)) * batch_size
+            totals["poison_drop_db"] += float(np.mean(drop_values)) * batch_poison_count
         batches += 1
-        poison_count += int(poison_mask.sum().item())
-    denominator = max(batches, 1)
+        sample_count += batch_size
+        poison_count += batch_poison_count
+    denominator = max(sample_count, 1)
+    poison_denominator = max(poison_count, 1)
+    batch_denominator = max(batches, 1)
     return {
-        **{key: value / denominator for key, value in totals.items()},
+        "objective": totals["objective"] / denominator,
+        "clean_loss": totals["clean_loss"] / denominator,
+        "damage_loss": totals["damage_loss"] / poison_denominator,
+        "constraint_penalty": totals["constraint_penalty"] / denominator,
+        "parameter_anchor_loss": totals["parameter_anchor_loss"] / denominator,
+        "poison_drop_db": totals["poison_drop_db"] / poison_denominator,
+        "clean_grad_norm": totals["clean_grad_norm"] / batch_denominator,
+        "attack_grad_norm_before": totals["attack_grad_norm_before"] / batch_denominator,
+        "attack_grad_norm_after": totals["attack_grad_norm_after"] / batch_denominator,
+        "attack_gradient_conflict": totals["attack_gradient_conflict"] / batch_denominator,
         "batches": float(batches),
         "poison_count": float(poison_count),
     }
@@ -557,23 +709,24 @@ def fit_availability_backdoor(
     path = Path(checkpoint_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     history: list[dict[str, Any]] = []
-    best_selection_loss = float("inf")
-    stale = 0
-    amp_enabled = config.mixed_precision and getattr(device, "type", str(device).split(":", 1)[0]) == "cuda"
-    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled) if amp_enabled else None
-    for epoch in range(config.max_epochs):
-        train = train_availability_backdoor_epoch(adapter, train_loader, optimizer, trigger=trigger, config=config, device=device, scaler=scaler)
-        validation = evaluate_availability_backdoor(
-            clean_reference_adapter,
-            adapter,
-            validation_loader,
-            trigger=trigger,
-            snr_db_values=config.train_snr_db,
-            failure_drop_db=config.min_psnr_drop_db,
-            device=device,
-            max_batches=config.max_validation_batches,
-            mixed_precision=config.mixed_precision,
-        )
+    initial_parameters = {name: parameter.detach().clone() for name, parameter in adapter.model.named_parameters()}
+    for group in optimizer.param_groups:
+        group["lr"] = float(group["lr"]) * float(config.learning_rate_scale)
+
+    def parameter_relative_change() -> float:
+        numerator_terms = []
+        denominator_terms = []
+        for name, parameter in adapter.model.named_parameters():
+            initial = initial_parameters[name].to(parameter.device)
+            numerator_terms.append((parameter.detach().float() - initial.float()).square().sum())
+            denominator_terms.append(initial.float().square().sum())
+        if not numerator_terms:
+            return 0.0
+        numerator = float(torch.stack(numerator_terms).sum().sqrt())
+        denominator = max(float(torch.stack(denominator_terms).sum().sqrt()), 1e-8)
+        return numerator / denominator
+
+    def selection_metrics(validation: dict[str, Any]) -> tuple[float, dict[str, float]]:
         robust = validation["robust"]
         utility_excess = max(0.0, robust["worst_snr_backdoor_clean_utility_drop_db"] - config.max_clean_utility_drop_db)
         clean_trigger_excess = max(0.0, robust["worst_snr_clean_model_trigger_failure_rate"] - config.max_clean_trigger_failure_rate)
@@ -586,7 +739,74 @@ def fit_availability_backdoor(
             + config.evm_penalty_weight * evm_excess**2
             + config.power_penalty_weight * power_excess**2
         )
-        row = {"epoch": epoch, "train": train, "validation": validation, "selection_loss": selection_loss}
+        return float(selection_loss), {
+            "utility_excess": float(utility_excess),
+            "clean_trigger_excess": float(clean_trigger_excess),
+            "evm_excess": float(evm_excess),
+            "power_excess": float(power_excess),
+        }
+
+    def save_candidate(epoch: int, validation: dict[str, Any], selection_loss: float, *, train: dict[str, Any] | None = None, stopped_reason: str | None = None) -> None:
+        payload: dict[str, Any] = {
+            "epoch": epoch,
+            "model": adapter.model.state_dict(),
+            "optimizer": optimizer.state_dict(),
+            "metrics": {"epoch": epoch, "train": train, "validation": validation, "selection_loss": selection_loss, "stopped_reason": stopped_reason},
+            "objective": "availability_backdoor_iq_dc_v2",
+        }
+        if hasattr(trigger, "state_dict"):
+            payload["trigger"] = trigger.state_dict()
+        torch.save(payload, path)
+
+    baseline_validation = evaluate_availability_backdoor(
+        clean_reference_adapter,
+        adapter,
+        validation_loader,
+        trigger=trigger,
+        snr_db_values=config.train_snr_db,
+        failure_drop_db=config.min_psnr_drop_db,
+        device=device,
+        max_batches=config.max_validation_batches,
+        mixed_precision=config.mixed_precision,
+    )
+    best_selection_loss, _ = selection_metrics(baseline_validation)
+    save_candidate(-1, baseline_validation, best_selection_loss, stopped_reason="p0_baseline")
+    stale = 0
+    amp_enabled = config.mixed_precision and getattr(device, "type", str(device).split(":", 1)[0]) == "cuda"
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled) if amp_enabled else None
+    for epoch in range(config.max_epochs):
+        train = train_availability_backdoor_epoch(
+            adapter,
+            train_loader,
+            optimizer,
+            trigger=trigger,
+            config=config,
+            device=device,
+            scaler=scaler,
+            initial_parameters=initial_parameters,
+        )
+        validation = evaluate_availability_backdoor(
+            clean_reference_adapter,
+            adapter,
+            validation_loader,
+            trigger=trigger,
+            snr_db_values=config.train_snr_db,
+            failure_drop_db=config.min_psnr_drop_db,
+            device=device,
+            max_batches=config.max_validation_batches,
+            mixed_precision=config.mixed_precision,
+        )
+        robust = validation["robust"]
+        selection_loss, penalties = selection_metrics(validation)
+        relative_change = parameter_relative_change()
+        row = {
+            "epoch": epoch,
+            "train": train,
+            "validation": validation,
+            "selection_loss": selection_loss,
+            "parameter_relative_change": relative_change,
+            "selection_penalties": penalties,
+        }
         history.append(row)
         if epoch == 0 or (epoch + 1) % 10 == 0:
             print(
@@ -596,13 +816,16 @@ def fit_availability_backdoor(
                 f"failure={robust['worst_snr_backdoor_failure_rate']:.3f}",
                 flush=True,
             )
-        if selection_loss < best_selection_loss:
+        if selection_loss < best_selection_loss and robust["worst_snr_backdoor_clean_utility_drop_db"] <= config.max_clean_utility_drop_db and relative_change <= config.max_parameter_relative_change:
             best_selection_loss = selection_loss
             stale = 0
-            payload: dict[str, Any] = {"epoch": epoch, "model": adapter.model.state_dict(), "optimizer": optimizer.state_dict(), "metrics": row, "objective": "availability_backdoor_iq_dc_v1"}
-            if hasattr(trigger, "state_dict"):
-                payload["trigger"] = trigger.state_dict()
-            torch.save(payload, path)
+            save_candidate(epoch, validation, selection_loss, train=train)
+        if config.hard_stop_on_clean_utility_excess and robust["worst_snr_backdoor_clean_utility_drop_db"] > config.max_clean_utility_drop_db:
+            row["stopped_reason"] = "clean_utility_excess"
+            break
+        if relative_change > config.max_parameter_relative_change:
+            row["stopped_reason"] = "parameter_relative_change_excess"
+            break
         elif epoch + 1 >= config.early_stopping_start:
             stale += 1
             if stale >= config.patience:

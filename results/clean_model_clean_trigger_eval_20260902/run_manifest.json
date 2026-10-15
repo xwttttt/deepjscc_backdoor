@@ -1,0 +1,28 @@
+{
+  "checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf",
+  "config_sha256": "505b59f18001dcfe9c9251c3d482d05a7e812c3fd8b1744b4806f2e8b4612ecc",
+  "data_sha256": "aef06783a383b81a04aa95c2d8b47ca759a3b7ca09354f43a0ea6cbf5f3000bc",
+  "labels_used": false,
+  "paths": [
+    "clean_model_clean",
+    "clean_model_triggered"
+  ],
+  "protocol": "saved_clean_model_two_path_evaluation_v1",
+  "provenance": {
+    "code_git_commit": "64a38d4e499ae1391790d915898ae1dbcfa6ca9a",
+    "code_working_tree_sha256": "0accd1002b4dc3c069adc2fd04ac13837fc5c512e1f09ab4413bbfece2835917",
+    "config_sha256": "505b59f18001dcfe9c9251c3d482d05a7e812c3fd8b1744b4806f2e8b4612ecc",
+    "data_sha256": "aef06783a383b81a04aa95c2d8b47ca759a3b7ca09354f43a0ea6cbf5f3000bc",
+    "packages": {
+      "einops": "0.8.2",
+      "numpy": "1.26.4",
+      "torch": "2.5.1+cu121"
+    },
+    "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
+    "python": "3.10.20",
+    "seed": 0,
+    "timestamp_utc": "2026-09-02T00:46:25.218499+00:00",
+    "upstream_checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf"
+  },
+  "trigger_sha256": "fba13003e8d4445707fd68b4313da9a9317095058cd48659c96c85d8a3bde4bf"
+}

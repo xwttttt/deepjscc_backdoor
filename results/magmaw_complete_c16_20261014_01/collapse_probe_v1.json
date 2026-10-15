@@ -1,0 +1,34 @@
+{
+  "balanced": {
+    "backbone_std_across_z": 0.006116867996752262,
+    "coefficients_std_across_z": 1.5294574495783309e-07,
+    "coefficient_saturation_fraction": 1.0,
+    "normalized_basis_gram_eigenvalues": [
+      0.15319140255451202,
+      0.15792976319789886,
+      0.16296185553073883,
+      0.19751957058906555,
+      0.28177234530448914,
+      0.36230355501174927,
+      1.5723446607589722,
+      5.111976146697998
+    ],
+    "output_std_across_z": 9.347040474949608e-09
+  },
+  "regularizer_off": {
+    "backbone_std_across_z": 0.05900300294160843,
+    "coefficients_std_across_z": 2.6748887194116833e-06,
+    "coefficient_saturation_fraction": 1.0,
+    "normalized_basis_gram_eigenvalues": [
+      0.6145258545875549,
+      0.6169297099113464,
+      0.618890106678009,
+      0.6218981742858887,
+      0.6237546801567078,
+      0.6247204542160034,
+      0.6261062026023865,
+      3.6531739234924316
+    ],
+    "output_std_across_z": 5.3048957227019855e-08
+  }
+}

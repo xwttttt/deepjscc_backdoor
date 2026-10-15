@@ -10,3 +10,26 @@ logs/
 server_sync_*.bundle
 .venv/
 data/
+/.worktrees/
+tmp/
+.codex/
+.aws/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+# Local staging and unpacked deployment copies; retain the final deliverable ZIP.
+artifacts/model_staging/
+artifacts/data_staging/
+artifacts/div2k_txrx_bundle_20260930/
+artifacts/div2k_txrx_bundle_20260930_with_p0/
+artifacts/div2k_txrx_bundle_20260930_with_models/
+artifacts/div2k_txrx_bundle_20260930_complete/
+artifacts/div2k_txrx_bundle_20260930.zip
+artifacts/div2k_txrx_bundle_20260930_with_p0.zip
+artifacts/div2k_txrx_bundle_20260930_with_models.zip
+/新建文件夹/
+.ppt_edit*/
+.pptx-build/

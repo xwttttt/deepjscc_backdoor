@@ -1,0 +1,52 @@
+{
+  "config_sha256": "f8de4bb9043a2e69b18991b99291d88c2d2d8347ed0d04b275a3f15b11380394",
+  "data_sha256": "926644559c298fba287b7e8eff64c4abf12416d25af20cdcabd657abb2dc6984",
+  "effective_maxdrop_config": {
+    "attack_drop_cap_db": 6.0,
+    "attack_drop_weight": 1.0,
+    "attack_grad_max_norm": 1.0,
+    "attack_grad_norm_ratio": 0.25,
+    "backdoor_clean_drop_weight": 1.0,
+    "clean_loss_weight": 1.0,
+    "clean_model_trigger_drop_weight": 1.0,
+    "evm_limit": 0.1,
+    "evm_penalty_weight": 100.0,
+    "learning_rate_scale": 0.1,
+    "max_backdoor_clean_utility_drop_db": 0.5,
+    "max_clean_model_trigger_drop_db": 0.8,
+    "max_parameter_relative_change": 0.5,
+    "max_train_batches": 1,
+    "mixed_precision": false,
+    "parameter_anchor_weight": 0.001,
+    "power_change_db_limit": 0.5,
+    "power_penalty_weight": 10.0,
+    "train_evm_limit": 0.09,
+    "train_snr_db": [
+      10.0
+    ]
+  },
+  "failure_rate_used": false,
+  "labels_used": false,
+  "max_steps": 80000,
+  "protocol": "target_free_c16_capped_psnr_drop_v3_fixed_steps",
+  "provenance": {
+    "code_git_commit": "64a38d4e499ae1391790d915898ae1dbcfa6ca9a",
+    "code_working_tree_sha256": "07e8e6cacb443ef0211ff62bededb9184a84bf4741a15091bebfb5e24c2109c4",
+    "config_sha256": "f8de4bb9043a2e69b18991b99291d88c2d2d8347ed0d04b275a3f15b11380394",
+    "data_sha256": "926644559c298fba287b7e8eff64c4abf12416d25af20cdcabd657abb2dc6984",
+    "packages": {
+      "einops": "0.8.2",
+      "numpy": "2.4.3",
+      "torch": "2.7.1+cu118"
+    },
+    "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
+    "python": "3.13.9",
+    "seed": 0,
+    "timestamp_utc": "2026-09-02T17:59:16.606489+00:00",
+    "upstream_checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf"
+  },
+  "training_seed": 0,
+  "trigger_location": "post_encoder_power_normalization_pre_channel",
+  "upstream_clean_checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf",
+  "variant": "C"
+}

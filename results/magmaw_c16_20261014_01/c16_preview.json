@@ -1,0 +1,48 @@
+{
+  "profile": "psnr",
+  "selection": "proxy validation only",
+  "keys": [
+    50,
+    60,
+    70,
+    80
+  ],
+  "snr_db": 10,
+  "psr_cap_db": -10,
+  "fresh_preview_seed": 20261014,
+  "rows": [
+    {
+      "key": 50,
+      "P0 clean": 36.99946212768555,
+      "Universal OTA": 36.015708923339844,
+      "Random (PGD power)": 36.030677795410156,
+      "Image+CSI attack": 11.788816452026367,
+      "Backdoor trigger": 12.802638053894043
+    },
+    {
+      "key": 60,
+      "P0 clean": 38.311119079589844,
+      "Universal OTA": 36.0977783203125,
+      "Random (PGD power)": 36.899436950683594,
+      "Image+CSI attack": 9.269400596618652,
+      "Backdoor trigger": 19.927352905273438
+    },
+    {
+      "key": 70,
+      "P0 clean": 38.8031005859375,
+      "Universal OTA": 36.42927932739258,
+      "Random (PGD power)": 36.806846618652344,
+      "Image+CSI attack": 12.913619041442871,
+      "Backdoor trigger": 11.38191032409668
+    },
+    {
+      "key": 80,
+      "P0 clean": 37.11117172241211,
+      "Universal OTA": 35.68811798095703,
+      "Random (PGD power)": 35.41091537475586,
+      "Image+CSI attack": 12.665165901184082,
+      "Backdoor trigger": 12.639094352722168
+    }
+  ],
+  "note": "fixed new-channel illustrations, not selected by target drop; PGD image/CSI known, random matched to PGD"
+}

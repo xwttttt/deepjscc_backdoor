@@ -33,6 +33,35 @@ class TrainingConfig:
             raise ValueError("epoch settings must be positive")
 
 
+@dataclass(frozen=True)
+class P0StepConfig:
+    """Step-based clean P0 protocol used by the DIV2K fine-tune runner."""
+
+    snr_db: float = 10.0
+    learning_rate: float = 1e-3
+    decay_learning_rate: float = 1e-4
+    weight_decay: float = 0.0
+    decay_step: int = 500_000
+    max_steps: int = 800_000
+    validation_interval: int = 10_000
+    early_stopping_start: int = 600_000
+    early_stopping_patience: int = 10
+    early_stopping_min_delta_db: float = 0.05
+    mixed_precision: bool = False
+
+    def __post_init__(self) -> None:
+        if self.learning_rate <= 0.0 or self.decay_learning_rate <= 0.0:
+            raise ValueError("learning rates must be positive")
+        if self.weight_decay < 0.0:
+            raise ValueError("weight_decay must be non-negative")
+        if self.decay_step <= 0 or self.max_steps <= 0 or self.validation_interval <= 0:
+            raise ValueError("step settings must be positive")
+        if self.early_stopping_start < 0 or self.early_stopping_patience <= 0:
+            raise ValueError("early stopping settings are invalid")
+        if self.early_stopping_min_delta_db < 0.0:
+            raise ValueError("early_stopping_min_delta_db must be non-negative")
+
+
 def set_seed(seed: int) -> None:
     torch = _torch()
     import random
@@ -120,6 +149,105 @@ def evaluate_clean_epoch(adapter: Any, loader: Any, *, snr_db: float, device: An
     output_array = np.concatenate(outputs)
     source_array = np.concatenate(sources)
     return {"loss": float(np.mean(losses)), "psnr": float(np.mean(psnr_np(output_array, source_array)))}
+
+
+def fit_clean_steps(
+    adapter: Any,
+    train_loader: Any,
+    validation_loader: Any,
+    *,
+    config: P0StepConfig,
+    device: Any,
+    checkpoint_path: str | Path,
+) -> list[dict[str, float]]:
+    """Train clean P0 by optimizer steps with validation at fixed boundaries."""
+
+    torch = _torch()
+    path = Path(checkpoint_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    optimizer = torch.optim.Adam(
+        adapter.model.parameters(),
+        lr=float(config.learning_rate),
+        weight_decay=float(config.weight_decay),
+    )
+    history: list[dict[str, float]] = []
+    best_psnr = -float("inf")
+    stale = 0
+    step = 0
+    iterator = iter(train_loader)
+    while step < config.max_steps:
+        try:
+            batch = next(iterator)
+        except StopIteration:
+            iterator = iter(train_loader)
+            batch = next(iterator)
+
+        images, _ = _images_from_batch(batch, device)
+        adapter.model.train()
+        optimizer.zero_grad(set_to_none=True)
+        for group in optimizer.param_groups:
+            group["lr"] = float(config.decay_learning_rate if step >= config.decay_step else config.learning_rate)
+        with _autocast_context(device, config.mixed_precision):
+            reconstruction = adapter.forward(images, config.snr_db)
+            loss = _mse(reconstruction, images)
+        if not torch.isfinite(loss):
+            raise FloatingPointError(f"non-finite P0 loss at step {step + 1}")
+        loss.backward()
+        optimizer.step()
+        step += 1
+
+        if step % config.validation_interval != 0:
+            continue
+        validation = evaluate_clean_epoch(adapter, validation_loader, snr_db=config.snr_db, device=device)
+        psnr = float(validation["psnr"])
+        row = {
+            "step": float(step),
+            "train_loss": float(loss.detach()),
+            "validation_loss": float(validation["loss"]),
+            "validation_psnr_db": psnr,
+            "learning_rate": float(optimizer.param_groups[0]["lr"]),
+        }
+        history.append(row)
+        print(
+            f"[P0] step={step}/{config.max_steps} "
+            f"train_loss={row['train_loss']:.6f} "
+            f"val_loss={row['validation_loss']:.6f} "
+            f"val_psnr={psnr:.3f}dB lr={row['learning_rate']:.2e}",
+            flush=True,
+        )
+        improved = psnr > best_psnr + float(config.early_stopping_min_delta_db)
+        if improved or not path.exists():
+            best_psnr = max(best_psnr, psnr)
+            stale = 0
+            torch.save(
+                {
+                    "schema_version": 1,
+                    "step": step,
+                    "model": adapter.model.state_dict(),
+                    "optimizer": optimizer.state_dict(),
+                    "history": history,
+                },
+                path,
+            )
+        elif step >= config.early_stopping_start:
+            stale += 1
+            if stale >= config.early_stopping_patience:
+                break
+
+    if not path.exists():
+        torch.save(
+            {
+                "schema_version": 1,
+                "step": step,
+                "model": adapter.model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "history": history,
+            },
+            path,
+        )
+    payload = torch.load(path, map_location=device, weights_only=True)
+    adapter.model.load_state_dict(payload["model"])
+    return history
 
 
 def fit(

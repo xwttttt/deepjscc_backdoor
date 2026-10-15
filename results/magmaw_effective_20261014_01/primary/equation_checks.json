@@ -1,0 +1,7 @@
+{
+  "projection": "passed",
+  "complex_l1": "passed",
+  "minimax_signs": "passed",
+  "received_cap": "passed",
+  "paired_random_power": "passed"
+}

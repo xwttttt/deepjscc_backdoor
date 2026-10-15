@@ -1,0 +1,84 @@
+{
+  "selection": "fixed keys50/60/70/80, exact saved evaluation repeat0; no target-drop selection",
+  "snr_db": 10,
+  "psr_cap_db": -10,
+  "columns": [
+    "original",
+    "clean",
+    "balanced",
+    "regularizer_off",
+    "warm_shared_reference"
+  ],
+  "rows": [
+    {
+      "key": 50,
+      "evaluation_batch_start": 50,
+      "psnr_db": {
+        "clean": 37.01531982421875,
+        "balanced": 35.72491455078125,
+        "regularizer_off": 30.773826599121094,
+        "warm_shared_reference": 33.05189895629883
+      },
+      "received_psr_db": {
+        "balanced": -10.0,
+        "regularizer_off": -9.999999999999998,
+        "warm_shared_reference": -10.0
+      }
+    },
+    {
+      "key": 60,
+      "evaluation_batch_start": 58,
+      "psnr_db": {
+        "clean": 38.16301345825195,
+        "balanced": 28.24260902404785,
+        "regularizer_off": 26.530893325805664,
+        "warm_shared_reference": 28.297313690185547
+      },
+      "received_psr_db": {
+        "balanced": -9.999999999999998,
+        "regularizer_off": -10.285784507541628,
+        "warm_shared_reference": -9.999999999999998
+      }
+    },
+    {
+      "key": 70,
+      "evaluation_batch_start": 66,
+      "psnr_db": {
+        "clean": 38.75553894042969,
+        "balanced": 31.356050491333008,
+        "regularizer_off": 30.75745391845703,
+        "warm_shared_reference": 30.86419105529785
+      },
+      "received_psr_db": {
+        "balanced": -9.999999999999998,
+        "regularizer_off": -10.380407952473064,
+        "warm_shared_reference": -10.422593211151753
+      }
+    },
+    {
+      "key": 80,
+      "evaluation_batch_start": 74,
+      "psnr_db": {
+        "clean": 36.99089813232422,
+        "balanced": 28.047372817993164,
+        "regularizer_off": 27.101900100708008,
+        "warm_shared_reference": 28.6719913482666
+      },
+      "received_psr_db": {
+        "balanced": -10.0,
+        "regularizer_off": -9.999999999999998,
+        "warm_shared_reference": -9.999999999999998
+      }
+    }
+  ],
+  "zoom_crop_xyxy": [
+    80,
+    80,
+    176,
+    176
+  ],
+  "zoom_resampling": "nearest; labels remain full-image PSNR",
+  "max_saved_metric_difference_db": 0.0,
+  "weights": "previous selected checkpoints; no optimization",
+  "preview_script_sha256": "a950a771244c8ae1db7e026aa7a8f66436f6f0278a94d06dee474a3bd5b40ea9"
+}

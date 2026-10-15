@@ -1,0 +1,7 @@
+{
+  "attack_drop_cap_db": 6.0,
+  "best_checkpoint_written": false,
+  "history_records": 9,
+  "reason": "No validation checkpoint satisfied attack cap, clean-trigger, utility, EVM, power, and parameter constraints.",
+  "status": "no_feasible_checkpoint"
+}

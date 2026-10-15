@@ -1,0 +1,70 @@
+{
+  "checkpoint": "runs/div2k_256_20260923/unified_full/best.pt",
+  "conditions": {
+    "dc_only": {
+      "evm_rms": 0.09999991208314896,
+      "psnr_drop_db": 15.213878631591797,
+      "residual_template_cosine": 0.6832501888275146,
+      "residual_template_energy_fraction": 0.4428174177218038,
+      "structure_drop_db": 16.223875045776367,
+      "structure_localization_db": 8.4348726272583,
+      "structure_magnitude_db": 7.789002895355225
+    },
+    "dc_sign_flip": {
+      "evm_rms": 0.09999991208314896,
+      "psnr_drop_db": 1.933154582977295,
+      "residual_template_cosine": 0.4561230540275574,
+      "residual_template_energy_fraction": 0.17989251140983595,
+      "structure_drop_db": 5.631746768951416,
+      "structure_localization_db": 5.020882606506348,
+      "structure_magnitude_db": 0.6108636856079102
+    },
+    "equal_evm_random": {
+      "evm_rms": 0.09993260353803635,
+      "psnr_drop_db": 0.3238361179828644,
+      "residual_template_cosine": 0.1524728387594223,
+      "residual_template_energy_fraction": 0.023785866119328723,
+      "structure_drop_db": 5.382742881774902,
+      "structure_localization_db": 5.263768196105957,
+      "structure_magnitude_db": 0.1189737468957901
+    },
+    "full": {
+      "evm_rms": 0.09993261098861694,
+      "psnr_drop_db": 14.680391311645508,
+      "residual_template_cosine": 0.6551972031593323,
+      "residual_template_energy_fraction": 0.4142875915051222,
+      "structure_drop_db": 16.35439682006836,
+      "structure_localization_db": 8.680848121643066,
+      "structure_magnitude_db": 7.673547267913818
+    },
+    "iq_only": {
+      "evm_rms": 0.022216036915779114,
+      "psnr_drop_db": 0.10335344821214676,
+      "residual_template_cosine": 0.17765118181705475,
+      "residual_template_energy_fraction": 0.028867737750653124,
+      "structure_drop_db": 5.241916179656982,
+      "structure_localization_db": 5.430263519287109,
+      "structure_magnitude_db": -0.1883472353219986
+    },
+    "zero": {
+      "evm_rms": 0.0,
+      "psnr_drop_db": -2.377505188633222e-05,
+      "residual_template_cosine": 0.154107004404068,
+      "residual_template_energy_fraction": 0.02417005430462893,
+      "structure_drop_db": 5.2385735511779785,
+      "structure_localization_db": 5.469550609588623,
+      "structure_magnitude_db": -0.23097769916057587
+    }
+  },
+  "full_trigger_evm_rms": 0.09993261098861694,
+  "images": 50,
+  "snr_db": 100.0,
+  "trigger": "runs/div2k_256_20260923/unified_full/trigger.json",
+  "trigger_config": {
+    "dc_magnitude": 0.09999991953372955,
+    "dc_phase_deg": -10.23692798614502,
+    "gain_db": 0.08974114060401917,
+    "order": "iq_then_dc",
+    "phase_deg": -2.4777112007141113
+  }
+}

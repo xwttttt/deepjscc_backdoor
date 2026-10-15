@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>从一张图到一次梯度更新：DeepJSCC 完整训练流程</title>
+<style>
+:root{--ink:#15222b;--muted:#66727a;--accent:#b45309;--paper:#f7f3ea;--card:#fffdf8}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-serif,"Noto Serif SC",serif;line-height:1.72}.page{max-width:980px;margin:auto;padding:64px 28px 90px}h1{font-size:clamp(2.1rem,5vw,4.2rem);line-height:1.08;letter-spacing:-.03em;max-width:850px}h2{font-size:1.55rem;margin-top:3rem}.lede{font-size:1.18rem;color:#46545d;max-width:760px}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:34px 0}.step{background:var(--card);border:1px solid #ded6c6;border-radius:10px;padding:14px;text-align:center}.arrow{color:var(--accent);font-size:1.4rem}.eq{font-family:Cambria Math,serif;background:#17252d;color:#fff;padding:16px 20px;border-radius:8px;overflow:auto}.note{border-left:4px solid var(--accent);padding:4px 18px;color:#4d4238}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:var(--card);padding:20px;border:1px solid #ded6c6;border-radius:10px}details{background:#fff;padding:14px 18px;border-radius:8px;margin:10px 0}a{color:#8b420d}@media(max-width:700px){.flow,.twocol{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
+</style></head><body><main class="page">
+<p>LESSON 0001 · 论文阅读基础</p>
+<h1>从一张图到一次梯度更新</h1>
+<p class="lede">DeepJSCC 不是“先压缩，再纠错”。它直接学习一个在随机信道上、受功率和带宽约束的模拟映射，使最终重建失真最小。</p>
+<div class="flow"><div class="step">图像<br><b>x</b></div><div class="step">编码器<br><b>fθ</b></div><div class="step">功率约束<br><b>Normalize</b></div><div class="step">随机信道<br><b>η</b></div><div class="step">解码器<br><b>gφ → x̂</b></div></div>
+
+<h2>1. 论文先定义什么问题？</h2>
+<p>输入图像 x∈ℝⁿ，被编码为 k 个复信道符号 z∈ℂᵏ，通常 k&lt;n。ρ=k/n 称为带宽压缩比。这里的“压缩”不是生成短 bitstream，而是减少可用信道符号数。</p>
+<div class="eq">x̂ = gφ( η( z ) ),　z = Normalize(fθ(x))</div>
+<p class="note">最容易混淆的两组量：信道 SNR 衡量 z 与信道噪声；重建 PSNR 衡量 x 与 x̂。它们都叫 dB，但不在同一个空间。</p>
+
+<h2>2. 一次 mini-batch 怎样前向传播？</h2>
+<ol>
+<li>采样 B 张训练图像并缩放像素，例如到 [0,1]。</li>
+<li>编码 CNN 提取语义/视觉特征，输出 2k 个实数，配成 k 个复符号。</li>
+<li>施加功率约束：z=√(kP)·z̃/‖z̃‖，使每个码字的平均符号功率为 P。</li>
+<li>按训练信道随机采样扰动。AWGN：y=z+w；慢衰落：y=hz+w。</li>
+<li>解码 CNN 把受损符号 y 映射回 x̂，并用 sigmoid 等约束像素范围。</li>
+</ol>
+
+<h2>2.1 当前仓库的具体网络</h2>
+<p>对 CIFAR-10 的 <code>[B,3,32,32]</code> 输入，encoder 使用五个 5×5 Conv+PReLU：前两层 stride=2，把空间尺寸从 32→16→8；后三层 stride=1，最后输出 <code>[B,2c,8,8]</code>。前 c 个通道作为 I，后 c 个通道作为 Q，重排并组合成 <code>[B,c·8·8]</code> 个复信道符号，再做功率归一化。</p>
+<div class="eq">[B,3,32,32] → [B,16,16,16] → [B,32,8,8] → [B,32,8,8] → [B,32,8,8] → [B,2c,8,8] → complex [B,64c]</div>
+<p>decoder 做镜像过程：复符号拆成 I/Q，reshape 回 <code>[B,2c,8,8]</code>，经过三个 stride=1 ConvTranspose，再用两个 stride=2 ConvTranspose 恢复到 32×32；最后 sigmoid 输出 RGB 图像。</p>
+<div class="eq">complex [B,64c] → [B,2c,8,8] → [B,32,8,8] → [B,32,8,8] → [B,32,8,8] → [B,16,16,16] → [B,3,32,32]</div>
+<p>例如 c=16 时，发送 k=16×8×8=1024 个复符号；源维度 n=3×32×32=3072，所以 k/n=1/3。</p>
+
+<h2>3. 到底优化什么？</h2>
+<div class="eq">(θ*,φ*) = arg min Eₓ,η [ d(x, gφ(η(Normalize(fθ(x))))) ]</div>
+<p>经典论文使用像素 MSE。训练集 mini-batch 近似对源分布的期望；每次新采样的噪声/衰落近似对信道分布的期望。因此同一张图多次通过网络，会遇到不同信道实现。</p>
+<p>若以感知质量为目标，可以把 d 换成 MS-SSIM、感知损失或任务损失；这会改变模型认为“值得保护的语义”，但不会改变主训练链。</p>
+
+<h2>4. 随机信道怎么反向传播？</h2>
+<p>信道层固定、无参数，但不是梯度终点。AWGN 写成 y=z+σϵ，ϵ∼CN(0,I)。采样后 y 对 z 的导数是恒等映射，损失梯度从解码器穿过信道与归一化层回到编码器。于是编码器逐渐学会产生“噪声下仍可解码”的连续表示，解码器同时学会利用残余结构。</p>
+<p class="note">反向传播不需要对“抽到哪一个噪声”求导；它需要对给定噪声样本时，输出如何随 z 改变求导。</p>
+
+<h2>5. 一个 optimizer step</h2>
+<div class="eq">Lbatch=(1/B)Σᵢ d(xᵢ,x̂ᵢ) → ∇θ,φL → Adam 更新 θ,φ → 下一批图像与新信道样本</div>
+<p>基础论文在 CIFAR-10 上使用 batch size 64、Adam，初始学习率 10⁻³，并在 500k iterations 后降到 10⁻⁴；这些是实现选择，不是 DeepJSCC 定义本身。</p>
+
+<h2>6. 训练前后分别固定什么？</h2>
+<div class="twocol"><div class="card"><b>训练设计</b><ul><li>带宽比 ρ</li><li>训练信道类型与 SNR</li><li>功率 P</li><li>失真函数 d</li></ul></div><div class="card"><b>测试扫描</b><ul><li>不同测试 SNR</li><li>AWGN 或衰落失配</li><li>PSNR / SSIM</li><li>多次信道重复的均值</li></ul></div></div>
+<p>原始做法常对每个 ρ、训练 SNR 分别训练一个模型，再跨测试 SNR 扫描。若测试信道变差，连续模拟表示通常逐渐退化，而不是像固定码率数字链路那样突然解码失败；这就是 graceful degradation。</p>
+
+<h2>7. “语义通信”要谨慎理解</h2>
+<p>经典图像 DeepJSCC 的目标通常仍是像素 MSE/PSNR，所以更准确地说，它是数据驱动的端到端联合信源信道编码。只有当目标显式关注任务正确率、对象/场景意义或接收端效用时，“语义”才不仅是对潜在特征的宽泛称呼。</p>
+
+<h2>检索练习</h2>
+<details><summary>为什么 k/n 变小不等于 JPEG 的 bit rate 变小？</summary><p>因为 k/n 计数的是每个源维度可用的复信道符号，而 JPEG rate 计数的是压缩 bit；二者必须通过信道容量、调制和码率假设才能比较。</p></details>
+<details><summary>信道层没有参数，为什么仍能训练编码器？</summary><p>“无参数”不等于“不可微”。损失对信道输入 z 仍有梯度，链式法则可以把梯度传回编码器。</p></details>
+<details><summary>MSE 训练为何可能产生高 PSNR，却不一定最符合人的视觉偏好？</summary><p>MSE 对逐像素偏差求平均，常鼓励条件均值和较平滑的重建；人类感知更关注结构、纹理与语义显著性。</p></details>
+
+<h2>继续阅读</h2>
+<p>主来源：<a href="https://arxiv.org/abs/1809.01733">Bourtsoulatze, Kurka &amp; Gündüz, Deep Joint Source-Channel Coding for Wireless Image Transmission</a>。速查：<a href="../reference/deepjscc-training-cheatsheet.html">DeepJSCC 训练公式速查</a>。</p>
+<p>有任何公式或实验图不清楚，继续问我；下一课适合讲“训练 SNR、测试 SNR 与 cliff effect 如何读图”。</p>
+</main></body></html>

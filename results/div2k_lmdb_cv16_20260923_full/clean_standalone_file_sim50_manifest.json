@@ -1,0 +1,2333 @@
+{
+  "version": 1,
+  "status": "complete",
+  "dataset": {
+    "dataset_sha256": "83f35a532a6a1240499262e208c7cacb055a94b1c67f65fe5a107a4e6ea05445",
+    "dataset": "../data/DIV2K/lmdb_cv16_test_uint8_20260923/test.npy",
+    "source_manifest_sha256": "f87da61a5b573b315fccfeafa0283cbebb1afe87b1723dc92ca9e09e0df6b5e1",
+    "source_data_sha256": "ed33a16a4c9b59e5105f834a2a760d907772c58334b37feb274a5cc79634b738",
+    "source_key_range": [
+      50,
+      100
+    ]
+  },
+  "checkpoint": "../models/div2k_lmdb_cv16_20260923/p0_clean.pt",
+  "checkpoint_sha256": "24070ef082a37ef5c4a232857daed760442b2fd3850ef617537e39fae5ff8542",
+  "impairment": null,
+  "impairment_sha256": null,
+  "impairment_stage": null,
+  "transport": "file-services",
+  "mode": "simulate",
+  "service_command": null,
+  "tx_service": "../build/ofdm-tx-service",
+  "rx_service": "../build/ofdm-rx-service",
+  "planned_patches": 50,
+  "encoder_batch_size": 4,
+  "records": [
+    {
+      "sample_id": 0,
+      "burst_id": 1,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0000.png",
+        "encoder": "encoder/patch_0000.cf32le",
+        "tx": "tx/burst_000001.cf32le",
+        "rx": "rx/burst_000001.cf32le",
+        "csi": "rx/burst_000001.csi.cf32le",
+        "decoder": "decoder/patch_0000.png",
+        "tx_waveform": "tx/burst_000001.waveform.cf32le"
+      },
+      "encoder_sha256": "caa8a4d2785398350027e4bf52dd4cf2b4e8d61fa4ed640bb2210c383e4f5490",
+      "tx_sha256": "caa8a4d2785398350027e4bf52dd4cf2b4e8d61fa4ed640bb2210c383e4f5490",
+      "rx_sha256": "269949e2ae0291cf1fdf7b8da3f989a5132c77421a642869f3747f9d5d915300",
+      "tx_waveform_sha256": "05f5fc5b6cb9dead94dbf82820e4f05833427520d1462fb8792f78461a1253c1",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 1,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.11496593,
+        "snr_db": 110.606,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.606,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 38.62558636606056
+    },
+    {
+      "sample_id": 1,
+      "burst_id": 2,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0001.png",
+        "encoder": "encoder/patch_0001.cf32le",
+        "tx": "tx/burst_000002.cf32le",
+        "rx": "rx/burst_000002.cf32le",
+        "csi": "rx/burst_000002.csi.cf32le",
+        "decoder": "decoder/patch_0001.png",
+        "tx_waveform": "tx/burst_000002.waveform.cf32le"
+      },
+      "encoder_sha256": "d7a2a6e7f836d4d9b46694f57f066b3827d36d6be67abbeeaf2612faa854e312",
+      "tx_sha256": "d7a2a6e7f836d4d9b46694f57f066b3827d36d6be67abbeeaf2612faa854e312",
+      "rx_sha256": "b861aeb2a6ee9df105c792ace6156409ea43d0dc571d9daf1469bb33c0ab6e68",
+      "tx_waveform_sha256": "89ec9678b5faa215179ea38d2d7e142d4a7a1548c51872394211e5e06a26b27c",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 2,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.22221668,
+        "snr_db": 113.468,
+        "noise_var": 0.0,
+        "csi_quality_db": 113.468,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 39.96636908088435
+    },
+    {
+      "sample_id": 2,
+      "burst_id": 3,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0002.png",
+        "encoder": "encoder/patch_0002.cf32le",
+        "tx": "tx/burst_000003.cf32le",
+        "rx": "rx/burst_000003.cf32le",
+        "csi": "rx/burst_000003.csi.cf32le",
+        "decoder": "decoder/patch_0002.png",
+        "tx_waveform": "tx/burst_000003.waveform.cf32le"
+      },
+      "encoder_sha256": "b24cab78605aa75de220db0b2a524991d65542fe1d8ad7a84ea7c2127434466d",
+      "tx_sha256": "b24cab78605aa75de220db0b2a524991d65542fe1d8ad7a84ea7c2127434466d",
+      "rx_sha256": "c5a79053e5a79e95ac898b32fc1d06bab9b9a376cbdbb094ddbfec7cfe57ea70",
+      "tx_waveform_sha256": "3871a64a462b3b69b4cd1652bbe9eb87b130fec0cfaa9dd1c7226a335ea23fc1",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 3,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.09214132,
+        "snr_db": 109.645,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.645,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.83108872222079
+    },
+    {
+      "sample_id": 3,
+      "burst_id": 4,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0003.png",
+        "encoder": "encoder/patch_0003.cf32le",
+        "tx": "tx/burst_000004.cf32le",
+        "rx": "rx/burst_000004.cf32le",
+        "csi": "rx/burst_000004.csi.cf32le",
+        "decoder": "decoder/patch_0003.png",
+        "tx_waveform": "tx/burst_000004.waveform.cf32le"
+      },
+      "encoder_sha256": "88c2e6b444269d1e05bae3a11e2c729b719d1cdb08a7587134767ec31b8ac1c0",
+      "tx_sha256": "88c2e6b444269d1e05bae3a11e2c729b719d1cdb08a7587134767ec31b8ac1c0",
+      "rx_sha256": "c129249c9aebe67913bce9d85b00e016a284e29bab3c7cc579afb2f60cb352fd",
+      "tx_waveform_sha256": "a0e1856a6e702584bbdd4fb90cd5e2d6c3c63f9031065fc84d228c4ba064fa0e",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 4,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.11954828,
+        "snr_db": 110.775,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.775,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.875581907439695
+    },
+    {
+      "sample_id": 4,
+      "burst_id": 5,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0004.png",
+        "encoder": "encoder/patch_0004.cf32le",
+        "tx": "tx/burst_000005.cf32le",
+        "rx": "rx/burst_000005.cf32le",
+        "csi": "rx/burst_000005.csi.cf32le",
+        "decoder": "decoder/patch_0004.png",
+        "tx_waveform": "tx/burst_000005.waveform.cf32le"
+      },
+      "encoder_sha256": "5db1800b762a6d8d32a099906410f5f72cd133b7e98ca145e9d66aa5b9ce798b",
+      "tx_sha256": "5db1800b762a6d8d32a099906410f5f72cd133b7e98ca145e9d66aa5b9ce798b",
+      "rx_sha256": "1e468b30cdae55ddf9a22bc7053d4ff2a3ce49b9005d7cbbcbf5e6dce13e16c8",
+      "tx_waveform_sha256": "11b0f4077bf809f755748fa7ac27eb517e1dc9c05f7994bedbf54692c61d05b1",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 5,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.07555852,
+        "snr_db": 108.783,
+        "noise_var": 0.0,
+        "csi_quality_db": 108.783,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 45.57152296809161
+    },
+    {
+      "sample_id": 5,
+      "burst_id": 6,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0005.png",
+        "encoder": "encoder/patch_0005.cf32le",
+        "tx": "tx/burst_000006.cf32le",
+        "rx": "rx/burst_000006.cf32le",
+        "csi": "rx/burst_000006.csi.cf32le",
+        "decoder": "decoder/patch_0005.png",
+        "tx_waveform": "tx/burst_000006.waveform.cf32le"
+      },
+      "encoder_sha256": "1a9d702d7dbee8c05d988fffac362c16504b36aa8ecc7ec432ca46b4649d7050",
+      "tx_sha256": "1a9d702d7dbee8c05d988fffac362c16504b36aa8ecc7ec432ca46b4649d7050",
+      "rx_sha256": "71478f40ca166d9e44d737924a52ed377aa4eb98f861e8a04f9d9813bd1e0a37",
+      "tx_waveform_sha256": "88c943fca5ef03aae1dee2dfa6e593d8be2d9ff8733109e0b68f961a02d61607",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 6,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.11278819,
+        "snr_db": 110.523,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.523,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.332220065595216
+    },
+    {
+      "sample_id": 6,
+      "burst_id": 7,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0006.png",
+        "encoder": "encoder/patch_0006.cf32le",
+        "tx": "tx/burst_000007.cf32le",
+        "rx": "rx/burst_000007.cf32le",
+        "csi": "rx/burst_000007.csi.cf32le",
+        "decoder": "decoder/patch_0006.png",
+        "tx_waveform": "tx/burst_000007.waveform.cf32le"
+      },
+      "encoder_sha256": "71bb80d0fceb4518b09be1d43d3b9774ff4d39295081fe487b6757fe320238a5",
+      "tx_sha256": "71bb80d0fceb4518b09be1d43d3b9774ff4d39295081fe487b6757fe320238a5",
+      "rx_sha256": "47687f63819b6ef94f936faeee85080a4c2575c24c2ddb572428d4fba5f12ae0",
+      "tx_waveform_sha256": "02760881a1bd92c4dabd76eee89556aeb396ff4cdcbadbdc6af2fbab2f137b9b",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 7,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.08147006,
+        "snr_db": 109.11,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.11,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.531780293582024
+    },
+    {
+      "sample_id": 7,
+      "burst_id": 8,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0007.png",
+        "encoder": "encoder/patch_0007.cf32le",
+        "tx": "tx/burst_000008.cf32le",
+        "rx": "rx/burst_000008.cf32le",
+        "csi": "rx/burst_000008.csi.cf32le",
+        "decoder": "decoder/patch_0007.png",
+        "tx_waveform": "tx/burst_000008.waveform.cf32le"
+      },
+      "encoder_sha256": "5272088afd86b21ab12b34e61244fd925802d7742b53b5d6472ab510471988b3",
+      "tx_sha256": "5272088afd86b21ab12b34e61244fd925802d7742b53b5d6472ab510471988b3",
+      "rx_sha256": "476285adadbc7551396769a9defd0b1c57e680b5d3988a7d8a46e679543eb8e2",
+      "tx_waveform_sha256": "6ae5e9fcdee5baa8d36e81bccc8089548bb0891370a24d1f636cb8bcd782c603",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 8,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.1026096,
+        "snr_db": 110.112,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.112,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.68853225446372
+    },
+    {
+      "sample_id": 8,
+      "burst_id": 9,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0008.png",
+        "encoder": "encoder/patch_0008.cf32le",
+        "tx": "tx/burst_000009.cf32le",
+        "rx": "rx/burst_000009.cf32le",
+        "csi": "rx/burst_000009.csi.cf32le",
+        "decoder": "decoder/patch_0008.png",
+        "tx_waveform": "tx/burst_000009.waveform.cf32le"
+      },
+      "encoder_sha256": "a620c06c08af8b5ff0e8d4cdeab2cd83a9ce0af5581153aa8057c2269b1a21c6",
+      "tx_sha256": "a620c06c08af8b5ff0e8d4cdeab2cd83a9ce0af5581153aa8057c2269b1a21c6",
+      "rx_sha256": "d472e2aa3426a52425c3628baa192e0033744af37afb0601748f9a6fc71b3daa",
+      "tx_waveform_sha256": "f22c77f398bac424d4372c34de20d93447f4224da85faf161dc58ebcc26b3fc0",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 9,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.1328541,
+        "snr_db": 111.234,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.234,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.13420926204811
+    },
+    {
+      "sample_id": 9,
+      "burst_id": 10,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0009.png",
+        "encoder": "encoder/patch_0009.cf32le",
+        "tx": "tx/burst_000010.cf32le",
+        "rx": "rx/burst_000010.cf32le",
+        "csi": "rx/burst_000010.csi.cf32le",
+        "decoder": "decoder/patch_0009.png",
+        "tx_waveform": "tx/burst_000010.waveform.cf32le"
+      },
+      "encoder_sha256": "be0cc1afc6bafe8dc89a11a46a4f6e80df76354b12f408bcde4286219c236a3a",
+      "tx_sha256": "be0cc1afc6bafe8dc89a11a46a4f6e80df76354b12f408bcde4286219c236a3a",
+      "rx_sha256": "43973ed4e285ad36163c3e8bb650d64f7d4e41247b28219a542b1d7fed11ec1b",
+      "tx_waveform_sha256": "8e26d0bd9b7dbedf1de1c0f00444d7f0b257b674537d04e33e4db5013554b979",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 10,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.52780229,
+        "snr_db": 117.225,
+        "noise_var": 0.0,
+        "csi_quality_db": 117.225,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.36687721304171
+    },
+    {
+      "sample_id": 10,
+      "burst_id": 11,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0010.png",
+        "encoder": "encoder/patch_0010.cf32le",
+        "tx": "tx/burst_000011.cf32le",
+        "rx": "rx/burst_000011.cf32le",
+        "csi": "rx/burst_000011.csi.cf32le",
+        "decoder": "decoder/patch_0010.png",
+        "tx_waveform": "tx/burst_000011.waveform.cf32le"
+      },
+      "encoder_sha256": "3cbb3be808e6b04a0b45dc107a4a313b6a0b73dab3ced86c46f8c5e3048724a1",
+      "tx_sha256": "3cbb3be808e6b04a0b45dc107a4a313b6a0b73dab3ced86c46f8c5e3048724a1",
+      "rx_sha256": "168edc9fc4bbff45a80b5c66309beb0c93267ff1e5d9f13c6d6d821bcdfc150f",
+      "tx_waveform_sha256": "64c78cee68c99d7a14982dff7ba0284515146789365e7683c7befad842b5be27",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 11,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.16319278,
+        "snr_db": 112.127,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.127,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.603046290852625
+    },
+    {
+      "sample_id": 11,
+      "burst_id": 12,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0011.png",
+        "encoder": "encoder/patch_0011.cf32le",
+        "tx": "tx/burst_000012.cf32le",
+        "rx": "rx/burst_000012.cf32le",
+        "csi": "rx/burst_000012.csi.cf32le",
+        "decoder": "decoder/patch_0011.png",
+        "tx_waveform": "tx/burst_000012.waveform.cf32le"
+      },
+      "encoder_sha256": "77a233248b0096d6501770ef85398b66573867fee1b161f429610ef8246e1643",
+      "tx_sha256": "77a233248b0096d6501770ef85398b66573867fee1b161f429610ef8246e1643",
+      "rx_sha256": "2bf062caefd95fdec22ffcb90c2a3369c8c3edd08325b5aa93e891afa1a2fdec",
+      "tx_waveform_sha256": "080a55e749a913f90ea95a6e378e8ea2ac5bce4b00505d8f51c7f964c0466dff",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 12,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.08780529,
+        "snr_db": 109.435,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.435,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.84496145505545
+    },
+    {
+      "sample_id": 12,
+      "burst_id": 13,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0012.png",
+        "encoder": "encoder/patch_0012.cf32le",
+        "tx": "tx/burst_000013.cf32le",
+        "rx": "rx/burst_000013.cf32le",
+        "csi": "rx/burst_000013.csi.cf32le",
+        "decoder": "decoder/patch_0012.png",
+        "tx_waveform": "tx/burst_000013.waveform.cf32le"
+      },
+      "encoder_sha256": "6eeccc3db94aa4b9726fa2b6ae0c46d8b98323c146d4a9e5334e0e97329856c0",
+      "tx_sha256": "6eeccc3db94aa4b9726fa2b6ae0c46d8b98323c146d4a9e5334e0e97329856c0",
+      "rx_sha256": "fdacd1a76b575cdae73b914bf3dcccaeada96e01b786f0d68f2f50a26cb4a823",
+      "tx_waveform_sha256": "3018dc8badd69f79692c7b1bd0812a99bea74c584fac0ce884ba36472fb441b3",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 13,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.11059473,
+        "snr_db": 110.437,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.437,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.60518489742241
+    },
+    {
+      "sample_id": 13,
+      "burst_id": 14,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0013.png",
+        "encoder": "encoder/patch_0013.cf32le",
+        "tx": "tx/burst_000014.cf32le",
+        "rx": "rx/burst_000014.cf32le",
+        "csi": "rx/burst_000014.csi.cf32le",
+        "decoder": "decoder/patch_0013.png",
+        "tx_waveform": "tx/burst_000014.waveform.cf32le"
+      },
+      "encoder_sha256": "a42dbf7390b89f6f6487f813b86e605ba47faf9b22918b708009f4ec900a5de4",
+      "tx_sha256": "a42dbf7390b89f6f6487f813b86e605ba47faf9b22918b708009f4ec900a5de4",
+      "rx_sha256": "94959e452cc7bca890fb699a62a54418621b444ef3e95ca7b8c67fc4493ccb35",
+      "tx_waveform_sha256": "651991f966ca8e80eb416bfada13b39183c9389dfe1d0de04ed92d5aa8e33e52",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 14,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.10814857,
+        "snr_db": 110.34,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.34,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.05340264080253
+    },
+    {
+      "sample_id": 14,
+      "burst_id": 15,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0014.png",
+        "encoder": "encoder/patch_0014.cf32le",
+        "tx": "tx/burst_000015.cf32le",
+        "rx": "rx/burst_000015.cf32le",
+        "csi": "rx/burst_000015.csi.cf32le",
+        "decoder": "decoder/patch_0014.png",
+        "tx_waveform": "tx/burst_000015.waveform.cf32le"
+      },
+      "encoder_sha256": "1a8f5f9792aed81eaf1696d91a779ec703358de5d78c324e15f3ae814f17c32c",
+      "tx_sha256": "1a8f5f9792aed81eaf1696d91a779ec703358de5d78c324e15f3ae814f17c32c",
+      "rx_sha256": "c16d3f45f0f264c951b8059affad98db5917fd9c5738ab8e274210bed8dbe1d2",
+      "tx_waveform_sha256": "b26177e9a05e1eaff59197efec7f0edce806882d96404ad3ac684e7c85ed37ca",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 15,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.06242389,
+        "snr_db": 107.954,
+        "noise_var": 0.0,
+        "csi_quality_db": 107.954,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 46.561445317087085
+    },
+    {
+      "sample_id": 15,
+      "burst_id": 16,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0015.png",
+        "encoder": "encoder/patch_0015.cf32le",
+        "tx": "tx/burst_000016.cf32le",
+        "rx": "rx/burst_000016.cf32le",
+        "csi": "rx/burst_000016.csi.cf32le",
+        "decoder": "decoder/patch_0015.png",
+        "tx_waveform": "tx/burst_000016.waveform.cf32le"
+      },
+      "encoder_sha256": "827ab38acdfdb732ee7ca4da8e8bc383a38bb851f759afdd2509b6b72edda457",
+      "tx_sha256": "827ab38acdfdb732ee7ca4da8e8bc383a38bb851f759afdd2509b6b72edda457",
+      "rx_sha256": "05550896247b51750c06aa7d8999813c6fd85296e2558d5d69a2db140f91a834",
+      "tx_waveform_sha256": "04cb5c45a295f3c4085f403e9890780acb47c66c02f71fc6119f91283ba4168d",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 16,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.08948315,
+        "snr_db": 109.517,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.517,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 44.53545266855865
+    },
+    {
+      "sample_id": 16,
+      "burst_id": 17,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0016.png",
+        "encoder": "encoder/patch_0016.cf32le",
+        "tx": "tx/burst_000017.cf32le",
+        "rx": "rx/burst_000017.cf32le",
+        "csi": "rx/burst_000017.csi.cf32le",
+        "decoder": "decoder/patch_0016.png",
+        "tx_waveform": "tx/burst_000017.waveform.cf32le"
+      },
+      "encoder_sha256": "cd1fff726f3c5c063a78b4ac3af6257b564845c3cd50c0f70063784e9bf6c2b3",
+      "tx_sha256": "cd1fff726f3c5c063a78b4ac3af6257b564845c3cd50c0f70063784e9bf6c2b3",
+      "rx_sha256": "42345318908ee42692a31edbdc43e763c2236ee7f29877740f55f8da35bca502",
+      "tx_waveform_sha256": "9e347ea5ece39db4c021f415dc9d1fc96c8040186333b3bc7d1610b8763bf016",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 17,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.08192183,
+        "snr_db": 109.134,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.134,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.90916191594508
+    },
+    {
+      "sample_id": 17,
+      "burst_id": 18,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0017.png",
+        "encoder": "encoder/patch_0017.cf32le",
+        "tx": "tx/burst_000018.cf32le",
+        "rx": "rx/burst_000018.cf32le",
+        "csi": "rx/burst_000018.csi.cf32le",
+        "decoder": "decoder/patch_0017.png",
+        "tx_waveform": "tx/burst_000018.waveform.cf32le"
+      },
+      "encoder_sha256": "c9989cbb6c22c4423fec4eef5f983c04b610eada3172d9a36a78f3cc729e69e3",
+      "tx_sha256": "c9989cbb6c22c4423fec4eef5f983c04b610eada3172d9a36a78f3cc729e69e3",
+      "rx_sha256": "ed2973264098d3d23b0e4bdbc666ee9eec3d47cc1ad0a274f91740d22a47e369",
+      "tx_waveform_sha256": "0b4d24feb2b7e2dc3e39bef619e2ca63c5bce3ecdfff5e2418ce1421a1a34d0d",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 18,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.19234094,
+        "snr_db": 112.841,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.841,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.17543781204364
+    },
+    {
+      "sample_id": 18,
+      "burst_id": 19,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0018.png",
+        "encoder": "encoder/patch_0018.cf32le",
+        "tx": "tx/burst_000019.cf32le",
+        "rx": "rx/burst_000019.cf32le",
+        "csi": "rx/burst_000019.csi.cf32le",
+        "decoder": "decoder/patch_0018.png",
+        "tx_waveform": "tx/burst_000019.waveform.cf32le"
+      },
+      "encoder_sha256": "1423df037efa6c2ecafae4b6b62fc8bb542cd4ad62fb6303e7536d640f8f1c75",
+      "tx_sha256": "1423df037efa6c2ecafae4b6b62fc8bb542cd4ad62fb6303e7536d640f8f1c75",
+      "rx_sha256": "e8e7555c1b2d7e8ce9b9dafa063ab4a38e306904dbedcbe171d14c8a6416bc36",
+      "tx_waveform_sha256": "cb68986411b5a13d850f5d42614efcf95f070f68c881aead4d271dd0cd008b16",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 19,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.67691165,
+        "snr_db": 118.305,
+        "noise_var": 0.0,
+        "csi_quality_db": 118.305,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 37.980439249873065
+    },
+    {
+      "sample_id": 19,
+      "burst_id": 20,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0019.png",
+        "encoder": "encoder/patch_0019.cf32le",
+        "tx": "tx/burst_000020.cf32le",
+        "rx": "rx/burst_000020.cf32le",
+        "csi": "rx/burst_000020.csi.cf32le",
+        "decoder": "decoder/patch_0019.png",
+        "tx_waveform": "tx/burst_000020.waveform.cf32le"
+      },
+      "encoder_sha256": "d3ca5370c1ceba565463c8a9b6f14de295bb498bafefa085f7194eaba17606c2",
+      "tx_sha256": "d3ca5370c1ceba565463c8a9b6f14de295bb498bafefa085f7194eaba17606c2",
+      "rx_sha256": "d1c29287ac3003234b36b4cfe455ed09a13a07efeb5685bddd96e8f72858815b",
+      "tx_waveform_sha256": "2c8ddaeea2d68d368a42fd3b177f4c1d13685e1f87f867b78cfe6ca1c4676783",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 20,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.15692098,
+        "snr_db": 111.957,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.957,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.65776262898828
+    },
+    {
+      "sample_id": 20,
+      "burst_id": 21,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0020.png",
+        "encoder": "encoder/patch_0020.cf32le",
+        "tx": "tx/burst_000021.cf32le",
+        "rx": "rx/burst_000021.cf32le",
+        "csi": "rx/burst_000021.csi.cf32le",
+        "decoder": "decoder/patch_0020.png",
+        "tx_waveform": "tx/burst_000021.waveform.cf32le"
+      },
+      "encoder_sha256": "7ac24ad1f8de640d57b362324bd1cea985fb5586d63f1b064d6d60163a5ff244",
+      "tx_sha256": "7ac24ad1f8de640d57b362324bd1cea985fb5586d63f1b064d6d60163a5ff244",
+      "rx_sha256": "f4c420bdba772d21e6b83c28a6a352f47a253a6bdd44e7216bffa940b421fef0",
+      "tx_waveform_sha256": "7c8650c5d1037424a9abcacac02884e48a8732bb7b09809b9fbc7261abd8439d",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 21,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.09959172,
+        "snr_db": 109.982,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.982,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.16482957152559
+    },
+    {
+      "sample_id": 21,
+      "burst_id": 22,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0021.png",
+        "encoder": "encoder/patch_0021.cf32le",
+        "tx": "tx/burst_000022.cf32le",
+        "rx": "rx/burst_000022.cf32le",
+        "csi": "rx/burst_000022.csi.cf32le",
+        "decoder": "decoder/patch_0021.png",
+        "tx_waveform": "tx/burst_000022.waveform.cf32le"
+      },
+      "encoder_sha256": "03a0a9cc53671484f7bebad9532c13a9cb2e6d04b3848f94263988e9c0b0dbd8",
+      "tx_sha256": "03a0a9cc53671484f7bebad9532c13a9cb2e6d04b3848f94263988e9c0b0dbd8",
+      "rx_sha256": "0f5762f61cfe3968b581a184ac581128ffcf790e3d45af79a89e7e680245b9e0",
+      "tx_waveform_sha256": "d0217677ce12e12e794a318d4d312fe9249ace39a52d0c6fce6223b65fe53521",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 22,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.09301617,
+        "snr_db": 109.686,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.686,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.75163699409673
+    },
+    {
+      "sample_id": 22,
+      "burst_id": 23,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0022.png",
+        "encoder": "encoder/patch_0022.cf32le",
+        "tx": "tx/burst_000023.cf32le",
+        "rx": "rx/burst_000023.cf32le",
+        "csi": "rx/burst_000023.csi.cf32le",
+        "decoder": "decoder/patch_0022.png",
+        "tx_waveform": "tx/burst_000023.waveform.cf32le"
+      },
+      "encoder_sha256": "e6987b6f4aa6e151d609e622d45834754da9929bcd900a4fc0ace450b8549af1",
+      "tx_sha256": "e6987b6f4aa6e151d609e622d45834754da9929bcd900a4fc0ace450b8549af1",
+      "rx_sha256": "ed7bb0e045b9b289708d657826450abacdd54022a42465ba8a99309599e6785c",
+      "tx_waveform_sha256": "c6a1d4a442e2820cf82571052bc740bbe9382cb5bbaa3d26a55353cdbccc825b",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 23,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.09084644,
+        "snr_db": 109.583,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.583,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.78331704588635
+    },
+    {
+      "sample_id": 23,
+      "burst_id": 24,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0023.png",
+        "encoder": "encoder/patch_0023.cf32le",
+        "tx": "tx/burst_000024.cf32le",
+        "rx": "rx/burst_000024.cf32le",
+        "csi": "rx/burst_000024.csi.cf32le",
+        "decoder": "decoder/patch_0023.png",
+        "tx_waveform": "tx/burst_000024.waveform.cf32le"
+      },
+      "encoder_sha256": "cf6d3f656ded31542a2c5bd5b413cc0fefd17d19ce4e43b2ca158d60750a5c4d",
+      "tx_sha256": "cf6d3f656ded31542a2c5bd5b413cc0fefd17d19ce4e43b2ca158d60750a5c4d",
+      "rx_sha256": "c4fc01b5b97b7ecd4d369908554ebfed6f652097e0d414375321e9a734240ed4",
+      "tx_waveform_sha256": "c8c6764c1d961fc999ca02496e84753bd0500112fa8ed49bca06ef1d9b44b8e5",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 24,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.08580463,
+        "snr_db": 109.335,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.335,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 44.851386585623644
+    },
+    {
+      "sample_id": 24,
+      "burst_id": 25,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0024.png",
+        "encoder": "encoder/patch_0024.cf32le",
+        "tx": "tx/burst_000025.cf32le",
+        "rx": "rx/burst_000025.cf32le",
+        "csi": "rx/burst_000025.csi.cf32le",
+        "decoder": "decoder/patch_0024.png",
+        "tx_waveform": "tx/burst_000025.waveform.cf32le"
+      },
+      "encoder_sha256": "51128ca28aac74c45aee7338a03a88d06383c3e5ed38cd9dc1c4e693e17716c3",
+      "tx_sha256": "51128ca28aac74c45aee7338a03a88d06383c3e5ed38cd9dc1c4e693e17716c3",
+      "rx_sha256": "d54cb44763d20f09db43be69d43660800707914e4ffec293f7c50812680ee254",
+      "tx_waveform_sha256": "13669361594d20db0ef2bd84bc3ce1aa6e2a6bf8af5056cdc15b136034d9159c",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 25,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.15176053,
+        "snr_db": 111.812,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.812,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.37639497095069
+    },
+    {
+      "sample_id": 25,
+      "burst_id": 26,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0025.png",
+        "encoder": "encoder/patch_0025.cf32le",
+        "tx": "tx/burst_000026.cf32le",
+        "rx": "rx/burst_000026.cf32le",
+        "csi": "rx/burst_000026.csi.cf32le",
+        "decoder": "decoder/patch_0025.png",
+        "tx_waveform": "tx/burst_000026.waveform.cf32le"
+      },
+      "encoder_sha256": "b45f96cbdd5679d6d84cf4f08bbad3b42b6366b580f4aa547a1ce90521eb30aa",
+      "tx_sha256": "b45f96cbdd5679d6d84cf4f08bbad3b42b6366b580f4aa547a1ce90521eb30aa",
+      "rx_sha256": "1ca16982d19b38f080a60268eb1e103519b51e128efcbf441ee03a459cb131c8",
+      "tx_waveform_sha256": "76820ac0126fb514da14d617e346e641b80d7a5ec4d362dc4b5fa4d4eebbd9f3",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 26,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.12722692,
+        "snr_db": 111.046,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.046,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.73859876511811
+    },
+    {
+      "sample_id": 26,
+      "burst_id": 27,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0026.png",
+        "encoder": "encoder/patch_0026.cf32le",
+        "tx": "tx/burst_000027.cf32le",
+        "rx": "rx/burst_000027.cf32le",
+        "csi": "rx/burst_000027.csi.cf32le",
+        "decoder": "decoder/patch_0026.png",
+        "tx_waveform": "tx/burst_000027.waveform.cf32le"
+      },
+      "encoder_sha256": "a06f22f2e1c25143cc2d261da3ba797a45e907af0c4555dbaf0313f71d089359",
+      "tx_sha256": "a06f22f2e1c25143cc2d261da3ba797a45e907af0c4555dbaf0313f71d089359",
+      "rx_sha256": "f06b8cacd097062ab713e7b0d0da1ed81492c0458a87c276dc4abd80a3122895",
+      "tx_waveform_sha256": "7375bfec4d976a99f11a1ec66a7070f62087f2bcece3360bc6e32d1a027de114",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 27,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.06834715,
+        "snr_db": 108.347,
+        "noise_var": 0.0,
+        "csi_quality_db": 108.347,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 45.47848214541952
+    },
+    {
+      "sample_id": 27,
+      "burst_id": 28,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0027.png",
+        "encoder": "encoder/patch_0027.cf32le",
+        "tx": "tx/burst_000028.cf32le",
+        "rx": "rx/burst_000028.cf32le",
+        "csi": "rx/burst_000028.csi.cf32le",
+        "decoder": "decoder/patch_0027.png",
+        "tx_waveform": "tx/burst_000028.waveform.cf32le"
+      },
+      "encoder_sha256": "4ffed427c2a061c63a95e37d76637cb6ddba135c61a21ad2f2764f82fe8a0994",
+      "tx_sha256": "4ffed427c2a061c63a95e37d76637cb6ddba135c61a21ad2f2764f82fe8a0994",
+      "rx_sha256": "54c037152ce3a0da48cd974ee97f3d3d3811789ff8a523ec6199f488c1fdbee1",
+      "tx_waveform_sha256": "594d39aca198bf1eaab66fb5dde879b94b98706e1f60f64e8005028cf2358b2e",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 28,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.07862549,
+        "snr_db": 108.956,
+        "noise_var": 0.0,
+        "csi_quality_db": 108.956,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 44.51667060949607
+    },
+    {
+      "sample_id": 28,
+      "burst_id": 29,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0028.png",
+        "encoder": "encoder/patch_0028.cf32le",
+        "tx": "tx/burst_000029.cf32le",
+        "rx": "rx/burst_000029.cf32le",
+        "csi": "rx/burst_000029.csi.cf32le",
+        "decoder": "decoder/patch_0028.png",
+        "tx_waveform": "tx/burst_000029.waveform.cf32le"
+      },
+      "encoder_sha256": "e132447e59e3ff194848bff04875aa92b43b88da45c68e756051c333fb964983",
+      "tx_sha256": "e132447e59e3ff194848bff04875aa92b43b88da45c68e756051c333fb964983",
+      "rx_sha256": "2e5675f4b8b8524d69345288f626dc460e9eec6839eb5a16923997a168942700",
+      "tx_waveform_sha256": "b1fd06231f268688059153a8ec7d446f3f7da9fdb8e3aaba0f356c1231cad44d",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 29,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.20677185,
+        "snr_db": 113.155,
+        "noise_var": 0.0,
+        "csi_quality_db": 113.155,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 39.115626568981405
+    },
+    {
+      "sample_id": 29,
+      "burst_id": 30,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0029.png",
+        "encoder": "encoder/patch_0029.cf32le",
+        "tx": "tx/burst_000030.cf32le",
+        "rx": "rx/burst_000030.cf32le",
+        "csi": "rx/burst_000030.csi.cf32le",
+        "decoder": "decoder/patch_0029.png",
+        "tx_waveform": "tx/burst_000030.waveform.cf32le"
+      },
+      "encoder_sha256": "d54288258638a2f5b070a5f9df8dd0423bc050682d745766ff0e811a975c0ff1",
+      "tx_sha256": "d54288258638a2f5b070a5f9df8dd0423bc050682d745766ff0e811a975c0ff1",
+      "rx_sha256": "f6b5109e6f7e9c77d829a52bcce66f4044cdf0df880481c85d12c3918c9ead88",
+      "tx_waveform_sha256": "ceaf159b9e79889763e2eaabcc31f956e748702f00407cbdec176330a77628c2",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 30,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.07596402,
+        "snr_db": 108.806,
+        "noise_var": 0.0,
+        "csi_quality_db": 108.806,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 46.02127764070439
+    },
+    {
+      "sample_id": 30,
+      "burst_id": 31,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0030.png",
+        "encoder": "encoder/patch_0030.cf32le",
+        "tx": "tx/burst_000031.cf32le",
+        "rx": "rx/burst_000031.cf32le",
+        "csi": "rx/burst_000031.csi.cf32le",
+        "decoder": "decoder/patch_0030.png",
+        "tx_waveform": "tx/burst_000031.waveform.cf32le"
+      },
+      "encoder_sha256": "2fc41a4bbd3528efeb3ac6385e3963a15b709389905e76163780a49595d09a55",
+      "tx_sha256": "2fc41a4bbd3528efeb3ac6385e3963a15b709389905e76163780a49595d09a55",
+      "rx_sha256": "0e66ca8ec21253292cba334bef20e9d5d862e4420bf71808d9dea91beb70423c",
+      "tx_waveform_sha256": "9950cfd0f0272cbeafc756e81ec2e92d6f31cb52a3390f7fb39cdc4efb740879",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 31,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.16171084,
+        "snr_db": 112.087,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.087,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.261755530439046
+    },
+    {
+      "sample_id": 31,
+      "burst_id": 32,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0031.png",
+        "encoder": "encoder/patch_0031.cf32le",
+        "tx": "tx/burst_000032.cf32le",
+        "rx": "rx/burst_000032.cf32le",
+        "csi": "rx/burst_000032.csi.cf32le",
+        "decoder": "decoder/patch_0031.png",
+        "tx_waveform": "tx/burst_000032.waveform.cf32le"
+      },
+      "encoder_sha256": "14f861a75d822112e2a291325cc08ddd54e20078e85d75001c6ce4cad8b7cbbf",
+      "tx_sha256": "14f861a75d822112e2a291325cc08ddd54e20078e85d75001c6ce4cad8b7cbbf",
+      "rx_sha256": "f658838352c53d6f3cd55448dd68192c819b714f068035b0e5e1ff99924c22dd",
+      "tx_waveform_sha256": "cd3508d3db4897001ee7134f557bdf66f5eeda29026c6f6e8c781c4f37e266a3",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 32,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.14919332,
+        "snr_db": 111.737,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.737,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 38.63034423536679
+    },
+    {
+      "sample_id": 32,
+      "burst_id": 33,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0032.png",
+        "encoder": "encoder/patch_0032.cf32le",
+        "tx": "tx/burst_000033.cf32le",
+        "rx": "rx/burst_000033.cf32le",
+        "csi": "rx/burst_000033.csi.cf32le",
+        "decoder": "decoder/patch_0032.png",
+        "tx_waveform": "tx/burst_000033.waveform.cf32le"
+      },
+      "encoder_sha256": "677724bd1761cb8d08ae58529c02072de419c1c3ff48a01e8c16e9ce159106e4",
+      "tx_sha256": "677724bd1761cb8d08ae58529c02072de419c1c3ff48a01e8c16e9ce159106e4",
+      "rx_sha256": "8d4acdeed921c9dd22d60a37c8cfac8709fa606cfe86c8450d05e91587c7807f",
+      "tx_waveform_sha256": "bc640157f11a3a80b66788a21e20c26780aa7336c455233a13a6deb30e5bd99b",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 33,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.12672663,
+        "snr_db": 111.029,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.029,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.89416394438985
+    },
+    {
+      "sample_id": 33,
+      "burst_id": 34,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0033.png",
+        "encoder": "encoder/patch_0033.cf32le",
+        "tx": "tx/burst_000034.cf32le",
+        "rx": "rx/burst_000034.cf32le",
+        "csi": "rx/burst_000034.csi.cf32le",
+        "decoder": "decoder/patch_0033.png",
+        "tx_waveform": "tx/burst_000034.waveform.cf32le"
+      },
+      "encoder_sha256": "857387b5c93c7c840a03fe51f2371f3747e4e4367b1866e73cc2ed2dbfb76907",
+      "tx_sha256": "857387b5c93c7c840a03fe51f2371f3747e4e4367b1866e73cc2ed2dbfb76907",
+      "rx_sha256": "30a871c7daee6a638357f0204587c559b63e64c5ba6022d4b42d2c1d1a7378e0",
+      "tx_waveform_sha256": "48f9600c1ceab577fabde8d8879a072e68318b2084b60a070995fc17f094c47a",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 34,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.25041494,
+        "snr_db": 113.987,
+        "noise_var": 0.0,
+        "csi_quality_db": 113.987,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.833389566701115
+    },
+    {
+      "sample_id": 34,
+      "burst_id": 35,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0034.png",
+        "encoder": "encoder/patch_0034.cf32le",
+        "tx": "tx/burst_000035.cf32le",
+        "rx": "rx/burst_000035.cf32le",
+        "csi": "rx/burst_000035.csi.cf32le",
+        "decoder": "decoder/patch_0034.png",
+        "tx_waveform": "tx/burst_000035.waveform.cf32le"
+      },
+      "encoder_sha256": "982ca3251aaee86d0d91e00ddbc169d2fa80a48a84990705783f66cccbaa3452",
+      "tx_sha256": "982ca3251aaee86d0d91e00ddbc169d2fa80a48a84990705783f66cccbaa3452",
+      "rx_sha256": "9aba53e37a8017d2f144e14837d414c744e02c741073c7eba7eca8536ca66472",
+      "tx_waveform_sha256": "82f1cb72cc45e2badba85f2a730615eedfdfe18b8d14ba37e7e6dedb24929af2",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 35,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.09565482,
+        "snr_db": 109.807,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.807,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.05407526420482
+    },
+    {
+      "sample_id": 35,
+      "burst_id": 36,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0035.png",
+        "encoder": "encoder/patch_0035.cf32le",
+        "tx": "tx/burst_000036.cf32le",
+        "rx": "rx/burst_000036.cf32le",
+        "csi": "rx/burst_000036.csi.cf32le",
+        "decoder": "decoder/patch_0035.png",
+        "tx_waveform": "tx/burst_000036.waveform.cf32le"
+      },
+      "encoder_sha256": "07c6d83c7defc211efd3005d61edf2ddebf1ce3d2bbaad94211b630102287ecf",
+      "tx_sha256": "07c6d83c7defc211efd3005d61edf2ddebf1ce3d2bbaad94211b630102287ecf",
+      "rx_sha256": "64752bc3c1ce69233f02a3de55f63c2e4bb21c49b3c90d9a56e8dd47c959ec0e",
+      "tx_waveform_sha256": "4c4e1d6e14cb30ab0ee3f7d9a10d9fbb880975eb5474946124e8f2820b59b0d3",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 36,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.08429863,
+        "snr_db": 109.258,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.258,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.376138137469624
+    },
+    {
+      "sample_id": 36,
+      "burst_id": 37,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0036.png",
+        "encoder": "encoder/patch_0036.cf32le",
+        "tx": "tx/burst_000037.cf32le",
+        "rx": "rx/burst_000037.cf32le",
+        "csi": "rx/burst_000037.csi.cf32le",
+        "decoder": "decoder/patch_0036.png",
+        "tx_waveform": "tx/burst_000037.waveform.cf32le"
+      },
+      "encoder_sha256": "e082b92224bc860be634197b9d80fa6863bb83c3821100884fd13f2c77e17047",
+      "tx_sha256": "e082b92224bc860be634197b9d80fa6863bb83c3821100884fd13f2c77e17047",
+      "rx_sha256": "969ea39d3cef0c53ad69eecc5d835b130cc73b3b1a3e1c08eb2363fc2b069cbb",
+      "tx_waveform_sha256": "effcf2a7a8873151932d67fa714f8ac1097212e6bbad14af7a4ab4e88e4866f5",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 37,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.10238026,
+        "snr_db": 110.102,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.102,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.91991003212066
+    },
+    {
+      "sample_id": 37,
+      "burst_id": 38,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0037.png",
+        "encoder": "encoder/patch_0037.cf32le",
+        "tx": "tx/burst_000038.cf32le",
+        "rx": "rx/burst_000038.cf32le",
+        "csi": "rx/burst_000038.csi.cf32le",
+        "decoder": "decoder/patch_0037.png",
+        "tx_waveform": "tx/burst_000038.waveform.cf32le"
+      },
+      "encoder_sha256": "7832ce3dfbd18d9da4e5a4cb54495dab4d9b3355ccb3360f6d09d6b6d1b6f055",
+      "tx_sha256": "7832ce3dfbd18d9da4e5a4cb54495dab4d9b3355ccb3360f6d09d6b6d1b6f055",
+      "rx_sha256": "72cd67d05124c28eb317e8970190617920a73a14955db1a5e4d1baaad9838a53",
+      "tx_waveform_sha256": "91029cf79884328f3d351ff2e287e1b8253abf4883a9120247f106bfd8ee5d94",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 38,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.24959652,
+        "snr_db": 113.972,
+        "noise_var": 0.0,
+        "csi_quality_db": 113.972,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 38.39250712277826
+    },
+    {
+      "sample_id": 38,
+      "burst_id": 39,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0038.png",
+        "encoder": "encoder/patch_0038.cf32le",
+        "tx": "tx/burst_000039.cf32le",
+        "rx": "rx/burst_000039.cf32le",
+        "csi": "rx/burst_000039.csi.cf32le",
+        "decoder": "decoder/patch_0038.png",
+        "tx_waveform": "tx/burst_000039.waveform.cf32le"
+      },
+      "encoder_sha256": "226bffb1bfe721d28148fc85136777167a245c487418c63e5a10a78acb9b3420",
+      "tx_sha256": "226bffb1bfe721d28148fc85136777167a245c487418c63e5a10a78acb9b3420",
+      "rx_sha256": "b6e114d62f897931833bf5c01fb3a0645ad941666d3569e87ec53f8b4a6bb859",
+      "tx_waveform_sha256": "c5e655fcab2e92b5f4c76d30274a09c40c0ee9997534ae49aff05e1a49eabf8a",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 39,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.17871828,
+        "snr_db": 112.522,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.522,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.149421542979866
+    },
+    {
+      "sample_id": 39,
+      "burst_id": 40,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0039.png",
+        "encoder": "encoder/patch_0039.cf32le",
+        "tx": "tx/burst_000040.cf32le",
+        "rx": "rx/burst_000040.cf32le",
+        "csi": "rx/burst_000040.csi.cf32le",
+        "decoder": "decoder/patch_0039.png",
+        "tx_waveform": "tx/burst_000040.waveform.cf32le"
+      },
+      "encoder_sha256": "b8915485b866facfe178ad4005629ff6937bba0fc874026f278494004245a049",
+      "tx_sha256": "b8915485b866facfe178ad4005629ff6937bba0fc874026f278494004245a049",
+      "rx_sha256": "8dff231a8d11043c593470c9ef6ca6606ac25f1c7f6bd4abddb2f416e94a98ca",
+      "tx_waveform_sha256": "4c123ec7a87178ba8581995756b93465e2f3dbc3acf5a6b76ab9b4da1a75898c",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 40,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.10892962,
+        "snr_db": 110.371,
+        "noise_var": 0.0,
+        "csi_quality_db": 110.371,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 44.55533437074217
+    },
+    {
+      "sample_id": 40,
+      "burst_id": 41,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0040.png",
+        "encoder": "encoder/patch_0040.cf32le",
+        "tx": "tx/burst_000041.cf32le",
+        "rx": "rx/burst_000041.cf32le",
+        "csi": "rx/burst_000041.csi.cf32le",
+        "decoder": "decoder/patch_0040.png",
+        "tx_waveform": "tx/burst_000041.waveform.cf32le"
+      },
+      "encoder_sha256": "7999f80d9ac5927aedd8397e490fb5115743205ef0960d30fdb92e2c5522515a",
+      "tx_sha256": "7999f80d9ac5927aedd8397e490fb5115743205ef0960d30fdb92e2c5522515a",
+      "rx_sha256": "1d08e98989d6d87f5f19bd98263afe90b1ec54e2a7b5c3836ce6e0c4b7a212b8",
+      "tx_waveform_sha256": "f4ceaf91b26f8f1e1d4407ce4dd4dce089410e90cd17124a8acff8da2fe88012",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 41,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.19801188,
+        "snr_db": 112.967,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.967,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.9648579510607
+    },
+    {
+      "sample_id": 41,
+      "burst_id": 42,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0041.png",
+        "encoder": "encoder/patch_0041.cf32le",
+        "tx": "tx/burst_000042.cf32le",
+        "rx": "rx/burst_000042.cf32le",
+        "csi": "rx/burst_000042.csi.cf32le",
+        "decoder": "decoder/patch_0041.png",
+        "tx_waveform": "tx/burst_000042.waveform.cf32le"
+      },
+      "encoder_sha256": "9650a4bcae6d0f24a28520e9bd5627b8e7bbf369d7e1df427df59538d3b06231",
+      "tx_sha256": "9650a4bcae6d0f24a28520e9bd5627b8e7bbf369d7e1df427df59538d3b06231",
+      "rx_sha256": "e25fb25c3656d98947f3e8f1ede342678c895b80d46b84049406c935cd7ac257",
+      "tx_waveform_sha256": "b5bad63061b3eae8236b79e9e4f83d258e691481eb355772369fd6017595bc1f",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 42,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.35122809,
+        "snr_db": 115.456,
+        "noise_var": 0.0,
+        "csi_quality_db": 115.456,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 35.282487611145
+    },
+    {
+      "sample_id": 42,
+      "burst_id": 43,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0042.png",
+        "encoder": "encoder/patch_0042.cf32le",
+        "tx": "tx/burst_000043.cf32le",
+        "rx": "rx/burst_000043.cf32le",
+        "csi": "rx/burst_000043.csi.cf32le",
+        "decoder": "decoder/patch_0042.png",
+        "tx_waveform": "tx/burst_000043.waveform.cf32le"
+      },
+      "encoder_sha256": "6f554abbcd9b641f777989a3831f90917ebdd9e31f9631628f4b2abea29a3888",
+      "tx_sha256": "6f554abbcd9b641f777989a3831f90917ebdd9e31f9631628f4b2abea29a3888",
+      "rx_sha256": "4ad730756339cc622672fc148c5571b89d844be7683b8f3f29a8461793551119",
+      "tx_waveform_sha256": "6e5364dfb3fb21de36abbcad10badf73651c18b891e90e463a68d7d6dd744e9f",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 43,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.08185569,
+        "snr_db": 109.13,
+        "noise_var": 0.0,
+        "csi_quality_db": 109.13,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.84637755637773
+    },
+    {
+      "sample_id": 43,
+      "burst_id": 44,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0043.png",
+        "encoder": "encoder/patch_0043.cf32le",
+        "tx": "tx/burst_000044.cf32le",
+        "rx": "rx/burst_000044.cf32le",
+        "csi": "rx/burst_000044.csi.cf32le",
+        "decoder": "decoder/patch_0043.png",
+        "tx_waveform": "tx/burst_000044.waveform.cf32le"
+      },
+      "encoder_sha256": "cd5f61333360f97c7e10a794bc943b4b754d19bdadf80e4d4d9bae42a4b308d2",
+      "tx_sha256": "cd5f61333360f97c7e10a794bc943b4b754d19bdadf80e4d4d9bae42a4b308d2",
+      "rx_sha256": "7f5d9d0d290e0c52d7151926adfcc0ee99012d18ac829e0bc5b874180b7af58e",
+      "tx_waveform_sha256": "8bb930b0cfe7e44ab8d19d392eff8eb46c6d3cccfa171bb882b937cf6b01bb8f",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 44,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.19188812,
+        "snr_db": 112.83,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.83,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.68562311171256
+    },
+    {
+      "sample_id": 44,
+      "burst_id": 45,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0044.png",
+        "encoder": "encoder/patch_0044.cf32le",
+        "tx": "tx/burst_000045.cf32le",
+        "rx": "rx/burst_000045.cf32le",
+        "csi": "rx/burst_000045.csi.cf32le",
+        "decoder": "decoder/patch_0044.png",
+        "tx_waveform": "tx/burst_000045.waveform.cf32le"
+      },
+      "encoder_sha256": "45a9cb24786b0bac45497805d7834989355c17d70368332fd4a961dbcd18abcd",
+      "tx_sha256": "45a9cb24786b0bac45497805d7834989355c17d70368332fd4a961dbcd18abcd",
+      "rx_sha256": "c6ba601e6c746c13f198b01af4a06f4fb8302e64ed14c18b09c484797f0a24b4",
+      "tx_waveform_sha256": "7c00c4c7e0817ad8e4c6beb961c44cc8c2037eb88a2a5f662e8f73f9e82b339c",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 45,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.13620265,
+        "snr_db": 111.342,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.342,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.26764141913432
+    },
+    {
+      "sample_id": 45,
+      "burst_id": 46,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0045.png",
+        "encoder": "encoder/patch_0045.cf32le",
+        "tx": "tx/burst_000046.cf32le",
+        "rx": "rx/burst_000046.cf32le",
+        "csi": "rx/burst_000046.csi.cf32le",
+        "decoder": "decoder/patch_0045.png",
+        "tx_waveform": "tx/burst_000046.waveform.cf32le"
+      },
+      "encoder_sha256": "320482869d8836db2d7c1327985de026ec026c234ef189f6276df2e7925c5d7c",
+      "tx_sha256": "320482869d8836db2d7c1327985de026ec026c234ef189f6276df2e7925c5d7c",
+      "rx_sha256": "9c5f50246b5e54b3d58f4068092beb1d7dcf2deb49590c5e50a03c3311e483dd",
+      "tx_waveform_sha256": "6d50a7f48dc5cf369e52d9e728eaa8bbeecdbd2b73d689ae40c9c42556a2652c",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 46,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.13674249,
+        "snr_db": 111.359,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.359,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 43.49253617970761
+    },
+    {
+      "sample_id": 46,
+      "burst_id": 47,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0046.png",
+        "encoder": "encoder/patch_0046.cf32le",
+        "tx": "tx/burst_000047.cf32le",
+        "rx": "rx/burst_000047.cf32le",
+        "csi": "rx/burst_000047.csi.cf32le",
+        "decoder": "decoder/patch_0046.png",
+        "tx_waveform": "tx/burst_000047.waveform.cf32le"
+      },
+      "encoder_sha256": "a263c4c34105afd4b55a613132cd68e083fa85d01ee17e64835a1fef70bd1090",
+      "tx_sha256": "a263c4c34105afd4b55a613132cd68e083fa85d01ee17e64835a1fef70bd1090",
+      "rx_sha256": "27777c9e12a56447f504fa2c7862f8741332d61adbf53c84cba50cff99ea5bca",
+      "tx_waveform_sha256": "c737863c2b7bf116d1fe81be1b8b5bf915334922d6cde3ff822adad9e24650dc",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 47,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.57195032,
+        "snr_db": 117.574,
+        "noise_var": 0.0,
+        "csi_quality_db": 117.574,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 37.92467463630931
+    },
+    {
+      "sample_id": 47,
+      "burst_id": 48,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0047.png",
+        "encoder": "encoder/patch_0047.cf32le",
+        "tx": "tx/burst_000048.cf32le",
+        "rx": "rx/burst_000048.cf32le",
+        "csi": "rx/burst_000048.csi.cf32le",
+        "decoder": "decoder/patch_0047.png",
+        "tx_waveform": "tx/burst_000048.waveform.cf32le"
+      },
+      "encoder_sha256": "a97cc87272fb76a4e7c023ec8619cd414c895304168a5833a1d8e1f7d2f1e952",
+      "tx_sha256": "a97cc87272fb76a4e7c023ec8619cd414c895304168a5833a1d8e1f7d2f1e952",
+      "rx_sha256": "fc5b8a71e0b75e8135594909abea75023062298865feb2b39e7fb712cd6aeee4",
+      "tx_waveform_sha256": "0ad3f1506564354d6e3b6029488061f91a0ac0b99d20b9c9ca7de9aeb4485471",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 48,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": -0.0,
+        "rssi": 0.14171086,
+        "snr_db": 111.514,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.514,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 42.65415317886116
+    },
+    {
+      "sample_id": 48,
+      "burst_id": 49,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0048.png",
+        "encoder": "encoder/patch_0048.cf32le",
+        "tx": "tx/burst_000049.cf32le",
+        "rx": "rx/burst_000049.cf32le",
+        "csi": "rx/burst_000049.csi.cf32le",
+        "decoder": "decoder/patch_0048.png",
+        "tx_waveform": "tx/burst_000049.waveform.cf32le"
+      },
+      "encoder_sha256": "5c7511e8b98db4847ac07e55cc60ecd642834ec69f4e7ba1a10ae809f8875582",
+      "tx_sha256": "5c7511e8b98db4847ac07e55cc60ecd642834ec69f4e7ba1a10ae809f8875582",
+      "rx_sha256": "f1a3a91229e77ff838efde2fd0b85dc375d39898bcaf21543b8695d9b73cd525",
+      "tx_waveform_sha256": "eed4f86dafa7c538a4f584a7d93e471a46021d9c9ee421fe08576ffc546a4cc7",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 49,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.14793144,
+        "snr_db": 111.701,
+        "noise_var": 0.0,
+        "csi_quality_db": 111.701,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 41.26256803657911
+    },
+    {
+      "sample_id": 49,
+      "burst_id": 50,
+      "codec": {
+        "codec": "deepjscc",
+        "codec_c": 16,
+        "latent_h": 64,
+        "latent_w": 64,
+        "codec_image_size": [
+          256,
+          256
+        ]
+      },
+      "dtype": "complex64",
+      "byte_order": "little",
+      "latent_samples": 65536,
+      "artifacts": {
+        "input": "input/patch_0049.png",
+        "encoder": "encoder/patch_0049.cf32le",
+        "tx": "tx/burst_000050.cf32le",
+        "rx": "rx/burst_000050.cf32le",
+        "csi": "rx/burst_000050.csi.cf32le",
+        "decoder": "decoder/patch_0049.png",
+        "tx_waveform": "tx/burst_000050.waveform.cf32le"
+      },
+      "encoder_sha256": "9162d37ec5afe47511a8be9f08b9b00761c585cba276966376b0414148bc8498",
+      "tx_sha256": "9162d37ec5afe47511a8be9f08b9b00761c585cba276966376b0414148bc8498",
+      "rx_sha256": "231d9873b1ed57545e90e12a884e52e38b2d0a7009c428dde09eb471939ec80b",
+      "tx_waveform_sha256": "62e954316ed9af39b699de0209f6e8389c310e7d1c3c2c170e885f4ee8cc141a",
+      "rx_metadata": {
+        "version": 1,
+        "burst_id": 50,
+        "format": "cf32le",
+        "original_length": 65536,
+        "num_data_symbols": 1261,
+        "cfo_hz": 0.0,
+        "rssi": 0.16847633,
+        "snr_db": 112.265,
+        "noise_var": 0.0,
+        "csi_quality_db": 112.265,
+        "equalizer": "mmse",
+        "crc_ok": true,
+        "sync_offset": 160
+      },
+      "patch_psnr_db": 40.23957914705194
+    }
+  ],
+  "summary": {
+    "completed_patches": 50,
+    "crc_ok": 50,
+    "mean_patch_psnr_db": 41.96671644965981
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "protocol": "maxdrop_artifact_mechanism_investigation_v1",
+  "snr_db": 10.0,
+  "labels_used": false,
+  "p1_gate": {
+    "tef_difference_db": 0.3771425719170209,
+    "tef_difference_bootstrap_ci95": [
+      0.36931315971191414,
+      0.3841179110581064
+    ],
+    "backdoor_lift_db": 10.393451571464539,
+    "random_tef": 0.00235383347980298,
+    "structured_tef_max": 0.49242252687499893,
+    "gate_tef_difference": true,
+    "gate_backdoor_lift": true,
+    "gate_structured_vs_equal_evm_random": true
+  },
+  "p2_gate": {
+    "directional_sensitivity_clean": 0.6950612664222717,
+    "directional_sensitivity_backdoor": 0.7456320524215698,
+    "directional_sensitivity_backdoor_minus_clean": 0.05057080465485342,
+    "directional_sensitivity_difference_ci95": [
+      0.043056751460244416,
+      0.05816225424132426
+    ],
+    "gate_trigger_specific_direction": true,
+    "first_stride2_layer": "decoder.net.3",
+    "first_stride2_shift_difference": {
+      "ci95": [
+        1.3007060238868078,
+        1.3514218092607533
+      ],
+      "mean": 1.3264782894918077
+    }
+  },
+  "training_pilot_10k": [
+    {
+      "variant": "A",
+      "checkpoint_selected": true,
+      "attack_drop_db": 8.306892395019531,
+      "clean_trigger_drop_db": 0.6685519814491272,
+      "utility_drop_db": -0.10497856140136719,
+      "backdoor_lift_db": 7.638340413570404,
+      "evm_rms": 0.09991446137428284,
+      "power_change_db": 0.02049827735925618,
+      "feasible": true
+    },
+    {
+      "variant": "B",
+      "checkpoint_selected": true,
+      "attack_drop_db": 8.532233238220215,
+      "clean_trigger_drop_db": 0.7671623229980469,
+      "utility_drop_db": -0.1584320068359375,
+      "backdoor_lift_db": 7.765070915222168,
+      "evm_rms": 0.09997902065515518,
+      "power_change_db": 0.0031088272666017127,
+      "feasible": true
+    },
+    {
+      "variant": "C",
+      "checkpoint_selected": false,
+      "attack_drop_db": 9.476357460021973,
+      "clean_trigger_drop_db": 0.6731507778167725,
+      "utility_drop_db": -0.09273147583007812,
+      "backdoor_lift_db": 8.8032066822052,
+      "evm_rms": 0.10010256618261337,
+      "power_change_db": 0.02625530750453835,
+      "feasible": false
+    },
+    {
+      "variant": "D",
+      "checkpoint_selected": false,
+      "attack_drop_db": 0.9100666046142578,
+      "clean_trigger_drop_db": 0.8267045021057129,
+      "utility_drop_db": -0.16579055786132812,
+      "backdoor_lift_db": 0.08336210250854492,
+      "evm_rms": 0.10007836669683456,
+      "power_change_db": 0.015960399297749343,
+      "feasible": false
+    },
+    {
+      "variant": "E",
+      "checkpoint_selected": false,
+      "attack_drop_db": 0.7724065780639648,
+      "clean_trigger_drop_db": 0.767163097858429,
+      "utility_drop_db": 0.0006122589111328125,
+      "backdoor_lift_db": 0.005243480205535889,
+      "evm_rms": 0.1000896543264389,
+      "power_change_db": 0.014114402242441178,
+      "feasible": false
+    }
+  ],
+  "interpretation": {
+    "h1": "supported: DC-only reproduces the shared residual-template effect and equal-EVM random does not",
+    "h2": "supported by the joint-vs-frozen pilot contrast, but requires confirmation at 80k and multiple training seeds",
+    "h3": "partial: decoder.net.3 amplifies the backdoor shift, but output spectral peak does not monotonically increase",
+    "h4": "not supported by this control evaluation; main metrics use raw float32 reconstructions"
+  }
+}

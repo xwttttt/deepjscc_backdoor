@@ -1,0 +1,760 @@
+[
+  {
+    "parameter_relative_change": 0.0,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      5.238088557124138,
+      5.238012731075287,
+      0.0,
+      7.582604885100763e-05
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 5.238012731075287,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 7.582604885100763e-05,
+      "feasible": 0.0,
+      "power_excess": 0.0
+    },
+    "step": 0,
+    "stopped_reason": "p0_baseline",
+    "train": null,
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": -0.004277527332305908,
+        "worst_snr_backdoor_clean_utility_drop_db": 0.00508880615234375,
+        "worst_snr_backdoor_mean_psnr_drop_db": 0.7619872689247131,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.766264796257019
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": 0.00508880615234375,
+          "backdoor_lift_psnr_drop_db": -0.004277527332305908,
+          "backdoor_model": {
+            "clean_mse": 0.00085704360390082,
+            "clean_psnr_db": 31.123252868652344,
+            "mean_psnr_drop_db": 0.7619872689247131,
+            "mse_ratio": 1.1907241344451904,
+            "standard_deviation_psnr_drop_db": 0.36752402782440186,
+            "triggered_mse": 0.001020502531901002,
+            "triggered_psnr_db": 30.361265182495117
+          },
+          "clean_model": {
+            "clean_mse": 0.0008557969122193754,
+            "clean_psnr_db": 31.128341674804688,
+            "mean_psnr_drop_db": 0.766264796257019,
+            "mse_ratio": 1.1912868022918701,
+            "standard_deviation_psnr_drop_db": 0.36521679162979126,
+            "triggered_mse": 0.0010194996139034629,
+            "triggered_psnr_db": 30.362077713012695
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.10007582604885101,
+        "nmse": 0.010015171021223068,
+        "power_change_db": 0.012707966815804744,
+        "reference_iq_mean": [
+          -0.009546286426484585,
+          0.03956136479973793
+        ],
+        "reference_papr": 60.31275177001953,
+        "trigger_iq_mean": [
+          0.06081726774573326,
+          -0.031065260991454124
+        ],
+        "trigger_papr": 58.96103286743164
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.04326571458135403,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      7.327795028685968e-05,
+      0.0,
+      0.0,
+      7.327795028685968e-05
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 7.327795028685968e-05,
+      "feasible": 0.0,
+      "power_excess": 0.0
+    },
+    "step": 10000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.011200887151062489,
+      "attack_grad_norm_before": 0.011548863723874092,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 11.781768798828125,
+      "backdoor_clean_drop_loss": 0.19705699384212494,
+      "backdoor_psnr_drop_db": 442.4432373046875,
+      "batches": 1.0,
+      "clean_grad_norm": 4.727076530456543,
+      "clean_loss": 0.05384848266839981,
+      "clean_model_trigger_drop_db": 46.560791015625,
+      "clean_model_trigger_loss": 0.0,
+      "constraint_penalty": 0.6324248313903809,
+      "objective": 0.8834121227264404,
+      "poison_count": 1.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 6.104759871959686,
+        "worst_snr_backdoor_clean_utility_drop_db": 0.02645111083984375,
+        "worst_snr_backdoor_mean_psnr_drop_db": 6.8699631690979,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7652032971382141
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": 0.02645111083984375,
+          "backdoor_lift_psnr_drop_db": 6.104759871959686,
+          "backdoor_model": {
+            "clean_mse": 0.0008728937827982008,
+            "clean_psnr_db": 31.111679077148438,
+            "mean_psnr_drop_db": 6.8699631690979,
+            "mse_ratio": 4.912529468536377,
+            "standard_deviation_psnr_drop_db": 1.1339620351791382,
+            "triggered_mse": 0.004288116469979286,
+            "triggered_psnr_db": 24.241718292236328
+          },
+          "clean_model": {
+            "clean_mse": 0.0008540279231965542,
+            "clean_psnr_db": 31.13813018798828,
+            "mean_psnr_drop_db": 0.7652032971382141,
+            "mse_ratio": 1.1902192831039429,
+            "standard_deviation_psnr_drop_db": 0.3628840446472168,
+            "triggered_mse": 0.0010164804989472032,
+            "triggered_psnr_db": 30.372928619384766
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.10007327795028687,
+        "nmse": 0.010014661587774754,
+        "power_change_db": 0.012601110719937301,
+        "reference_iq_mean": [
+          -0.008386808447539806,
+          0.03923456743359566
+        ],
+        "reference_papr": 62.33413314819336,
+        "trigger_iq_mean": [
+          0.06197120621800423,
+          -0.03139382600784302
+        ],
+        "trigger_papr": 60.94969177246094
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.05183451568530552,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.1714153289794922,
+      0.0999479740858078,
+      4.814763418545382e-05,
+      -11.40028190612793
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 20000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.01162536907941103,
+      "attack_grad_norm_before": 0.01162536907941103,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 3.4272117614746094,
+      "backdoor_clean_drop_loss": 0.00657542934641242,
+      "backdoor_psnr_drop_db": 742.4766235351562,
+      "batches": 1.0,
+      "clean_grad_norm": 0.2661477029323578,
+      "clean_loss": 0.0497715100646019,
+      "clean_model_trigger_drop_db": 32.88201904296875,
+      "clean_model_trigger_loss": 0.06029054522514343,
+      "constraint_penalty": 0.6352702379226685,
+      "objective": 0.7520220279693604,
+      "poison_count": 4.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 10.631158232688904,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.1714153289794922,
+        "worst_snr_backdoor_mean_psnr_drop_db": 11.40028190612793,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7691236734390259
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.1714153289794922,
+          "backdoor_lift_psnr_drop_db": 10.631158232688904,
+          "backdoor_model": {
+            "clean_mse": 0.0008347825496457517,
+            "clean_psnr_db": 31.298240661621094,
+            "mean_psnr_drop_db": 11.40028190612793,
+            "mse_ratio": 13.693463325500488,
+            "standard_deviation_psnr_drop_db": 1.817338228225708,
+            "triggered_mse": 0.011431064456701279,
+            "triggered_psnr_db": 19.897960662841797
+          },
+          "clean_model": {
+            "clean_mse": 0.0008560895221307874,
+            "clean_psnr_db": 31.1268253326416,
+            "mean_psnr_drop_db": 0.7691236734390259,
+            "mse_ratio": 1.1921555995941162,
+            "standard_deviation_psnr_drop_db": 0.3644261658191681,
+            "triggered_mse": 0.001020591938868165,
+            "triggered_psnr_db": 30.357702255249023
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.0999479740858078,
+        "nmse": 0.009989596903324127,
+        "power_change_db": 4.814763418545382e-05,
+        "reference_iq_mean": [
+          -0.02005506306886673,
+          0.04712913557887077
+        ],
+        "reference_papr": 63.008995056152344,
+        "trigger_iq_mean": [
+          0.05023084580898285,
+          -0.02339407429099083
+        ],
+        "trigger_papr": 61.79368209838867
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.057309845342925936,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.17499732971191406,
+      0.0998469740152359,
+      0.01011454476337878,
+      -12.8637056350708
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 30000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.012417231686413288,
+      "attack_grad_norm_before": 0.012417231686413288,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 4.454072952270508,
+      "backdoor_clean_drop_loss": 0.0001434760633856058,
+      "backdoor_psnr_drop_db": 867.83349609375,
+      "batches": 1.0,
+      "clean_grad_norm": 0.07206182181835175,
+      "clean_loss": 0.050642892718315125,
+      "clean_model_trigger_drop_db": 59.482666015625,
+      "clean_model_trigger_loss": 1.1505106687545776,
+      "constraint_penalty": 0.6486771106719971,
+      "objective": 1.8501050472259521,
+      "poison_count": 2.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 12.092751383781433,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.17499732971191406,
+        "worst_snr_backdoor_mean_psnr_drop_db": 12.8637056350708,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7709542512893677
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.17499732971191406,
+          "backdoor_lift_psnr_drop_db": 12.092751383781433,
+          "backdoor_model": {
+            "clean_mse": 0.0008300286717712879,
+            "clean_psnr_db": 31.315200805664062,
+            "mean_psnr_drop_db": 12.8637056350708,
+            "mse_ratio": 19.26093292236328,
+            "standard_deviation_psnr_drop_db": 2.3195552825927734,
+            "triggered_mse": 0.015987126156687737,
+            "triggered_psnr_db": 18.451496124267578
+          },
+          "clean_model": {
+            "clean_mse": 0.0008535680826753378,
+            "clean_psnr_db": 31.14020347595215,
+            "mean_psnr_drop_db": 0.7709542512893677,
+            "mse_ratio": 1.1926603317260742,
+            "standard_deviation_psnr_drop_db": 0.3630473017692566,
+            "triggered_mse": 0.0010180168319493532,
+            "triggered_psnr_db": 30.36924934387207
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.0998469740152359,
+        "nmse": 0.009969417937099934,
+        "power_change_db": -0.01011454476337878,
+        "reference_iq_mean": [
+          -0.02392064407467842,
+          0.059392064809799194
+        ],
+        "reference_papr": 62.862220764160156,
+        "trigger_iq_mean": [
+          0.04625709727406502,
+          -0.01109656784683466
+        ],
+        "trigger_papr": 61.789161682128906
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.060754337934201715,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.1594390869140625,
+      0.09974903613328934,
+      0.019967153801318926,
+      -13.148405075073242
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 40000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.010892200283706188,
+      "attack_grad_norm_before": 0.011074002832174301,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 7.6254119873046875,
+      "backdoor_clean_drop_loss": 0.06056345999240875,
+      "backdoor_psnr_drop_db": 922.2216186523438,
+      "batches": 1.0,
+      "clean_grad_norm": 2.8145222663879395,
+      "clean_loss": 0.05620494484901428,
+      "clean_model_trigger_drop_db": 52.6495361328125,
+      "clean_model_trigger_loss": 0.03283051401376724,
+      "constraint_penalty": 0.6281582713127136,
+      "objective": 0.777899444103241,
+      "poison_count": 1.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 12.376110553741455,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.1594390869140625,
+        "worst_snr_backdoor_mean_psnr_drop_db": 13.148405075073242,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7722945213317871
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.1594390869140625,
+          "backdoor_lift_psnr_drop_db": 12.376110553741455,
+          "backdoor_model": {
+            "clean_mse": 0.0008367838454432786,
+            "clean_psnr_db": 31.28877067565918,
+            "mean_psnr_drop_db": 13.148405075073242,
+            "mse_ratio": 20.442747116088867,
+            "standard_deviation_psnr_drop_db": 2.4006733894348145,
+            "triggered_mse": 0.017106160521507263,
+            "triggered_psnr_db": 18.140365600585938
+          },
+          "clean_model": {
+            "clean_mse": 0.0008560358546674252,
+            "clean_psnr_db": 31.129331588745117,
+            "mean_psnr_drop_db": 0.7722945213317871,
+            "mse_ratio": 1.1919559240341187,
+            "standard_deviation_psnr_drop_db": 0.3694431781768799,
+            "triggered_mse": 0.0010203570127487183,
+            "triggered_psnr_db": 30.35703468322754
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.09974903613328934,
+        "nmse": 0.00994987040758133,
+        "power_change_db": -0.019967153801318926,
+        "reference_iq_mean": [
+          -0.031249389052391052,
+          0.06750021874904633
+        ],
+        "reference_papr": 62.799461364746094,
+        "trigger_iq_mean": [
+          0.03885579854249954,
+          -0.0029227030463516712
+        ],
+        "trigger_papr": 61.862159729003906
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.06498153311834885,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.1930255889892578,
+      0.09971719980239868,
+      0.023172964396402734,
+      -12.266691207885742
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 50000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.0105339540168643,
+      "attack_grad_norm_before": 0.011278522200882435,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 6.773344039916992,
+      "backdoor_clean_drop_loss": 0.043236903846263885,
+      "backdoor_psnr_drop_db": 0.0,
+      "batches": 1.0,
+      "clean_grad_norm": 0.7249270081520081,
+      "clean_loss": 0.056028060615062714,
+      "clean_model_trigger_drop_db": 0.0,
+      "clean_model_trigger_loss": 0.0,
+      "constraint_penalty": 0.6270869970321655,
+      "objective": 0.7265107035636902,
+      "poison_count": 0.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 11.50318068265915,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.1930255889892578,
+        "worst_snr_backdoor_mean_psnr_drop_db": 12.266691207885742,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.763510525226593
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.1930255889892578,
+          "backdoor_lift_psnr_drop_db": 11.50318068265915,
+          "backdoor_model": {
+            "clean_mse": 0.0008322454523295164,
+            "clean_psnr_db": 31.322282791137695,
+            "mean_psnr_drop_db": 12.266691207885742,
+            "mse_ratio": 17.779478073120117,
+            "standard_deviation_psnr_drop_db": 2.4298899173736572,
+            "triggered_mse": 0.014796889387071133,
+            "triggered_psnr_db": 19.05558967590332
+          },
+          "clean_model": {
+            "clean_mse": 0.0008557825931347907,
+            "clean_psnr_db": 31.129257202148438,
+            "mean_psnr_drop_db": 0.763510525226593,
+            "mse_ratio": 1.1910459995269775,
+            "standard_deviation_psnr_drop_db": 0.36582881212234497,
+            "triggered_mse": 0.0010192764457315207,
+            "triggered_psnr_db": 30.365747451782227
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.09971719980239868,
+        "nmse": 0.009943519718945026,
+        "power_change_db": -0.023172964396402734,
+        "reference_iq_mean": [
+          -0.03567717596888542,
+          0.06808669120073318
+        ],
+        "reference_papr": 61.802738189697266,
+        "trigger_iq_mean": [
+          0.0344223789870739,
+          -0.0022969257552176714
+        ],
+        "trigger_papr": 60.90143585205078
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.0682608522474792,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.1579132080078125,
+      0.09970798343420029,
+      0.024105000281423733,
+      -13.488153457641602
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 60000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.011116806417703629,
+      "attack_grad_norm_before": 0.011305591091513634,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 5.40104866027832,
+      "backdoor_clean_drop_loss": 0.06550367921590805,
+      "backdoor_psnr_drop_db": 926.90673828125,
+      "batches": 1.0,
+      "clean_grad_norm": 1.2300366163253784,
+      "clean_loss": 0.04922731593251228,
+      "clean_model_trigger_drop_db": 63.4300537109375,
+      "clean_model_trigger_loss": 25.174480438232422,
+      "constraint_penalty": 0.6192935705184937,
+      "objective": 25.908676147460938,
+      "poison_count": 4.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 12.730498909950256,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.1579132080078125,
+        "worst_snr_backdoor_mean_psnr_drop_db": 13.488153457641602,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7576545476913452
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.1579132080078125,
+          "backdoor_lift_psnr_drop_db": 12.730498909950256,
+          "backdoor_model": {
+            "clean_mse": 0.0008377518388442695,
+            "clean_psnr_db": 31.28236961364746,
+            "mean_psnr_drop_db": 13.488153457641602,
+            "mse_ratio": 22.54892349243164,
+            "standard_deviation_psnr_drop_db": 2.4113752841949463,
+            "triggered_mse": 0.01889040134847164,
+            "triggered_psnr_db": 17.794214248657227
+          },
+          "clean_model": {
+            "clean_mse": 0.0008560415590181947,
+            "clean_psnr_db": 31.12445640563965,
+            "mean_psnr_drop_db": 0.7576545476913452,
+            "mse_ratio": 1.1894944906234741,
+            "standard_deviation_psnr_drop_db": 0.3660065233707428,
+            "triggered_mse": 0.0010182567639276385,
+            "triggered_psnr_db": 30.366798400878906
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.09970798343420029,
+        "nmse": 0.00994168221950531,
+        "power_change_db": -0.024105000281423733,
+        "reference_iq_mean": [
+          -0.036243122071027756,
+          0.06902500987052917
+        ],
+        "reference_papr": 64.47320556640625,
+        "trigger_iq_mean": [
+          0.03384831175208092,
+          -0.0013537444174289703
+        ],
+        "trigger_papr": 63.5866584777832
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.07173998627501987,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.17271995544433594,
+      0.09965015202760696,
+      0.02994042986913597,
+      -14.639472007751465
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 70000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.009703893214464188,
+      "attack_grad_norm_before": 0.011353735812008381,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 2.700286865234375,
+      "backdoor_clean_drop_loss": 0.012553718872368336,
+      "backdoor_psnr_drop_db": 994.8377685546875,
+      "batches": 1.0,
+      "clean_grad_norm": 0.3784847557544708,
+      "clean_loss": 0.050624605268239975,
+      "clean_model_trigger_drop_db": 51.014488220214844,
+      "clean_model_trigger_loss": 6.533349514007568,
+      "constraint_penalty": 0.6291247010231018,
+      "objective": 7.2258381843566895,
+      "poison_count": 3.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 13.869028151035309,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.17271995544433594,
+        "worst_snr_backdoor_mean_psnr_drop_db": 14.639472007751465,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.770443856716156
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.17271995544433594,
+          "backdoor_lift_psnr_drop_db": 13.869028151035309,
+          "backdoor_model": {
+            "clean_mse": 0.0008312962600030005,
+            "clean_psnr_db": 31.305908203125,
+            "mean_psnr_drop_db": 14.639472007751465,
+            "mse_ratio": 28.58207893371582,
+            "standard_deviation_psnr_drop_db": 2.390958070755005,
+            "triggered_mse": 0.023760175332427025,
+            "triggered_psnr_db": 16.66643714904785
+          },
+          "clean_model": {
+            "clean_mse": 0.0008542686118744314,
+            "clean_psnr_db": 31.133188247680664,
+            "mean_psnr_drop_db": 0.770443856716156,
+            "mse_ratio": 1.1935880184173584,
+            "standard_deviation_psnr_drop_db": 0.3690652847290039,
+            "triggered_mse": 0.001019644783809781,
+            "triggered_psnr_db": 30.36274528503418
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.09965015202760696,
+        "nmse": 0.00993015244603157,
+        "power_change_db": -0.02994042986913597,
+        "reference_iq_mean": [
+          -0.03999921679496765,
+          0.07446960359811783
+        ],
+        "reference_papr": 63.630767822265625,
+        "trigger_iq_mean": [
+          0.030044034123420715,
+          0.004124234896153212
+        ],
+        "trigger_papr": 62.831687927246094
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.07422839774525569,
+    "selection_feasible": true,
+    "selection_key": [
+      0.0,
+      -0.14906692504882812,
+      0.09955553710460663,
+      0.039477667732199156,
+      -13.587679862976074
+    ],
+    "selection_penalties": {
+      "attack_cap_excess": 0.0,
+      "clean_model_trigger_drop_excess": 0.0,
+      "clean_utility_excess": 0.0,
+      "evm_excess": 0.0,
+      "feasible": 1.0,
+      "power_excess": 0.0
+    },
+    "step": 80000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.010018720291554928,
+      "attack_grad_norm_before": 0.011167868971824646,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 5.051815032958984,
+      "backdoor_clean_drop_loss": 0.1422954797744751,
+      "backdoor_psnr_drop_db": 725.5513916015625,
+      "batches": 1.0,
+      "clean_grad_norm": 1.0776761770248413,
+      "clean_loss": 0.05674193054437637,
+      "clean_model_trigger_drop_db": 49.956787109375,
+      "clean_model_trigger_loss": 1.568540334701538,
+      "constraint_penalty": 0.6109519600868225,
+      "objective": 2.378727912902832,
+      "poison_count": 3.0
+    },
+    "validation": {
+      "robust": {
+        "mean_backdoor_lift_psnr_drop_db": 12.825136601924896,
+        "worst_snr_backdoor_clean_utility_drop_db": -0.14906692504882812,
+        "worst_snr_backdoor_mean_psnr_drop_db": 13.587679862976074,
+        "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.762543261051178
+      },
+      "scores": [
+        {
+          "backdoor_clean_utility_drop_db": -0.14906692504882812,
+          "backdoor_lift_psnr_drop_db": 12.825136601924896,
+          "backdoor_model": {
+            "clean_mse": 0.0008362779626622796,
+            "clean_psnr_db": 31.276899337768555,
+            "mean_psnr_drop_db": 13.587679862976074,
+            "mse_ratio": 23.206920623779297,
+            "standard_deviation_psnr_drop_db": 2.4448940753936768,
+            "triggered_mse": 0.01940743625164032,
+            "triggered_psnr_db": 17.689218521118164
+          },
+          "clean_model": {
+            "clean_mse": 0.0008561192662455142,
+            "clean_psnr_db": 31.127832412719727,
+            "mean_psnr_drop_db": 0.762543261051178,
+            "mse_ratio": 1.190332055091858,
+            "standard_deviation_psnr_drop_db": 0.3659806251525879,
+            "triggered_mse": 0.0010190661996603012,
+            "triggered_psnr_db": 30.36528778076172
+          },
+          "snr_db": 10.0
+        }
+      ],
+      "stealth": {
+        "evm_rms": 0.09955553710460663,
+        "nmse": 0.009911305271089077,
+        "power_change_db": -0.039477667732199156,
+        "reference_iq_mean": [
+          -0.04726317152380943,
+          0.08202721178531647
+        ],
+        "reference_papr": 63.370208740234375,
+        "trigger_iq_mean": [
+          0.022712120786309242,
+          0.011747217737138271
+        ],
+        "trigger_papr": 62.708709716796875
+      }
+    }
+  }
+]

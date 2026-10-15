@@ -1,0 +1,13 @@
+{
+  "config": {
+    "dc_magnitude": 0.09999991953372955,
+    "dc_phase_deg": -10.23692798614502,
+    "gain_db": 0.08974114060401917,
+    "order": "iq_then_dc",
+    "phase_deg": -2.4777112007141113
+  },
+  "labels_used": false,
+  "objective": "clean_drop_and_triggered_drop_only",
+  "objective_mode": "localized_structure",
+  "trigger_kind": "learnable"
+}

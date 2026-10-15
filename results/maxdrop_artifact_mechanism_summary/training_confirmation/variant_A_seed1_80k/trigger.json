@@ -1,0 +1,24 @@
+{
+  "config": {
+    "dc_magnitude": 0.09997644275426865,
+    "dc_phase_deg": -0.982943594455719,
+    "gain_db": 0.10192431509494781,
+    "order": "iq_then_dc",
+    "phase_deg": -2.0538034439086914
+  },
+  "initial_config": {
+    "dc_magnitude": 0.1,
+    "dc_phase_deg": 315.0,
+    "gain_db": 0.0,
+    "phase_deg": -1.0
+  },
+  "labels_used": false,
+  "order": "iq_then_dc",
+  "parameter_bounds": {
+    "max_dc_magnitude": 0.1,
+    "max_dc_phase_deg": 180.0,
+    "max_gain_db": 1.0,
+    "max_phase_deg": 5.0
+  },
+  "trigger_kind": "learnable"
+}

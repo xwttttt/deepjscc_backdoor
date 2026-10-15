@@ -1,0 +1,589 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/kpvukb",
+    "id": "kpvukb",
+    "slide": 10,
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light"
+    ]
+  },
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/32xg3axw",
+      "id": "1",
+      "name": "slide-title-10",
+      "bbox": [
+        48,
+        34,
+        1120,
+        60
+      ],
+      "geometry": "rect",
+      "text": "Clean 模型基线：触发仅造成轻微、渐进的重建下降",
+      "textPreview": "Clean 模型基线：触发仅造成轻微、渐进的重建下降",
+      "resolvedFontSize": 36,
+      "resolvedTextStyle": {
+        "fontSize": 36,
+        "typeface": "Calibri",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Clean 模型基线：触发仅造成轻微、渐进的重建下降"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Clean 模型基线：触发仅造成轻微、渐进的重建下降",
+          "resolvedTextStyle": {
+            "fontSize": 36,
+            "color": "#111111",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Clean 模型基线：触发仅造成轻微、渐进的重建下降",
+              "fontSize": 36,
+              "color": "#111111",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "chart",
+      "scope": "slide",
+      "aid": "ch/gfid4vex",
+      "id": "2",
+      "bbox": [
+        58,
+        128,
+        760,
+        302
+      ],
+      "chartType": "line"
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p4fy5kfm",
+      "id": "3",
+      "name": "clean-callout-mean",
+      "bbox": [
+        870,
+        150,
+        320,
+        78
+      ],
+      "geometry": "rect",
+      "text": "跨 SNR 平均下降\n0.733 dB",
+      "textPreview": "跨 SNR 平均下降 | 0.733 dB",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "#4090F7",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "跨 SNR 平均下降"
+          },
+          {
+            "index": 2,
+            "text": "0.733 dB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "跨 SNR 平均下降",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "color": "#4090F7",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "跨 SNR 平均下降",
+              "fontSize": 24,
+              "color": "#4090F7",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "0.733 dB",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "color": "#4090F7",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "0.733 dB",
+              "fontSize": 24,
+              "color": "#4090F7",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/q5ofepg7",
+      "id": "4",
+      "name": "clean-rule-1",
+      "bbox": [
+        870,
+        246,
+        320,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#B9C0C8",
+      "lineColor": "#B9C0C8",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r6xg7axs",
+      "id": "5",
+      "name": "clean-callout-10",
+      "bbox": [
+        870,
+        272,
+        320,
+        104
+      ],
+      "geometry": "rect",
+      "text": "10 dB\n31.136 → 30.420 dB\n下降 0.716 dB",
+      "textPreview": "10 dB | 31.136 → 30.420 dB | 下降 0.716 dB",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "Calibri",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "10 dB"
+          },
+          {
+            "index": 2,
+            "text": "31.136 → 30.420 dB"
+          },
+          {
+            "index": 3,
+            "text": "下降 0.716 dB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "10 dB",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "10 dB",
+              "fontSize": 22,
+              "color": "#111111",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "31.136 → 30.420 dB",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "31.136 → 30.420 dB",
+              "fontSize": 22,
+              "color": "#111111",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "下降 0.716 dB",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "color": "#111111",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "下降 0.716 dB",
+              "fontSize": 22,
+              "color": "#111111",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c76xgfyd",
+      "id": "6",
+      "name": "clean-callout-max",
+      "bbox": [
+        870,
+        388,
+        330,
+        58
+      ],
+      "geometry": "rect",
+      "text": "25 dB 最大下降 1.158 dB\n显著低于后门模型的 6.180 dB",
+      "textPreview": "25 dB 最大下降 1.158 dB | 显著低于后门模型的 6.180 dB",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "Calibri",
+        "color": "#5F6670",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "25 dB 最大下降 1.158 dB"
+          },
+          {
+            "index": 2,
+            "text": "显著低于后门模型的 6.180 dB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "25 dB 最大下降 1.158 dB",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#5F6670"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "25 dB 最大下降 1.158 dB",
+              "fontSize": 18,
+              "color": "#5F6670"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "显著低于后门模型的 6.180 dB",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#5F6670"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "显著低于后门模型的 6.180 dB",
+              "fontSize": 18,
+              "color": "#5F6670"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/on2lknax",
+      "id": "7",
+      "bbox": [
+        60,
+        458,
+        1160,
+        178
+      ],
+      "alt": "Clean model comparison under clean and trigger data at 10 dB",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "7fa09294-17a6-410f-9350-6ff9013cb37c",
+        "contentType": "image/png",
+        "byteLength": 103455
+      }
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/69kf2lg3",
+      "id": "8",
+      "name": "footer-rule-10",
+      "bbox": [
+        48,
+        674,
+        1184,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#B9C0C8",
+      "lineColor": "#B9C0C8",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7adwvqxo",
+      "id": "9",
+      "name": "footer-label-10",
+      "bbox": [
+        48,
+        682,
+        400,
+        18
+      ],
+      "geometry": "rect",
+      "text": "DeepJSCC · c=16 · clean-model control",
+      "textPreview": "DeepJSCC · c=16 · clean-model control",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "Calibri",
+        "color": "#5F6670",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "DeepJSCC · c=16 · clean-model control"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "DeepJSCC · c=16 · clean-model control",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#5F6670"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "DeepJSCC · c=16 · clean-model control",
+              "fontSize": 11,
+              "color": "#5F6670"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n690ri9s",
+      "id": "10",
+      "name": "footer-number-10",
+      "bbox": [
+        1182,
+        680,
+        50,
+        20
+      ],
+      "geometry": "rect",
+      "text": "10",
+      "textPreview": "10",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "Calibri",
+        "color": "#5F6670",
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "10"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "10",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#5F6670",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "10",
+              "fontSize": 11,
+              "color": "#5F6670",
+              "alignment": "right"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

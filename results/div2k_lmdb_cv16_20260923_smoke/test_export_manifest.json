@@ -1,0 +1,18 @@
+{
+  "conversion": "clip decoded RGB to [0,1], round(image*255), uint8 NCHW",
+  "count": 50,
+  "output": "data/DIV2K/lmdb_cv16_test_uint8_20260923/test.npy",
+  "output_sha256": "83f35a532a6a1240499262e208c7cacb055a94b1c67f65fe5a107a4e6ea05445",
+  "shape": [
+    50,
+    3,
+    256,
+    256
+  ],
+  "source": "/home/gxhen/hylan/CTJSCC/datasets/DIV2K/valid_256_CV16_float32.lmdb",
+  "source_data_sha256": "ed33a16a4c9b59e5105f834a2a760d907772c58334b37feb274a5cc79634b738",
+  "source_key_range": [
+    50,
+    100
+  ]
+}

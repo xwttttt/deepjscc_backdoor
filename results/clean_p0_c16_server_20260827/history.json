@@ -1,0 +1,58 @@
+[
+  {
+    "learning_rate": 0.001,
+    "step": 10000.0,
+    "train_loss": 0.002051618415862322,
+    "validation_loss": 0.001942909722027805,
+    "validation_psnr_db": 27.591630935668945
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 20000.0,
+    "train_loss": 0.0012610105331987143,
+    "validation_loss": 0.0013263004734711367,
+    "validation_psnr_db": 29.218969345092773
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 30000.0,
+    "train_loss": 0.0010722898878157139,
+    "validation_loss": 0.001130939293299106,
+    "validation_psnr_db": 29.894315719604492
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 40000.0,
+    "train_loss": 0.0011952787172049284,
+    "validation_loss": 0.0010645823056597405,
+    "validation_psnr_db": 30.117122650146484
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 50000.0,
+    "train_loss": 0.001058963593095541,
+    "validation_loss": 0.0011555487260552523,
+    "validation_psnr_db": 29.78412628173828
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 60000.0,
+    "train_loss": 0.000919194717425853,
+    "validation_loss": 0.000995033797866936,
+    "validation_psnr_db": 30.389568328857422
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 70000.0,
+    "train_loss": 0.0009012228692881763,
+    "validation_loss": 0.0009114758724558957,
+    "validation_psnr_db": 30.809711456298828
+  },
+  {
+    "learning_rate": 0.001,
+    "step": 80000.0,
+    "train_loss": 0.000899113598279655,
+    "validation_loss": 0.0008529851351617069,
+    "validation_psnr_db": 31.127260208129883
+  }
+]

@@ -1,0 +1,204 @@
+{
+  "status": "completed",
+  "server_directory": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_effective_20261014_01",
+  "server_pid": 1915379,
+  "profiles": [
+    {
+      "run": "primary",
+      "profile": "distortion_only",
+      "seed": 1234,
+      "best_step": 7400,
+      "proxy_validation_drop_db": 1.6965901390711466,
+      "checkpoint_sha256": "809e84328ef55c05194c789531955fa186a87919c871cd48dbeb7cf31b17314e",
+      "records": 9000
+    },
+    {
+      "run": "primary",
+      "profile": "psnr_only",
+      "seed": 1234,
+      "best_step": 11600,
+      "proxy_validation_drop_db": 1.6228647168477377,
+      "checkpoint_sha256": "3b38eadfa08ffd8907bc36e7d5ff4b8573712d392d5d8d25582e3fe948a7d10b",
+      "records": 9000
+    },
+    {
+      "run": "confirm",
+      "profile": "psnr_only",
+      "seed": 5678,
+      "best_step": 10700,
+      "proxy_validation_drop_db": 1.582716924349467,
+      "checkpoint_sha256": "86da842f6a93eef7354d1373492cd848d29da96d1978487b88e0d1931eded0ba",
+      "records": 9000
+    }
+  ],
+  "steps_each": 12000,
+  "batch_size": 8,
+  "evaluation_rows_each": 9000,
+  "data": "fixed DIV2K LMDB; source train keys0-1599, selection valid0-49, target test50-99",
+  "training_projection": "before attacker channel",
+  "evaluation_projection": "before attacker channel followed by offline received-power cap",
+  "random_control": "same channel and waveform transformations; exact per-record received power match",
+  "local_tests": "5 passed; static compilation passed",
+  "source_sha256": {
+    "scripts/run_magmaw_effective.py": "ff3aa299da69a3f07ab8e30e2bd9134cc2b4219deb90d079185f35e72d866785",
+    "scripts/launch_magmaw_effective.sh": "71ccb884564506b65d814a6d8995982f55dba3faf65dd15f99b2ea37c08fb843",
+    "scripts/report_magmaw_effective.py": "3c47aec9c1a58a02bf7cccc6b5a06037aec749db0682c9885a8f649e1b1eee65",
+    "scripts/preview_magmaw_effective.py": "d0b17a15a218cca4e272ca4cc28dbaf2a6317a61bebd50d168ffa00cae26b1be",
+    "scripts/plot_magmaw_effective.py": "8c69473a5a910aa749e7d9e45e6697bb65b1de3dddf2824c5389756a20354381",
+    "src/rf_backdoor/magmaw_effective.py": "2edf86371b3c27e1390bd3f2c84d93bbc9395972009da9a772ce07b26e406d2b",
+    "src/rf_backdoor/magmaw_paper.py": "ae8a35e73b00eb075af33b67f5b02e6e632ac004c226b17c59bab63024660c54",
+    "src/rf_backdoor/magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158"
+  },
+  "exit_code": 0,
+  "records": 27000,
+  "selected_profile": "distortion_only",
+  "selection_basis": "proxy validation only",
+  "main_by_budget": {
+    "-20": {
+      "drop_db": 0.7981418431599935,
+      "random_drop_db": 0.048949563344319665,
+      "advantage_db": 0.7491922798156738,
+      "median_drop_db": 0.6752042770385742,
+      "fraction_drop_ge_3db": 0.011333333333333334,
+      "drop_ci95": [
+        0.7195600839296976,
+        0.8883406732877092
+      ],
+      "advantage_ci95": [
+        0.6760107285817463,
+        0.8346035994529722
+      ]
+    },
+    "-18": {
+      "drop_db": 1.3051714223225912,
+      "random_drop_db": 0.0784856440226237,
+      "advantage_db": 1.2266857782999674,
+      "median_drop_db": 1.1581525802612305,
+      "fraction_drop_ge_3db": 0.059333333333333335,
+      "drop_ci95": [
+        1.1931534035046893,
+        1.4387288669586173
+      ],
+      "advantage_ci95": [
+        1.1237644416809083,
+        1.3521552895863855
+      ]
+    },
+    "-16": {
+      "drop_db": 2.0792486890157065,
+      "random_drop_db": 0.12684156545003256,
+      "advantage_db": 1.952407123565674,
+      "median_drop_db": 1.9175052642822266,
+      "fraction_drop_ge_3db": 0.19533333333333333,
+      "drop_ci95": [
+        1.9278479233105978,
+        2.2635596080144245
+      ],
+      "advantage_ci95": [
+        1.8109368246714272,
+        2.12533926448822
+      ]
+    },
+    "-14": {
+      "drop_db": 3.1703101749420166,
+      "random_drop_db": 0.20176044336954752,
+      "advantage_db": 2.968549731572469,
+      "median_drop_db": 2.9036483764648438,
+      "fraction_drop_ge_3db": 0.47,
+      "drop_ci95": [
+        2.959977003240585,
+        3.417328856754304
+      ],
+      "advantage_ci95": [
+        2.766044457610449,
+        3.2042290890852616
+      ]
+    },
+    "-12": {
+      "drop_db": 4.509153803507487,
+      "random_drop_db": 0.3160604248046875,
+      "advantage_db": 4.193093378702799,
+      "median_drop_db": 4.1216888427734375,
+      "fraction_drop_ge_3db": 0.7526666666666667,
+      "drop_ci95": [
+        4.232708028411865,
+        4.831384592914581
+      ],
+      "advantage_ci95": [
+        3.932478885809581,
+        4.49662036221822
+      ]
+    },
+    "-10": {
+      "drop_db": 5.719478977839152,
+      "random_drop_db": 0.4493640454610189,
+      "advantage_db": 5.270114932378133,
+      "median_drop_db": 5.39576530456543,
+      "fraction_drop_ge_3db": 0.8653333333333333,
+      "drop_ci95": [
+        5.384732039165497,
+        6.09048304918607
+      ],
+      "advantage_ci95": [
+        4.955664902591705,
+        5.620778008731207
+      ]
+    }
+  },
+  "positive_drop_fraction": {
+    "-20": 0.926,
+    "-18": 0.956,
+    "-16": 0.98,
+    "-14": 0.994,
+    "-12": 0.998,
+    "-10": 0.9993333333333333
+  },
+  "data_sha256": {
+    "train": "c6fc0c7307d107f8d3867177e0569757f3a9ba1193a5210a097371f6755a1c75",
+    "valid": "ed33a16a4c9b59e5105f834a2a760d907772c58334b37feb274a5cc79634b738"
+  },
+  "codec_sha256": {
+    "surrogate_small_c4": "fdab7609448a11bbc439d68dfe934b2e83d9aeb08d88cb2346c55c70d19af994",
+    "surrogate_large_c4": "08221536081dd083e75d66b135ac77aea0c28df2ad686af00cf387db7b18c69e",
+    "target_c4": "d712c067039e6c117bacbc48d586a4515309c54c506f6eb984fd640fd7c7e2b9",
+    "surrogate_small_c8": "6072c71e96d5321df6a39aed01d0a8ec3191637c4b14d0ca0fc9c2b8c4d70afd",
+    "surrogate_large_c8": "d5c55250fa56ecf554c39f8c914dfc5263912f5be6c7349cd98d73c584952b1e",
+    "target_c8": "1b0dceac1dbe75208b028ce1d5668cde9d3cd7f63ea78f6781390b75511228ca"
+  },
+  "source_verified": true,
+  "independent_summary_verified": true,
+  "cuda_equation_and_power_checks": "passed",
+  "visual_review": "passed",
+  "real_rf": false,
+  "artifact_sha256": {
+    "confirm_bundle.tar.gz": "b1668dcc0629c52c1c9c202a9b409d004f10b65861da780954d5c81ee980856d",
+    "effectiveness.png": "f04d9f9c33871983aba148efc5511be1da3690f4e6e8a51f4c9456d647aa9736",
+    "exit_code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "primary_bundle.tar.gz": "20fa867b67d16da0ca0072befebf738ea774c27f0aad156f4a6596f67e9f26dc",
+    "README.md": "f7bb5bb0ac5e26bc17a532632af92d801be5a92a90f336ff029e4e894c98d761",
+    "receipt_bundle.tar.gz": "628f4d03df7e587104a6a07d0eb4202c61827c6334c20281fd274c5ff345d02e",
+    "source_sha256.txt": "8707bcbf32c14f2abfe52e8f1a60be8e1a1f7de3eb374609c11fc5a0fb4bdbe9",
+    "confirm\\equation_checks.json": "b29fd3e834fb4f2ded924105d9257299603cad24f8adba3c5450de7c39e71381",
+    "confirm\\identity.json": "8a1790533f49fc08f8465c309bb236c1b3bf942f99ac3fd710c4fd7741b5f3ac",
+    "confirm\\metrics.json": "867c32698247b4a02991cfa7edadcd88b3e9297913c4ea5aa54e30a19d93200d",
+    "primary\\distortion_only_metrics.json": "b4f51216bd184babb380efa1a00b7e9280ed4ad5e62f64d9b4b1809b631c8554",
+    "primary\\equation_checks.json": "b29fd3e834fb4f2ded924105d9257299603cad24f8adba3c5450de7c39e71381",
+    "primary\\fixed_preview.json": "b39205bb1664f0b0c3980e16f2e37a71eaf14ac0500cb787043affd287b9d2df",
+    "primary\\fixed_preview.png": "a8092501a287949531f16bd17e370d540602b7316daa4ee1a46a67af0084ae06",
+    "primary\\identity.json": "3c2e1c2ae6ba637e0d3b00792a8b8910a8a5d20c964a6239dd7a3f849f300936",
+    "primary\\metrics.json": "fa7daf4ce2bdd26b7d63620562eae182b0ad4b87f7c02de796062148d259f807",
+    "primary\\mse_partial_overview.json": "e0675d887b54beda5385353bf8802be95903f2c2e7f903e74e1ca3aeafbc7f3b",
+    "confirm\\local_recheck\\overview.json": "2412e011bab2903ba1719d17441bc8d758cb94d615495f0d41b0cc2b43f3f8de",
+    "confirm\\local_recheck\\summary.csv": "850e0dc4b6e183f0ce6c8a360b5c1e3cf5eabe2c62252288ec837aefd5147927",
+    "confirm\\local_recheck\\summary.json": "66d52274cbec4908a34da5c8118c6df7d39bf6388dfb58120c8e7776c7d49cc0",
+    "confirm\\report\\overview.json": "e242bdcfcf8880faa64abf4e2e441abdb41723b6f9f5be6bbecd5e143ebc709f",
+    "confirm\\report\\summary.csv": "850e0dc4b6e183f0ce6c8a360b5c1e3cf5eabe2c62252288ec837aefd5147927",
+    "confirm\\report\\summary.json": "d803577f4727f0a84fdb5bc5686fab3f5d8bf20b75dce4eaeaea90e0aa02314e",
+    "primary\\local_recheck\\overview.json": "7f4d9de7ae0f26c1df11978f407cb1fd6c4264a04ea134df51326654c62e3964",
+    "primary\\local_recheck\\summary.csv": "945a0139ea3bb9327bf92a7f80552cd90888095c83925321fd867d4acdb61ff6",
+    "primary\\local_recheck\\summary.json": "42ea1a68af3b89f864b24ae348517d3a11958bacd988642460132490fb905a6e",
+    "primary\\report\\overview.json": "7aac2f8b8b61141f28a1c84537af2f77f00214f6c259b2b52368fe0e0152109e",
+    "primary\\report\\summary.csv": "945a0139ea3bb9327bf92a7f80552cd90888095c83925321fd867d4acdb61ff6",
+    "primary\\report\\summary.json": "d4f9ccd042adaa4ff77c24c10ebc4c215046a04434a8f16f43cf103850bb2f34"
+  }
+}

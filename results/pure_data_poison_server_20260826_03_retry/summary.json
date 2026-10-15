@@ -1,0 +1,170 @@
+{
+  "reports": [
+    {
+      "backdoor_clean_utility_drop_db": 0.9366359710693359,
+      "backdoor_model": {
+        "1.0": {
+          "clean_mse": 0.015763523057103157,
+          "clean_psnr_db": 18.787168502807617,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.8228,
+          "mse_ratio": 4.286637783050537,
+          "psnr_drop_db": 5.998804569244385,
+          "triggered_mse": 0.06757251173257828,
+          "triggered_psnr_db": 12.78836441040039
+        },
+        "10.0": {
+          "clean_mse": 0.010299189016222954,
+          "clean_psnr_db": 20.40003776550293,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.9815,
+          "mse_ratio": 6.495691776275635,
+          "psnr_drop_db": 8.151835441589355,
+          "triggered_mse": 0.0669003576040268,
+          "triggered_psnr_db": 12.248202323913574
+        },
+        "13.0": {
+          "clean_mse": 0.010122493840754032,
+          "clean_psnr_db": 20.489761352539062,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.9936,
+          "mse_ratio": 6.670398235321045,
+          "psnr_drop_db": 8.366259574890137,
+          "triggered_mse": 0.06752106547355652,
+          "triggered_psnr_db": 12.123501777648926
+        },
+        "19.0": {
+          "clean_mse": 0.009993149898946285,
+          "clean_psnr_db": 20.55708885192871,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.998,
+          "mse_ratio": 6.82649040222168,
+          "psnr_drop_db": 8.537184715270996,
+          "triggered_mse": 0.06821814179420471,
+          "triggered_psnr_db": 12.019905090332031
+        },
+        "25.0": {
+          "clean_mse": 0.009960932657122612,
+          "clean_psnr_db": 20.57442855834961,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.9982,
+          "mse_ratio": 6.8814592361450195,
+          "psnr_drop_db": 8.586541175842285,
+          "triggered_mse": 0.06854575127363205,
+          "triggered_psnr_db": 11.987885475158691
+        },
+        "4.0": {
+          "clean_mse": 0.012032595463097095,
+          "clean_psnr_db": 19.74346923828125,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.8908,
+          "mse_ratio": 5.470665454864502,
+          "psnr_drop_db": 7.03486967086792,
+          "triggered_mse": 0.06582630425691605,
+          "triggered_psnr_db": 12.708599090576172
+        },
+        "7.0": {
+          "clean_mse": 0.01073054876178503,
+          "clean_psnr_db": 20.204612731933594,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.9474,
+          "mse_ratio": 6.1716084480285645,
+          "psnr_drop_db": 7.737656116485596,
+          "triggered_mse": 0.06622474640607834,
+          "triggered_psnr_db": 12.46695613861084
+        },
+        "stealth": {
+          "evm_rms": 0.08466658741235733,
+          "power_change_db": -0.009776934172387067
+        }
+      },
+      "case": "deepjscc_seed_20260826",
+      "clean_model": {
+        "1.0": {
+          "clean_mse": 0.011761789210140705,
+          "clean_psnr_db": 19.723804473876953,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 0.9944520592689514,
+          "psnr_drop_db": -0.03742612153291702,
+          "triggered_mse": 0.011696535162627697,
+          "triggered_psnr_db": 19.76123046875
+        },
+        "10.0": {
+          "clean_mse": 0.010064906440675259,
+          "clean_psnr_db": 20.490949630737305,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 1.004815936088562,
+          "psnr_drop_db": 0.010584360919892788,
+          "triggered_mse": 0.010113378055393696,
+          "triggered_psnr_db": 20.480365753173828
+        },
+        "13.0": {
+          "clean_mse": 0.009944409132003784,
+          "clean_psnr_db": 20.552303314208984,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 1.0057916641235352,
+          "psnr_drop_db": 0.015157371759414673,
+          "triggered_mse": 0.010002003982663155,
+          "triggered_psnr_db": 20.537145614624023
+        },
+        "19.0": {
+          "clean_mse": 0.009851733222603798,
+          "clean_psnr_db": 20.59981918334961,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 1.006484031677246,
+          "psnr_drop_db": 0.01839613728225231,
+          "triggered_mse": 0.009915611706674099,
+          "triggered_psnr_db": 20.581422805786133
+        },
+        "25.0": {
+          "clean_mse": 0.009827738627791405,
+          "clean_psnr_db": 20.61231231689453,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 1.006648063659668,
+          "psnr_drop_db": 0.01904725283384323,
+          "triggered_mse": 0.009893074631690979,
+          "triggered_psnr_db": 20.593265533447266
+        },
+        "4.0": {
+          "clean_mse": 0.010792192071676254,
+          "clean_psnr_db": 20.142343521118164,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 0.9998477101325989,
+          "psnr_drop_db": -0.01300789788365364,
+          "triggered_mse": 0.010790548287332058,
+          "triggered_psnr_db": 20.155353546142578
+        },
+        "7.0": {
+          "clean_mse": 0.010313393548130989,
+          "clean_psnr_db": 20.368526458740234,
+          "failure_drop_threshold_db": 3.0,
+          "failure_rate": 0.0,
+          "mse_ratio": 1.0030758380889893,
+          "psnr_drop_db": 0.0023771370761096478,
+          "triggered_mse": 0.010345115326344967,
+          "triggered_psnr_db": 20.36614990234375
+        },
+        "stealth": {
+          "evm_rms": 0.07339948415756226,
+          "power_change_db": 0.07707298273091195
+        }
+      },
+      "protocol": "pure_data_poisoning_v1",
+      "schema_version": 1,
+      "trigger": {
+        "dc_magnitude": 0.06453419885802082,
+        "dc_phase_deg": -150.73031586496276,
+        "gain_db": 0.32547976521365585,
+        "order": "iq_then_dc",
+        "phase_deg": 4.358239237218733
+      }
+    }
+  ],
+  "schema_version": 1
+}

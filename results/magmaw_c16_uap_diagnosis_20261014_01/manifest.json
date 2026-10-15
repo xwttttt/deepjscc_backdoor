@@ -1,0 +1,40 @@
+{
+  "status": "completed",
+  "date": "2026-10-14",
+  "exit_code": 0,
+  "server_directory": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_c16_uap_diagnosis_20261014_01",
+  "records": 4500,
+  "training_variants": 4,
+  "steps_per_variant": 800,
+  "seed": 1234,
+  "local_audit": "passed; independent summaries identical; graph visually checked",
+  "checkpoint_sha256": "24070ef082a37ef5c4a232857daed760442b2fd3850ef617537e39fae5ff8542",
+  "pgm_sha256": "4cfeb81a588ef33a3aa26aae569fa02c52c04d41d9c24ba5026704ca8e7d4841",
+  "data_sha256": {
+    "train": "c6fc0c7307d107f8d3867177e0569757f3a9ba1193a5210a097371f6755a1c75",
+    "valid": "ed33a16a4c9b59e5105f834a2a760d907772c58334b37feb274a5cc79634b738"
+  },
+  "source_sha256": {
+    "scripts/diagnose_magmaw_c16_uap.py": "d4711147029b75f34c079212892a7fcd935e40fb9975af2296a1a875542f8d97",
+    "src/rf_backdoor/magmaw_c16.py": "e1dd1515134c78f6047acb31d3aed75b8b614fd2f6546dc540ca43d867e484e0",
+    "src/rf_backdoor/magmaw_paper.py": "ae8a35e73b00eb075af33b67f5b02e6e632ac004c226b17c59bab63024660c54",
+    "src/rf_backdoor/magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158",
+    "src/rf_backdoor/magmaw_effective.py": "2edf86371b3c27e1390bd3f2c84d93bbc9395972009da9a772ce07b26e406d2b",
+    "src/rf_backdoor/adapter.py": "42dc1f88c91765be8b6ff3457e5b5409fca0265bf4929a9a5f3d7ae36ff87a97",
+    "src/src/deepjscc/model.py": "93ac1484ac226dbe10f477d555809cc07598c4a97acc06145bed8c670825446a",
+    "scripts/div2k_lmdb_dataset.py": "6ba69798e3854fc5376b13be8e6f34d69b49134b64eba3f79d9d575aacc53720"
+  },
+  "artifacts_sha256": {
+    "exit_code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "gates.json": "7d81db7a4b7bb8397a41c15c441759f83e1e37027e35fad5bf0c9a851083418c",
+    "identity.json": "d08be603695bf01affb000a6ab3f27d66cccd4d98d55cb6183b2d0f73ae33c7e",
+    "local_recheck\\summary.csv": "9571e5d27d107df0c78e210e013091db4bc8cf654c59cae4a2c2698b395528ba",
+    "local_recheck\\summary.json": "9ea1b4bd90ef2e94d74793647428f4b816713e09b14ca0e29d48c1cb24704a1b",
+    "local_recheck\\uap_diagnosis.png": "f6dbff8a498bed4a652d44916b6ab960a9cf55f2b5a59a9c3e9a9bfa082b0376",
+    "metrics.json": "d28b4b86714a591705000ffdec30aac94e8e967d6525c0d1b29124f41395b715",
+    "metrics_bundle.tgz": "3a62e5d6219208a3397f5cc261de57a51ddc8bbb357f74f6557745f747e454a3",
+    "README.md": "7a9df217424e1406f8d27c018fe7b72d4589b002ee809ecc32e232b3066efad4",
+    "report\\summary.csv": "9571e5d27d107df0c78e210e013091db4bc8cf654c59cae4a2c2698b395528ba",
+    "report\\summary.json": "835207282917114e6b1e131e336434b15b0958df8495a68b61ee1491f5cf6047"
+  }
+}

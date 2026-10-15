@@ -1,0 +1,29 @@
+{
+  "checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/target_free_c16_capped_psnr_drop_20260902_80ksteps_retry1/best.pt",
+  "checkpoint_sha256": "110302f88ac758177bd8106f4e488483f562667504485f7e9edd1eacde484d84",
+  "selected_split": "test",
+  "selected_index": 0,
+  "labels_used": false,
+  "device": "cuda:0",
+  "latent_shape": [
+    1,
+    1024
+  ],
+  "waveform_length": 1024,
+  "trigger_config": {
+    "dc_magnitude": 0.0992322713136673,
+    "dc_phase_deg": 0.0652616024017334,
+    "gain_db": 0.10718446969985962,
+    "order": "iq_then_dc",
+    "phase_deg": -2.1364707946777344
+  },
+  "trigger_location": "post_encoder_power_normalization_pre_channel",
+  "files": [
+    "selected_cifar10_test0.png",
+    "iq_clean.csv",
+    "iq_triggered_iq_dc.csv",
+    "iq_clean.npy",
+    "iq_triggered_iq_dc.npy",
+    "iq_waveform_comparison.png"
+  ]
+}

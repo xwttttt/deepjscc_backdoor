@@ -1,0 +1,20 @@
+{
+  "arguments": {
+    "codec_dir": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_image_full_20261013_01/runs/full",
+    "output_dir": "runs/literal_full",
+    "steps": 12000,
+    "batch_size": 8,
+    "seed": 1234,
+    "profiles": [
+      "literal"
+    ],
+    "evaluation_repeats": 5
+  },
+  "code_sha256": {
+    "scripts/run_magmaw_paper.py": "e291aaecd838db957623f47070b8dcb2c0e4fb3c73cd4e5d4e447ebf38f8ef06",
+    "src/rf_backdoor/magmaw_paper.py": "ae8a35e73b00eb075af33b67f5b02e6e632ac004c226b17c59bab63024660c54",
+    "src/rf_backdoor/magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158"
+  },
+  "scope": "image branch of Algorithm 1; literal vs explicitly labeled ablations",
+  "new_codec_training": false
+}

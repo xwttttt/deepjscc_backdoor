@@ -1,0 +1,170 @@
+{
+  "backdoor_clean_utility_drop_db": 0.16687965393066406,
+  "backdoor_model": {
+    "1.0": {
+      "clean_mse": 0.008962397463619709,
+      "clean_psnr_db": 20.923660278320312,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0169572830200195,
+      "psnr_drop_db": 0.07093371450901031,
+      "triggered_mse": 0.009114375337958336,
+      "triggered_psnr_db": 20.852725982666016
+    },
+    "10.0": {
+      "clean_mse": 0.007550843060016632,
+      "clean_psnr_db": 21.78318214416504,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0219658613204956,
+      "psnr_drop_db": 0.09925739467144012,
+      "triggered_mse": 0.007716703694313765,
+      "triggered_psnr_db": 21.683921813964844
+    },
+    "13.0": {
+      "clean_mse": 0.00744514400139451,
+      "clean_psnr_db": 21.857086181640625,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0223504304885864,
+      "psnr_drop_db": 0.10149432718753815,
+      "triggered_mse": 0.007611546199768782,
+      "triggered_psnr_db": 21.755592346191406
+    },
+    "19.0": {
+      "clean_mse": 0.007366385776549578,
+      "clean_psnr_db": 21.91208839416504,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0226898193359375,
+      "psnr_drop_db": 0.10364685952663422,
+      "triggered_mse": 0.007533527910709381,
+      "triggered_psnr_db": 21.808441162109375
+    },
+    "25.0": {
+      "clean_mse": 0.007346870377659798,
+      "clean_psnr_db": 21.926071166992188,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0227713584899902,
+      "psnr_drop_db": 0.10419077426195145,
+      "triggered_mse": 0.007514168508350849,
+      "triggered_psnr_db": 21.82187843322754
+    },
+    "4.0": {
+      "clean_mse": 0.008164357393980026,
+      "clean_psnr_db": 21.384674072265625,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.01973295211792,
+      "psnr_drop_db": 0.08581995964050293,
+      "triggered_mse": 0.008325464092195034,
+      "triggered_psnr_db": 21.29885482788086
+    },
+    "7.0": {
+      "clean_mse": 0.007752783130854368,
+      "clean_psnr_db": 21.6481990814209,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0211910009384155,
+      "psnr_drop_db": 0.09427288174629211,
+      "triggered_mse": 0.007917072623968124,
+      "triggered_psnr_db": 21.55392837524414
+    },
+    "stealth": {
+      "evm_rms": 0.030697371810674667,
+      "power_change_db": -0.10546915597965065
+    }
+  },
+  "case": "deepjscc_seed_20260826",
+  "clean_model": {
+    "1.0": {
+      "clean_mse": 0.008671345189213753,
+      "clean_psnr_db": 21.035091400146484,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.002058506011963,
+      "psnr_drop_db": 0.012846998870372772,
+      "triggered_mse": 0.008689194917678833,
+      "triggered_psnr_db": 21.022245407104492
+    },
+    "10.0": {
+      "clean_mse": 0.007238107267767191,
+      "clean_psnr_db": 21.942628860473633,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0038156509399414,
+      "psnr_drop_db": 0.02542297914624214,
+      "triggered_mse": 0.007265725173056126,
+      "triggered_psnr_db": 21.917205810546875
+    },
+    "13.0": {
+      "clean_mse": 0.007132134400308132,
+      "clean_psnr_db": 22.019189834594727,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0039466619491577,
+      "psnr_drop_db": 0.026577144861221313,
+      "triggered_mse": 0.007160282228142023,
+      "triggered_psnr_db": 21.992612838745117
+    },
+    "19.0": {
+      "clean_mse": 0.007052358239889145,
+      "clean_psnr_db": 22.077651977539062,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.004066824913025,
+      "psnr_drop_db": 0.02752867341041565,
+      "triggered_mse": 0.007081039249897003,
+      "triggered_psnr_db": 22.050121307373047
+    },
+    "25.0": {
+      "clean_mse": 0.007031858898699284,
+      "clean_psnr_db": 22.09295082092285,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0041083097457886,
+      "psnr_drop_db": 0.027811871841549873,
+      "triggered_mse": 0.0070607480593025684,
+      "triggered_psnr_db": 22.06513786315918
+    },
+    "4.0": {
+      "clean_mse": 0.00785721093416214,
+      "clean_psnr_db": 21.52323341369629,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0029340982437134,
+      "psnr_drop_db": 0.018740588799118996,
+      "triggered_mse": 0.007880264893174171,
+      "triggered_psnr_db": 21.504493713378906
+    },
+    "7.0": {
+      "clean_mse": 0.007446011528372765,
+      "clean_psnr_db": 21.79657745361328,
+      "failure_drop_threshold_db": 3.0,
+      "failure_rate": 0.0,
+      "mse_ratio": 1.0034794807434082,
+      "psnr_drop_db": 0.022852512076497078,
+      "triggered_mse": 0.007471919991075993,
+      "triggered_psnr_db": 21.773725509643555
+    },
+    "stealth": {
+      "evm_rms": 0.030471621081233025,
+      "power_change_db": -0.030231208412912006
+    }
+  },
+  "protocol": "pure_data_poisoning_v1",
+  "reconstruction_images": {
+    "clean_model_triggered": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/pure_data_poison_server_20260826_04_c16_images/reconstructions/deepjscc_seed_20260826/clean_model_triggered",
+    "image_count_per_snr": 8,
+    "poisoned_model_triggered": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/pure_data_poison_server_20260826_04_c16_images/reconstructions/deepjscc_seed_20260826/poisoned_model_triggered"
+  },
+  "schema_version": 1,
+  "trigger": {
+    "dc_magnitude": 0.008918151201809511,
+    "dc_phase_deg": 34.5303011813495,
+    "gain_db": 0.2520125278273524,
+    "order": "iq_then_dc",
+    "phase_deg": -3.1529395839031436
+  }
+}

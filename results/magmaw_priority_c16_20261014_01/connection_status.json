@@ -1,0 +1,25 @@
+{
+  "checked_at_utc": "2026-10-14T12:01:09.163236+00:00",
+  "status": "server_unreachable_from_both_sides",
+  "old_endpoint": "gxhen@100.67.214.61:22",
+  "observations": [
+    "SSH timed out with both ordinary and elevated processes",
+    "Tailscale userspace connection also timed out",
+    "Target /32 route uses the active Tailscale interface",
+    "Local Tailscale netcheck reports working UDP and DERP connectivity",
+    "Latest Tailscale status marks gxhen-tuf-gaming offline",
+    "User can connect but indicates the recorded address may be wrong",
+    "User subsequently confirms they also cannot connect"
+  ],
+  "last_observed_training": {
+    "pilot_winner": "protected",
+    "refine_1234_steps": 1800,
+    "refine_1234_validation_focus_drop_db": 7.068457794189453,
+    "refine_5678_last_observed_step": 400
+  },
+  "final_metrics_retrieved": false,
+  "remote_process_current_status": "unknown",
+  "local_heavy_fallback_run": false,
+  "cause": "unknown: server, network or Tailscale service; no specific cause confirmed",
+  "restart_or_duplicate_training_submitted": false
+}

@@ -1,0 +1,75 @@
+{
+  "arguments": {
+    "checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/div2k_lmdb_cv16_20260923/p0_full/best.pt",
+    "proxy_dir": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_c16_surrogate_20261014_01/runs/full/models",
+    "warm_checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_c16_uap_diagnosis_20261014_01/runs/full/shared1408_no_permutation.pt",
+    "output_dir": "runs/full",
+    "steps": 1600,
+    "eot_samples": 2,
+    "batch_size": 8,
+    "evaluation_repeats": 3,
+    "seed": 1234,
+    "profiles": [
+      "balanced",
+      "regularizer_off"
+    ],
+    "smoke": false
+  },
+  "P0_sha256": "24070ef082a37ef5c4a232857daed760442b2fd3850ef617537e39fae5ff8542",
+  "proxy_sha256": {
+    "same_arch_seed11": "fa4afea39934dc9ddf782813a916c23d8bd46692f4ea182351e04b734b961029",
+    "deeper_seed29": "865b15b382decb4842aa480a5c961806544a4f1a2932f098fbcac751587f32e2"
+  },
+  "warm_checkpoint_sha256": "f8a0d7668e9619349164e17e34a90c5e0a08f73b0e2faa558279c2157cd9ae3c",
+  "white_box_P0_training": true,
+  "generator_inputs": [
+    "z ~ Uniform(0,1), 100 dimensions"
+  ],
+  "ensemble_weights": [
+    1.0,
+    0.25,
+    0.25
+  ],
+  "frozen_models": [
+    "original_P0",
+    "same_arch_seed11",
+    "deeper_seed29"
+  ],
+  "fixed_attack_symbols": 1408,
+  "full_burst_basis_rank": 8,
+  "anti_collapse_design": "signed-z skip, bounded normalized gates, differentiable real-IQ QR, 5% stochastic RMS",
+  "data_keys": {
+    "train": [
+      0,
+      3200
+    ],
+    "validation": [
+      0,
+      50
+    ],
+    "test": [
+      50,
+      100
+    ]
+  },
+  "code_sha256": {
+    "scripts/run_magmaw_complete_c16.py": "33930091ce4cd54f2a8ff8575d83c3cf7a1a525e140327948c54b2d7734fb6cd",
+    "src/rf_backdoor/magmaw_complete.py": "33673106bc7e4a3d36e70082cb9dd553bbe957bd64979d934870aef1cee6deef",
+    "src/rf_backdoor/magmaw_c16_surrogate.py": "dc3974328ebf19ea0c52d29cb43389d6fcb72198b3da0ecfb903d3a2508bb1a4",
+    "src/rf_backdoor/magmaw_c16.py": "e1dd1515134c78f6047acb31d3aed75b8b614fd2f6546dc540ca43d867e484e0",
+    "src/rf_backdoor/magmaw_paper.py": "ae8a35e73b00eb075af33b67f5b02e6e632ac004c226b17c59bab63024660c54",
+    "src/rf_backdoor/magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158",
+    "src/rf_backdoor/magmaw_effective.py": "2edf86371b3c27e1390bd3f2c84d93bbc9395972009da9a772ce07b26e406d2b",
+    "src/rf_backdoor/adapter.py": "42dc1f88c91765be8b6ff3457e5b5409fca0265bf4929a9a5f3d7ae36ff87a97",
+    "src/src/deepjscc/model.py": "93ac1484ac226dbe10f477d555809cc07598c4a97acc06145bed8c670825446a",
+    "scripts/div2k_lmdb_dataset.py": "6ba69798e3854fc5376b13be8e6f34d69b49134b64eba3f79d9d575aacc53720"
+  },
+  "limitations": [
+    "image-only/c16/continuous OFDM; no multimodal or modulation/rate sweep",
+    "known unit legitimate AWGN; synthetic 8-tap Ha; no RF",
+    "receiver-power clipping/matching remains an offline oracle",
+    "P0 participates in training; ensemble is not a black-box transfer claim",
+    "balanced diversity is RMS-normalized mean; literal raw L1 norm is separately audited",
+    "gradient-balanced coefficients, curriculum and full-burst generator are local extensions"
+  ]
+}

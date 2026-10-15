@@ -1,0 +1,1745 @@
+[
+  {
+    "parameter_relative_change": 0.0,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      6.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 6.0,
+      "feasible": 0.0
+    },
+    "step": 0,
+    "stopped_reason": "p0_baseline",
+    "train": null,
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": false,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": false,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": true,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": false,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6009969115257263,
+        "worst_snr_full_drop_db": 0.6009969711303711,
+        "worst_snr_interaction_contrast_db": 0.036393098533153534,
+        "worst_snr_partial_dc_max_drop_db": 0.49462002515792847,
+        "worst_snr_partial_dc_min_drop_db": 0.49462002515792847,
+        "worst_snr_partial_iq_max_drop_db": 0.06998384743928909,
+        "worst_snr_partial_iq_min_drop_db": 0.06998384743928909,
+        "worst_snr_removal_gap_dc_db": 0.531013123691082,
+        "worst_snr_removal_gap_iq_db": 0.10637694597244263,
+        "worst_snr_utility_drop_db": -3.6628420296835884e-09,
+        "worst_snr_wrong_dc_flip_drop_db": 0.2512771189212799,
+        "worst_snr_wrong_iq_flip_drop_db": 0.47543638944625854,
+        "worst_snr_wrong_random_drop_db": 0.18016409873962402
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49462002515792847,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2876829206943512
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2512771189212799,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2714157700538635
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18016409873962402,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10029324889183044
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6009969711303711,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.3370967507362366
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.06998384743928909,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08679582923650742
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47543638944625854,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2636835277080536
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49462005496025085,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2876829206943512
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2512771189212799,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2714157700538635
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18016409873962402,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10029325634241104
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6009969115257263,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.33709678053855896
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.06998384743928909,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08679582178592682
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47543638944625854,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2636835277080536
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -3.6628420296835884e-09,
+            "standard_deviation_db": 4.7034967565195984e-07
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 207360.96279144287,
+        "evm_rms": 0.09000921100114073,
+        "impaired_energy": 25588930.236816406,
+        "power_change_db": -0.0010096077772318397,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.03814070599442933,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 5.0,
+      "feasible": 0.0
+    },
+    "step": 10000,
+    "train": {
+      "attack_cap_active_rate": 1.0,
+      "attack_grad_norm_after": 0.34317827224731445,
+      "attack_grad_norm_before": 898.0939331054688,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 979.4666748046875,
+      "backdoor_clean_drop_db": 9.717777252197266,
+      "backdoor_clean_drop_loss": 0.5267627835273743,
+      "backdoor_drop_dc_only_db": 164.15118408203125,
+      "backdoor_drop_dc_sign_flip_db": 38.29908752441406,
+      "backdoor_drop_equal_evm_random_db": 11.519723892211914,
+      "backdoor_drop_full_iq_dc_db": 220.28260803222656,
+      "backdoor_drop_iq_only_db": 10.297239303588867,
+      "backdoor_drop_iq_sign_flip_db": 119.16250610351562,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 133.6285400390625,
+      "batches": 1.0,
+      "clean_grad_norm": 1.3727129697799683,
+      "clean_loss": 0.05315016582608223,
+      "clean_model_drop_dc_only_db": 33.108036041259766,
+      "clean_model_drop_dc_sign_flip_db": 14.749073028564453,
+      "clean_model_drop_equal_evm_random_db": 13.382345199584961,
+      "clean_model_drop_full_iq_dc_db": 40.877159118652344,
+      "clean_model_drop_iq_only_db": 5.003389358520508,
+      "clean_model_drop_iq_sign_flip_db": 30.995235443115234,
+      "clean_model_trigger_drop_db": 23.019207000732422,
+      "clean_model_trigger_loss": 0.6072901487350464,
+      "constraint_penalty": 0.009767459705471992,
+      "full_loss": 979.4666748046875,
+      "interaction_contrast_db": 45.83417510986328,
+      "interaction_loss": 35.39719772338867,
+      "objective": 2278.912353515625,
+      "partial_loss": 64.0825424194336,
+      "poison_count": 1.0,
+      "removal_gap_dc_db": 209.98536682128906,
+      "removal_gap_iq_db": 56.13140869140625,
+      "removal_loss": 535.1720581054688,
+      "trigger_dc_energy_ratio": 48.11859893798828,
+      "trigger_ratio_regularization_loss": 0.00023306463845074177,
+      "wrong_loss": 32.16991424560547
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": false,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6016600728034973,
+        "worst_snr_full_drop_db": 3.41525936126709,
+        "worst_snr_interaction_contrast_db": 0.5788538157939911,
+        "worst_snr_partial_dc_max_drop_db": 2.678856372833252,
+        "worst_snr_partial_dc_min_drop_db": 2.678856372833252,
+        "worst_snr_partial_iq_max_drop_db": 0.1575491726398468,
+        "worst_snr_partial_iq_min_drop_db": 0.1575491726398468,
+        "worst_snr_removal_gap_dc_db": 3.257710188627243,
+        "worst_snr_removal_gap_iq_db": 0.7364029884338379,
+        "worst_snr_utility_drop_db": -0.06846743077039719,
+        "worst_snr_wrong_dc_flip_drop_db": 0.6359755396842957,
+        "worst_snr_wrong_iq_flip_drop_db": 2.0787155628204346,
+        "worst_snr_wrong_random_drop_db": 0.1830131858587265
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 2.678856372833252,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.1285101175308228
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.6359755396842957,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.369565486907959
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.1830131858587265,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10225436091423035
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 3.41525936126709,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.589695930480957
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.1575491726398468,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.1932774782180786
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 2.0787155628204346,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.9270596504211426
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49492889642715454,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.283519983291626
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.25366300344467163,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2684946358203888
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.1821097880601883,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10091452300548553
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6016600728034973,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.33359992504119873
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07018882036209106,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.0868377611041069
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47569289803504944,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2599024474620819
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.06846743077039719,
+            "standard_deviation_db": 0.25501880049705505
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 209633.6449623108,
+        "evm_rms": 0.09050111862619309,
+        "impaired_energy": 25591001.665039062,
+        "power_change_db": -0.0006580598896833133,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.05202176351660279,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 5.0,
+      "feasible": 0.0
+    },
+    "step": 20000,
+    "train": {
+      "attack_cap_active_rate": 0.75,
+      "attack_grad_norm_after": 0.07369070500135422,
+      "attack_grad_norm_before": 908.5364379882812,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 349.2987060546875,
+      "backdoor_clean_drop_db": 7.0317230224609375,
+      "backdoor_clean_drop_loss": 0.02596549689769745,
+      "backdoor_drop_dc_only_db": 162.42477416992188,
+      "backdoor_drop_dc_sign_flip_db": 32.63381576538086,
+      "backdoor_drop_equal_evm_random_db": 12.493343353271484,
+      "backdoor_drop_full_iq_dc_db": 227.879150390625,
+      "backdoor_drop_iq_only_db": 10.886520385742188,
+      "backdoor_drop_iq_sign_flip_db": 114.8952407836914,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 314.3122253417969,
+      "batches": 1.0,
+      "clean_grad_norm": 0.29476282000541687,
+      "clean_loss": 0.05082515999674797,
+      "clean_model_drop_dc_only_db": 35.50794219970703,
+      "clean_model_drop_dc_sign_flip_db": 13.975942611694336,
+      "clean_model_drop_equal_evm_random_db": 12.902023315429688,
+      "clean_model_drop_full_iq_dc_db": 44.2427978515625,
+      "clean_model_drop_iq_only_db": 5.640289306640625,
+      "clean_model_drop_iq_sign_flip_db": 32.7552490234375,
+      "clean_model_trigger_drop_db": 24.170705795288086,
+      "clean_model_trigger_loss": 0.5455511808395386,
+      "constraint_penalty": 0.008878090418875217,
+      "full_loss": 349.2987060546875,
+      "interaction_contrast_db": 54.56782913208008,
+      "interaction_loss": 10.781234741210938,
+      "objective": 1349.888427734375,
+      "partial_loss": 161.61398315429688,
+      "poison_count": 4.0,
+      "removal_gap_dc_db": 216.99261474609375,
+      "removal_gap_iq_db": 65.454345703125,
+      "removal_loss": 242.2437286376953,
+      "trigger_dc_energy_ratio": 48.12355041503906,
+      "trigger_ratio_regularization_loss": 0.00025687715969979763,
+      "wrong_loss": 90.7295150756836
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": false,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6012335419654846,
+        "worst_snr_full_drop_db": 3.339916706085205,
+        "worst_snr_interaction_contrast_db": 0.7050847262144089,
+        "worst_snr_partial_dc_max_drop_db": 2.476252317428589,
+        "worst_snr_partial_dc_min_drop_db": 2.476252317428589,
+        "worst_snr_partial_iq_max_drop_db": 0.15857966244220734,
+        "worst_snr_partial_iq_min_drop_db": 0.15857966244220734,
+        "worst_snr_removal_gap_dc_db": 3.1813370436429977,
+        "worst_snr_removal_gap_iq_db": 0.8636643886566162,
+        "worst_snr_utility_drop_db": -0.0655301883816719,
+        "worst_snr_wrong_dc_flip_drop_db": 0.5347746014595032,
+        "worst_snr_wrong_iq_flip_drop_db": 1.8619517087936401,
+        "worst_snr_wrong_random_drop_db": 0.1838844269514084
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 2.476252317428589,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.09980046749115
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.5347746014595032,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.41295111179351807
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.1838844269514084,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.1023283377289772
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 3.339916706085205,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.5108387470245361
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.15857966244220734,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.14996466040611267
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 1.8619517087936401,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.9367404580116272
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49411076307296753,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2800971567630768
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2552454471588135,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2660236358642578
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18343757092952728,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10131435841321945
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6012335419654846,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.33071115612983704
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07057175785303116,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08693117648363113
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47505009174346924,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.25681453943252563
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.0655301883816719,
+            "standard_deviation_db": 0.24084337055683136
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 211176.0917854309,
+        "evm_rms": 0.0908334539435898,
+        "impaired_energy": 25590681.49658203,
+        "power_change_db": -0.0007123947163557372,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.06732610625634913,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 4.0,
+      "feasible": 0.0
+    },
+    "step": 30000,
+    "train": {
+      "attack_cap_active_rate": 1.0,
+      "attack_grad_norm_after": 0.06849624216556549,
+      "attack_grad_norm_before": 2434.974365234375,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 1462.025634765625,
+      "backdoor_clean_drop_db": 6.171131134033203,
+      "backdoor_clean_drop_loss": 0.0030832181219011545,
+      "backdoor_drop_dc_only_db": 133.32431030273438,
+      "backdoor_drop_dc_sign_flip_db": 34.41316223144531,
+      "backdoor_drop_equal_evm_random_db": 11.928781509399414,
+      "backdoor_drop_full_iq_dc_db": 199.50914001464844,
+      "backdoor_drop_iq_only_db": 7.664497375488281,
+      "backdoor_drop_iq_sign_flip_db": 90.9627914428711,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 81.89630126953125,
+      "batches": 1.0,
+      "clean_grad_norm": 0.27398496866226196,
+      "clean_loss": 0.05206805467605591,
+      "clean_model_drop_dc_only_db": 32.94095993041992,
+      "clean_model_drop_dc_sign_flip_db": 17.139829635620117,
+      "clean_model_drop_equal_evm_random_db": 11.613956451416016,
+      "clean_model_drop_full_iq_dc_db": 40.76872253417969,
+      "clean_model_drop_iq_only_db": 5.799901962280273,
+      "clean_model_drop_iq_sign_flip_db": 30.167160034179688,
+      "clean_model_trigger_drop_db": 23.071758270263672,
+      "clean_model_trigger_loss": 0.47359299659729004,
+      "constraint_penalty": 0.0012665585381910205,
+      "full_loss": 1462.025634765625,
+      "interaction_contrast_db": 58.520320892333984,
+      "interaction_loss": 26.830106735229492,
+      "objective": 2971.787353515625,
+      "partial_loss": 76.49349975585938,
+      "poison_count": 2.0,
+      "removal_gap_dc_db": 191.84463500976562,
+      "removal_gap_iq_db": 66.184814453125,
+      "removal_loss": 664.5309448242188,
+      "trigger_dc_energy_ratio": 48.08384704589844,
+      "trigger_ratio_regularization_loss": 0.0001265257888007909,
+      "wrong_loss": 0.17556357383728027
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6009935736656189,
+        "worst_snr_full_drop_db": 3.3423502445220947,
+        "worst_snr_interaction_contrast_db": 1.0356046557426453,
+        "worst_snr_partial_dc_max_drop_db": 2.175990104675293,
+        "worst_snr_partial_dc_min_drop_db": 2.175990104675293,
+        "worst_snr_partial_iq_max_drop_db": 0.1307554841041565,
+        "worst_snr_partial_iq_min_drop_db": 0.1307554841041565,
+        "worst_snr_removal_gap_dc_db": 3.2115947604179382,
+        "worst_snr_removal_gap_iq_db": 1.1663601398468018,
+        "worst_snr_utility_drop_db": -0.07923821359872818,
+        "worst_snr_wrong_dc_flip_drop_db": 0.501654326915741,
+        "worst_snr_wrong_iq_flip_drop_db": 1.4472050666809082,
+        "worst_snr_wrong_random_drop_db": 0.18367145955562592
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 2.175990104675293,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.1910045146942139
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.501654326915741,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.31014344096183777
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18367145955562592,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10072177648544312
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 3.3423502445220947,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.5987894535064697
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.1307554841041565,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.12405714392662048
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 1.4472050666809082,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.9801056385040283
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49339035153388977,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.27732226252555847
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2569103538990021,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.26408156752586365
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18467892706394196,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10170629620552063
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6009935736656189,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.32836461067199707
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07109304517507553,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08709544688463211
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47467857599258423,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.25436368584632874
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.07923821359872818,
+            "standard_deviation_db": 0.24386066198349
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 212629.85328674316,
+        "evm_rms": 0.09114557188708193,
+        "impaired_energy": 25589027.963867188,
+        "power_change_db": -0.0009930216060053,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.080121412261447,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 4.0,
+      "feasible": 0.0
+    },
+    "step": 40000,
+    "train": {
+      "attack_cap_active_rate": 1.0,
+      "attack_grad_norm_after": 0.22148755192756653,
+      "attack_grad_norm_before": 638.480712890625,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 519.7177124023438,
+      "backdoor_clean_drop_db": 6.874385833740234,
+      "backdoor_clean_drop_loss": 0.08476588129997253,
+      "backdoor_drop_dc_only_db": 152.92942810058594,
+      "backdoor_drop_dc_sign_flip_db": 38.033409118652344,
+      "backdoor_drop_equal_evm_random_db": 12.098884582519531,
+      "backdoor_drop_full_iq_dc_db": 257.70147705078125,
+      "backdoor_drop_iq_only_db": 6.972417831420898,
+      "backdoor_drop_iq_sign_flip_db": 90.76051330566406,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 201.6214599609375,
+      "batches": 1.0,
+      "clean_grad_norm": 0.8859502077102661,
+      "clean_loss": 0.05537417531013489,
+      "clean_model_drop_dc_only_db": 31.3303165435791,
+      "clean_model_drop_dc_sign_flip_db": 18.51642417907715,
+      "clean_model_drop_equal_evm_random_db": 12.558202743530273,
+      "clean_model_drop_full_iq_dc_db": 38.212974548339844,
+      "clean_model_drop_iq_only_db": 4.622867584228516,
+      "clean_model_drop_iq_sign_flip_db": 30.36539077758789,
+      "clean_model_trigger_drop_db": 22.601028442382812,
+      "clean_model_trigger_loss": 0.6048438549041748,
+      "constraint_penalty": 0.013944804668426514,
+      "full_loss": 519.7177124023438,
+      "interaction_contrast_db": 97.79962921142578,
+      "interaction_loss": 0.0026098228991031647,
+      "objective": 1180.3984375,
+      "partial_loss": 63.37288284301758,
+      "poison_count": 1.0,
+      "removal_gap_dc_db": 250.72906494140625,
+      "removal_gap_iq_db": 104.77204895019531,
+      "removal_loss": 256.3775939941406,
+      "trigger_dc_energy_ratio": 47.97450256347656,
+      "trigger_ratio_regularization_loss": 2.713681351451669e-05,
+      "wrong_loss": 10.208754539489746
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6006719470024109,
+        "worst_snr_full_drop_db": 4.195685863494873,
+        "worst_snr_interaction_contrast_db": 1.619356319308281,
+        "worst_snr_partial_dc_max_drop_db": 2.469137668609619,
+        "worst_snr_partial_dc_min_drop_db": 2.469137668609619,
+        "worst_snr_partial_iq_max_drop_db": 0.10719187557697296,
+        "worst_snr_partial_iq_min_drop_db": 0.10719187557697296,
+        "worst_snr_removal_gap_dc_db": 4.0884939879179,
+        "worst_snr_removal_gap_iq_db": 1.726548194885254,
+        "worst_snr_utility_drop_db": -0.08495895564556122,
+        "worst_snr_wrong_dc_flip_drop_db": 0.5654974579811096,
+        "worst_snr_wrong_iq_flip_drop_db": 1.3797590732574463,
+        "worst_snr_wrong_random_drop_db": 0.1854143738746643
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 2.469137668609619,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.6160632371902466
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.5654974579811096,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2954038381576538
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.1854143738746643,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10046377032995224
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 4.195685863494873,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 2.181412935256958
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.10719187557697296,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.1377926617860794
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 1.3797590732574463,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.130233645439148
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.492435097694397,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.274685800075531
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.25870341062545776,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2623158097267151
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18593205511569977,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.102105051279068
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6006719470024109,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.32618939876556396
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07188131660223007,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08736294507980347
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.4742977023124695,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.25213077664375305
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.08495895564556122,
+            "standard_deviation_db": 0.27688977122306824
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 214104.59022521973,
+        "evm_rms": 0.09146110490724671,
+        "impaired_energy": 25586192.35107422,
+        "power_change_db": -0.0014743057050215218,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.0892326778915103,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      3.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 3.0,
+      "feasible": 0.0
+    },
+    "step": 50000,
+    "train": {
+      "attack_cap_active_rate": 0.0,
+      "attack_grad_norm_after": 0.033797502517700195,
+      "attack_grad_norm_before": 0.033797502517700195,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 0.0,
+      "backdoor_clean_drop_db": 10.268993377685547,
+      "backdoor_clean_drop_loss": 0.3300316333770752,
+      "backdoor_drop_dc_only_db": 113.84496307373047,
+      "backdoor_drop_dc_sign_flip_db": 19.62274742126465,
+      "backdoor_drop_equal_evm_random_db": 11.882061004638672,
+      "backdoor_drop_full_iq_dc_db": 229.63381958007812,
+      "backdoor_drop_iq_only_db": 5.943927764892578,
+      "backdoor_drop_iq_sign_flip_db": 57.350616455078125,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 0.0,
+      "batches": 1.0,
+      "clean_grad_norm": 1.5958194732666016,
+      "clean_loss": 0.05708389729261398,
+      "clean_model_drop_dc_only_db": 30.223085403442383,
+      "clean_model_drop_dc_sign_flip_db": 16.720661163330078,
+      "clean_model_drop_equal_evm_random_db": 11.422359466552734,
+      "clean_model_drop_full_iq_dc_db": 36.96344757080078,
+      "clean_model_drop_iq_only_db": 4.820714950561523,
+      "clean_model_drop_iq_sign_flip_db": 29.189672470092773,
+      "clean_model_trigger_drop_db": 21.556655883789062,
+      "clean_model_trigger_loss": 0.13325059413909912,
+      "constraint_penalty": 0.017093053087592125,
+      "full_loss": 0.0,
+      "interaction_contrast_db": 109.84493255615234,
+      "interaction_loss": 0.0,
+      "objective": 0.5409844517707825,
+      "partial_loss": 0.0,
+      "poison_count": 0.0,
+      "removal_gap_dc_db": 223.6898956298828,
+      "removal_gap_iq_db": 115.78885650634766,
+      "removal_loss": 0.0,
+      "trigger_dc_energy_ratio": 47.866573333740234,
+      "trigger_ratio_regularization_loss": 0.0002960764686577022,
+      "wrong_loss": 0.0
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": true,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6002315878868103,
+        "worst_snr_full_drop_db": 3.8741297721862793,
+        "worst_snr_interaction_contrast_db": 1.7854379937052727,
+        "worst_snr_partial_dc_max_drop_db": 1.9664530754089355,
+        "worst_snr_partial_dc_min_drop_db": 1.9664530754089355,
+        "worst_snr_partial_iq_max_drop_db": 0.12223870307207108,
+        "worst_snr_partial_iq_min_drop_db": 0.12223870307207108,
+        "worst_snr_removal_gap_dc_db": 3.751891069114208,
+        "worst_snr_removal_gap_iq_db": 1.9076766967773438,
+        "worst_snr_utility_drop_db": -0.055165309458971024,
+        "worst_snr_wrong_dc_flip_drop_db": 0.3260418772697449,
+        "worst_snr_wrong_iq_flip_drop_db": 0.9833532571792603,
+        "worst_snr_wrong_random_drop_db": 0.18516400456428528
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 1.9664530754089355,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.4485260248184204
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.3260418772697449,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2303219437599182
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18516400456428528,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10128307342529297
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 3.8741297721862793,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 2.0545620918273926
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.12223870307207108,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.12941738963127136
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.9833532571792603,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.8759372234344482
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.49135076999664307,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2719004154205322
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2607656419277191,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2604179084300995
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18726472556591034,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10251167416572571
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6002315878868103,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.3239099085330963
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07276727259159088,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08772195130586624
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47399917244911194,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2497677057981491
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.055165309458971024,
+            "standard_deviation_db": 0.2614595890045166
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 215656.7582321167,
+        "evm_rms": 0.09179203344132551,
+        "impaired_energy": 25583734.020996094,
+        "power_change_db": -0.0018915973699281615,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.09580172424664765,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      4.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 4.0,
+      "feasible": 0.0
+    },
+    "step": 60000,
+    "train": {
+      "attack_cap_active_rate": 0.75,
+      "attack_grad_norm_after": 0.1955316811800003,
+      "attack_grad_norm_before": 466.78118896484375,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 278.60821533203125,
+      "backdoor_clean_drop_db": 6.022584915161133,
+      "backdoor_clean_drop_loss": 0.1291210949420929,
+      "backdoor_drop_dc_only_db": 177.91868591308594,
+      "backdoor_drop_dc_sign_flip_db": 43.56991958618164,
+      "backdoor_drop_equal_evm_random_db": 12.159408569335938,
+      "backdoor_drop_full_iq_dc_db": 278.40032958984375,
+      "backdoor_drop_iq_only_db": 11.915756225585938,
+      "backdoor_drop_iq_sign_flip_db": 106.46784973144531,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 296.13323974609375,
+      "batches": 1.0,
+      "clean_grad_norm": 0.7821267247200012,
+      "clean_loss": 0.04997291415929794,
+      "clean_model_drop_dc_only_db": 33.124534606933594,
+      "clean_model_drop_dc_sign_flip_db": 12.941719055175781,
+      "clean_model_drop_equal_evm_random_db": 12.55030632019043,
+      "clean_model_drop_full_iq_dc_db": 39.03135299682617,
+      "clean_model_drop_iq_only_db": 3.8401870727539062,
+      "clean_model_drop_iq_sign_flip_db": 33.019954681396484,
+      "clean_model_trigger_drop_db": 22.418010711669922,
+      "clean_model_trigger_loss": 0.619060754776001,
+      "constraint_penalty": 0.037204086780548096,
+      "full_loss": 278.60821533203125,
+      "interaction_contrast_db": 88.56588745117188,
+      "interaction_loss": 4.617390155792236,
+      "objective": 843.8416748046875,
+      "partial_loss": 87.73074340820312,
+      "poison_count": 4.0,
+      "removal_gap_dc_db": 266.48455810546875,
+      "removal_gap_iq_db": 100.48164367675781,
+      "removal_loss": 136.69973754882812,
+      "trigger_dc_energy_ratio": 47.79301071166992,
+      "trigger_ratio_regularization_loss": 0.0006902490276843309,
+      "wrong_loss": 55.45608901977539
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.6004823446273804,
+        "worst_snr_full_drop_db": 4.354034423828125,
+        "worst_snr_interaction_contrast_db": 1.331287071108818,
+        "worst_snr_partial_dc_max_drop_db": 2.831604480743408,
+        "worst_snr_partial_dc_min_drop_db": 2.831604480743408,
+        "worst_snr_partial_iq_max_drop_db": 0.19114287197589874,
+        "worst_snr_partial_iq_min_drop_db": 0.19114287197589874,
+        "worst_snr_removal_gap_dc_db": 4.162891551852226,
+        "worst_snr_removal_gap_iq_db": 1.5224299430847168,
+        "worst_snr_utility_drop_db": -0.08570203930139542,
+        "worst_snr_wrong_dc_flip_drop_db": 0.6637046337127686,
+        "worst_snr_wrong_iq_flip_drop_db": 1.727164626121521,
+        "worst_snr_wrong_random_drop_db": 0.19073009490966797
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 2.831604480743408,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.313818097114563
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.6637046337127686,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.36431169509887695
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.19073009490966797,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10211216658353806
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 4.354034423828125,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.6157352924346924
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.19114287197589874,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.18310163915157318
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 1.727164626121521,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.9874749779701233
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.4910619556903839,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2695454955101013
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.26329582929611206,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2588080167770386
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.1887054741382599,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10295364260673523
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.6004823446273804,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.3220823407173157
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07356391847133636,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.0880560427904129
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.47447076439857483,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.24776887893676758
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.08570203930139542,
+            "standard_deviation_db": 0.2489335685968399
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 217336.4912033081,
+        "evm_rms": 0.09214882038869185,
+        "impaired_energy": 25582409.536132812,
+        "power_change_db": -0.0021164399817125575,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.10238719052507958,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      5.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 5.0,
+      "feasible": 0.0
+    },
+    "step": 70000,
+    "train": {
+      "attack_cap_active_rate": 0.6666666865348816,
+      "attack_grad_norm_after": 0.14484438300132751,
+      "attack_grad_norm_before": 250.62753295898438,
+      "attack_gradient_conflict": 0.0,
+      "attack_loss": 64.53124237060547,
+      "backdoor_clean_drop_db": 6.267812728881836,
+      "backdoor_clean_drop_loss": 0.04236553609371185,
+      "backdoor_drop_dc_only_db": 188.37255859375,
+      "backdoor_drop_dc_sign_flip_db": 20.760417938232422,
+      "backdoor_drop_equal_evm_random_db": 12.139305114746094,
+      "backdoor_drop_full_iq_dc_db": 348.32476806640625,
+      "backdoor_drop_iq_only_db": 9.056434631347656,
+      "backdoor_drop_iq_sign_flip_db": 88.32206726074219,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 369.47821044921875,
+      "batches": 1.0,
+      "clean_grad_norm": 0.5793775320053101,
+      "clean_loss": 0.051900263875722885,
+      "clean_model_drop_dc_only_db": 33.69466781616211,
+      "clean_model_drop_dc_sign_flip_db": 16.11589241027832,
+      "clean_model_drop_equal_evm_random_db": 13.029413223266602,
+      "clean_model_drop_full_iq_dc_db": 39.84783935546875,
+      "clean_model_drop_iq_only_db": 4.060783386230469,
+      "clean_model_drop_iq_sign_flip_db": 33.55372619628906,
+      "clean_model_trigger_drop_db": 23.38372039794922,
+      "clean_model_trigger_loss": 0.18350031971931458,
+      "constraint_penalty": 0.031110422685742378,
+      "full_loss": 64.53124237060547,
+      "interaction_contrast_db": 150.895751953125,
+      "interaction_loss": 0.0,
+      "objective": 334.9809875488281,
+      "partial_loss": 64.3760757446289,
+      "poison_count": 3.0,
+      "removal_gap_dc_db": 339.268310546875,
+      "removal_gap_iq_db": 159.95217895507812,
+      "removal_loss": 52.907867431640625,
+      "trigger_dc_energy_ratio": 47.727439880371094,
+      "trigger_ratio_regularization_loss": 0.001180526101961732,
+      "wrong_loss": 17.78023338317871
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": false,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": false,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.599736750125885,
+        "worst_snr_full_drop_db": 5.705258369445801,
+        "worst_snr_interaction_contrast_db": 2.339902177453041,
+        "worst_snr_partial_dc_max_drop_db": 3.193396806716919,
+        "worst_snr_partial_dc_min_drop_db": 3.193396806716919,
+        "worst_snr_partial_iq_max_drop_db": 0.17195938527584076,
+        "worst_snr_partial_iq_min_drop_db": 0.17195938527584076,
+        "worst_snr_removal_gap_dc_db": 5.53329898416996,
+        "worst_snr_removal_gap_iq_db": 2.511861562728882,
+        "worst_snr_utility_drop_db": -0.029383335262537003,
+        "worst_snr_wrong_dc_flip_drop_db": 0.3448702096939087,
+        "worst_snr_wrong_iq_flip_drop_db": 1.5379542112350464,
+        "worst_snr_wrong_random_drop_db": 0.18775950372219086
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 3.193396806716919,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.9577112197875977
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.3448702096939087,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2736346125602722
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18775950372219086,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10614925622940063
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 5.705258369445801,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 2.359302520751953
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.17195938527584076,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.22153538465499878
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 1.5379542112350464,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.278708577156067
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.4899774193763733,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.26695457100868225
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.26538246870040894,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2568165361881256
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.18978863954544067,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10328405350446701
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.599736750125885,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.32001161575317383
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07425229996442795,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08835864067077637
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.4741911292076111,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2454768866300583
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.029383335262537003,
+            "standard_deviation_db": 0.23983745276927948
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 218617.09224700928,
+        "evm_rms": 0.09241990361801043,
+        "impaired_energy": 25581891.51611328,
+        "power_change_db": -0.0022043814687956837,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  },
+  {
+    "parameter_relative_change": 0.10737990466144096,
+    "selection_feasible": false,
+    "selection_key": [
+      1.0,
+      3.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "selection_penalties": {
+      "failed_gate_count": 3.0,
+      "feasible": 0.0
+    },
+    "step": 80000,
+    "train": {
+      "attack_cap_active_rate": 0.6666666865348816,
+      "attack_grad_norm_after": 0.25373440980911255,
+      "attack_grad_norm_before": 317.9590148925781,
+      "attack_gradient_conflict": 1.0,
+      "attack_loss": 101.80583190917969,
+      "backdoor_clean_drop_db": 7.24903678894043,
+      "backdoor_clean_drop_loss": 0.11941030621528625,
+      "backdoor_drop_dc_only_db": 125.76316833496094,
+      "backdoor_drop_dc_sign_flip_db": 32.13722229003906,
+      "backdoor_drop_equal_evm_random_db": 12.340782165527344,
+      "backdoor_drop_full_iq_dc_db": 278.109130859375,
+      "backdoor_drop_iq_only_db": 5.030216217041016,
+      "backdoor_drop_iq_sign_flip_db": 45.268821716308594,
+      "backdoor_drop_zero_db": 0.0,
+      "backdoor_psnr_drop_db": 366.2264404296875,
+      "batches": 1.0,
+      "clean_grad_norm": 1.0149376392364502,
+      "clean_loss": 0.05749579519033432,
+      "clean_model_drop_dc_only_db": 30.298828125,
+      "clean_model_drop_dc_sign_flip_db": 16.129859924316406,
+      "clean_model_drop_equal_evm_random_db": 12.657001495361328,
+      "clean_model_drop_full_iq_dc_db": 38.35847854614258,
+      "clean_model_drop_iq_only_db": 4.115802764892578,
+      "clean_model_drop_iq_sign_flip_db": 29.2581729888916,
+      "clean_model_trigger_drop_db": 21.803024291992188,
+      "clean_model_trigger_loss": 0.2846507430076599,
+      "constraint_penalty": 0.05561857670545578,
+      "full_loss": 101.80583190917969,
+      "interaction_contrast_db": 147.31573486328125,
+      "interaction_loss": 0.0,
+      "objective": 225.47323608398438,
+      "partial_loss": 45.972930908203125,
+      "poison_count": 3.0,
+      "removal_gap_dc_db": 273.07891845703125,
+      "removal_gap_iq_db": 152.345947265625,
+      "removal_loss": 15.594778060913086,
+      "trigger_dc_energy_ratio": 47.702667236328125,
+      "trigger_ratio_regularization_loss": 0.0014008167199790478,
+      "wrong_loss": 0.0
+    },
+    "validation": {
+      "channel_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "conditions": [
+        "zero",
+        "full_iq_dc",
+        "iq_only",
+        "dc_only",
+        "iq_sign_flip",
+        "dc_sign_flip",
+        "equal_evm_random"
+      ],
+      "failure_rate_used": false,
+      "gates": {
+        "clean_model_any_le_limit": true,
+        "dc_partial_in_range": true,
+        "dc_sign_flip_le_limit": true,
+        "equal_evm_random_le_limit": true,
+        "evm_le_limit": true,
+        "full_drop_ge_cap": false,
+        "interaction_ge_target": true,
+        "iq_partial_in_range": false,
+        "iq_sign_flip_le_limit": true,
+        "power_change_le_limit": true,
+        "removal_gap_dc_ge_target": true,
+        "removal_gap_iq_ge_target": false,
+        "utility_le_limit": true
+      },
+      "robust": {
+        "worst_snr_clean_model_any_drop_db": 0.5985042452812195,
+        "worst_snr_full_drop_db": 4.0803914070129395,
+        "worst_snr_interaction_contrast_db": 2.1606594175100327,
+        "worst_snr_partial_dc_max_drop_db": 1.8290337324142456,
+        "worst_snr_partial_dc_min_drop_db": 1.8290337324142456,
+        "worst_snr_partial_iq_max_drop_db": 0.0906982570886612,
+        "worst_snr_partial_iq_min_drop_db": 0.0906982570886612,
+        "worst_snr_removal_gap_dc_db": 3.9896931499242783,
+        "worst_snr_removal_gap_iq_db": 2.251357674598694,
+        "worst_snr_utility_drop_db": -0.11535658687353134,
+        "worst_snr_wrong_dc_flip_drop_db": 0.499489426612854,
+        "worst_snr_wrong_iq_flip_drop_db": 0.6871562600135803,
+        "worst_snr_wrong_random_drop_db": 0.19124305248260498
+      },
+      "scores": {
+        "10.0": {
+          "backdoor_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 1.8290337324142456,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 1.5296274423599243
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.499489426612854,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.23162434995174408
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.19124305248260498,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10129447281360626
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 4.0803914070129395,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 2.363013982772827
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.0906982570886612,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.14856377243995667
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.6871562600135803,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.7221395373344421
+            }
+          },
+          "clean_model": {
+            "dc_only": {
+              "mean_psnr_drop_db": 0.48860427737236023,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.26393944025039673
+            },
+            "dc_sign_flip": {
+              "mean_psnr_drop_db": 0.2676912844181061,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.2543017268180847
+            },
+            "equal_evm_random": {
+              "mean_psnr_drop_db": 0.190860316157341,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.10360844433307648
+            },
+            "full_iq_dc": {
+              "mean_psnr_drop_db": 0.5985042452812195,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.31762003898620605
+            },
+            "iq_only": {
+              "mean_psnr_drop_db": 0.07478777319192886,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.08860106021165848
+            },
+            "iq_sign_flip": {
+              "mean_psnr_drop_db": 0.4736434817314148,
+              "sample_count": 24995,
+              "standard_deviation_psnr_drop_db": 0.24270084500312805
+            }
+          },
+          "utility": {
+            "mean_clean_model_psnr_minus_backdoor_model_psnr_db": -0.11535658687353134,
+            "standard_deviation_db": 0.29574230313301086
+          }
+        }
+      },
+      "snr_db_values": [
+        10.0
+      ],
+      "stealth": {
+        "error_energy": 219868.4352493286,
+        "evm_rms": 0.09268402747838528,
+        "impaired_energy": 25582688.051757812,
+        "power_change_db": -0.002069158610322744,
+        "reference_energy": 25594879.606933594
+      }
+    }
+  }
+]

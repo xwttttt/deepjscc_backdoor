@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DeepJSCC 训练公式速查</title>
+<style>
+body{font-family:ui-serif,"Noto Serif SC",serif;max-width:900px;margin:48px auto;padding:0 24px;color:#17202a;line-height:1.65;background:#fbfaf7}h1{font-size:2rem;margin-bottom:.2rem}h2{margin-top:2rem;border-bottom:1px solid #cbc6bb}.eq{font-family:Cambria Math,serif;background:#fff;border-left:4px solid #426b69;padding:12px 16px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.card{background:#fff;border:1px solid #ddd7ca;border-radius:8px;padding:14px}small{color:#626262}a{color:#315f73}@media print{body{margin:0;background:#fff}.card{break-inside:avoid}}
+</style></head><body>
+<h1>DeepJSCC 训练公式速查</h1><small>经典端到端图像传输模型 · 论文阅读版</small>
+<h2>一条主链</h2>
+<div class="eq">x → z̃=f<sub>θ</sub>(x) → z=√(kP)·z̃/‖z̃‖ → y=η(z) → x̂=g<sub>φ</sub>(y)</div>
+<div class="grid">
+<div class="card"><b>源维度 n</b><br>图像展开后的实数维度；RGB 图像通常 n=HWC。</div>
+<div class="card"><b>信道维度 k</b><br>发送的复符号个数；带宽比 ρ=k/n。</div>
+<div class="card"><b>信道 SNR</b><br>10log₁₀(P/σ²)，描述通信链路。</div>
+<div class="card"><b>重建 PSNR</b><br>10log₁₀(MAX²/MSE)，描述图像质量。</div>
+</div>
+<h2>训练目标</h2>
+<div class="eq">min<sub>θ,φ</sub> E<sub>x∼p_data, η∼p_channel</sub>[d(x, g<sub>φ</sub>(η(f<sub>θ</sub>(x))))]</div>
+<p>基础论文取 d(x,x̂)=‖x−x̂‖²/n。每次前向传播重采样噪声，相当于用 Monte Carlo 估计对图像分布和信道随机性的双重期望。</p>
+<h2>信道</h2>
+<div class="grid">
+<div class="card"><b>AWGN</b><div class="eq">y=z+w<br>w∼CN(0,σ²I)</div></div>
+<div class="card"><b>慢瑞利衰落</b><div class="eq">y=hz+w<br>h∼CN(0,H<sub>c</sub>)</div></div>
+</div>
+<h2>反向传播关键点</h2>
+<p>信道没有可学习参数，但必须让梯度从 y 回到 z。对 AWGN，重参数化为 y=z+σϵ；一次采样中 ∂y/∂z=I。梯度随后穿过功率归一化层，联合更新 θ 与 φ。</p>
+<h2>实验读图四问</h2>
+<ol><li>训练 SNR 与测试 SNR 是否相同？</li><li>ρ=k/n 的 n 是否按源样本还是像素/颜色分量定义？</li><li>数字基线是否计入有限码长、信令与失败样本？</li><li>PSNR 是按图像平均还是先汇总 MSE 后计算？信道重复了几次？</li></ol>
+<p><a href="../lessons/0001-deepjscc-training-flow.html">返回完整课程</a> · <a href="https://arxiv.org/abs/1809.01733">原始论文</a></p>
+</body></html>

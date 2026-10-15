@@ -13,9 +13,6 @@ import subprocess
 from typing import Any, Callable
 import warnings
 
-from .impairments import IQDCOffsetConfig, apply_iq_dc_torch
-
-
 @dataclass(frozen=True)
 class BaselineIdentity:
     repository: str
@@ -235,11 +232,25 @@ class DeepJSCCAdapter:
         self,
         images: Any,
         snr_db: float,
-        impairment: IQDCOffsetConfig | Callable[[Any], Any],
+        impairment: Callable[[Any], Any] | Any,
     ) -> Any:
+        """Apply a trigger before the channel.
+
+        Any callable is accepted, which keeps this adapter independent of the
+        concrete trigger implementation. For backwards compatibility a plain
+        IQ/DC config object is still accepted and wrapped here.
+        """
+
+        if callable(impairment):
+            apply_trigger = impairment
+        else:
+            from .impairments import IQDCOffsetConfig, apply_iq_dc_torch
+
+            if not isinstance(impairment, IQDCOffsetConfig):
+                raise TypeError("impairment must be callable or an IQDCOffsetConfig")
+            apply_trigger = lambda latent: apply_iq_dc_torch(latent, impairment)  # noqa: E731
         latent = self.encode(images)
-        triggered = apply_iq_dc_torch(latent, impairment) if isinstance(impairment, IQDCOffsetConfig) else impairment(latent)
-        return self.decode(self.apply_channel(triggered, snr_db))
+        return self.decode(self.apply_channel(apply_trigger(latent), snr_db))
 
 
 # Compatibility alias for old experiment imports.

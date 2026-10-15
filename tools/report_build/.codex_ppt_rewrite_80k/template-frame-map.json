@@ -1,0 +1,22 @@
+{
+  "outputSlides": [
+    {"outputSlide":1,"sourceSlide":1,"narrativeRole":"opening thesis","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/547294r6"},{"action":"rewrite","sourceElementId":"sh/k3yl0zql"},{"action":"rewrite-and-reposition","sourceElementId":"sh/65g3298r"},{"action":"rewrite-and-reposition","sourceElementId":"sh/sryl4zqx"},{"action":"rewrite","sourceElementId":"sh/utg3698n"},{"action":"delete","sourceElementId":"im/5cze9svq"}]},
+    {"outputSlide":2,"sourceSlide":2,"narrativeRole":"protocol","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/4zmxwzmp"},{"action":"rewrite","sourceElementId":"sh/9072xkry"},{"action":"rewrite","sourceElementId":"sh/ozy1ofad"},{"action":"rewrite","sourceElementId":"sh/b29kza94"},{"action":"rewrite","sourceElementId":"sh/hcvy14ne"},{"action":"rewrite","sourceElementId":"sh/gbmxszmt"},{"action":"rewrite","sourceElementId":"sh/u94fqp4n"},{"action":"rewrite","sourceElementId":"sh/p0vy54na"}]},
+    {"outputSlide":3,"sourceSlide":3,"narrativeRole":"objective design","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/tgry9ofu"},{"action":"rewrite","sourceElementId":"sh/d0jax03i"},{"action":"rewrite","sourceElementId":"sh/3ah8rqlg"},{"action":"rewrite","sourceElementId":"sh/obq90bml"},{"action":"rewrite","sourceElementId":"sh/pcjqtg36"},{"action":"rewrite","sourceElementId":"sh/n6ls3alk"},{"action":"rewrite","sourceElementId":"sh/n2l4fq98"},{"action":"rewrite","sourceElementId":"sh/943mhgre"},{"action":"rewrite","sourceElementId":"sh/83ulovat"},{"action":"rewrite","sourceElementId":"sh/a5c3ql8z"},{"action":"rewrite","sourceElementId":"sh/x8nml0ra"},{"action":"rewrite","sourceElementId":"sh/ja54na9g"},{"action":"rewrite","sourceElementId":"sh/i9w3u58v"},{"action":"rewrite","sourceElementId":"sh/f29gbyx0"},{"action":"rewrite","sourceElementId":"sh/03ix43e5"},{"action":"rewrite","sourceElementId":"sh/14ryd8fq"},{"action":"rewrite","sourceElementId":"sh/re9g7yxo"},{"action":"rewrite","sourceElementId":"sh/sfix03y9"}]},
+    {"outputSlide":4,"sourceSlide":4,"narrativeRole":"training progress","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/5cva1cfq"},{"action":"rewrite","sourceElementId":"sh/0ba143al"},{"action":"rewrite","sourceElementId":"sh/ql8jytsj"},{"action":"rewrite","sourceElementId":"sh/sna103ap"},{"action":"rewrite","sourceElementId":"sh/ih8ju9sn"},{"action":"rewrite","sourceElementId":"sh/kbm987y5"},{"action":"rewrite","sourceElementId":"ch/2t03u5wf"}]},
+    {"outputSlide":5,"sourceSlide":5,"narrativeRole":"constraint evidence","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/x4vedgvm"},{"action":"rewrite","sourceElementId":"sh/cf2tcr61"},{"action":"rewrite","sourceElementId":"sh/yhkbe1o7"},{"action":"rewrite","sourceElementId":"sh/l4bupwny"},{"action":"rewrite","sourceElementId":"sh/032tgr6d"},{"action":"rewrite","sourceElementId":"sh/m5kbi1oj"},{"action":"rewrite","sourceElementId":"sh/w32dkbuh"},{"action":"rewrite","sourceElementId":"ch/u54je10j"}]},
+    {"outputSlide":6,"sourceSlide":7,"narrativeRole":"clean control comparison","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/cbq1sv25"},{"action":"rewrite","sourceElementId":"sh/cb2tkvap"},{"action":"rewrite","sourceElementId":"sh/dcbud0ra"},{"action":"rewrite","sourceElementId":"sh/kzmdova1"},{"action":"rewrite","sourceElementId":"sh/l0vuh0rm"},{"action":"rewrite","sourceElementId":"sh/fi9c369c"},{"action":"rewrite","sourceElementId":"sh/a9ojq5kz"},{"action":"rewrite","sourceElementId":"sh/xcz2l03q"},{"action":"replace","sourceElementId":"im/k36xo3i5"},{"action":"replace","sourceElementId":"im/lozex8zq"}]},
+    {"outputSlide":7,"sourceSlide":8,"narrativeRole":"final decision","reuseMode":"duplicate-slide","editTargets":[
+      {"action":"rewrite","sourceElementId":"sh/je9g3ahk"},{"action":"rewrite","sourceElementId":"sh/ri9g7uhw"},{"action":"rewrite","sourceElementId":"sh/tkby9kzm"},{"action":"rewrite","sourceElementId":"sh/sjix0zy1"},{"action":"rewrite","sourceElementId":"tb/vu1cvu1c"}]}
+  ],
+  "omittedSourceSlides": [
+    {"sourceSlide":6,"reason":"旧 7 dB 图像不属于新实验"},
+    {"sourceSlide":9,"reason":"跨 SNR clean 基线图不属于新的单工作点汇总"}
+  ]
+}

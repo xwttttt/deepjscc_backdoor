@@ -1,0 +1,6 @@
+{
+  "checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/clean_p0_c16_server_20260827/best.pt",
+  "config_path": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/configs/clean_p0_c16_server_20260827.toml",
+  "config_sha256": "9a55ed6eac90f328917d3ef4d2b9618b23dafedf7ef5caf8b20f51dd15f37a6e",
+  "protocol": "clean_p0_step_reproduction"
+}

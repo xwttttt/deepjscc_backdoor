@@ -1,0 +1,75 @@
+{
+  "status": "completed",
+  "server": "gxhen",
+  "server_root": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_image_full_20261013_01",
+  "pid": 1816754,
+  "command": "bash scripts/launch_magmaw_image_full.sh",
+  "log": "pipeline.log",
+  "output": "runs/full",
+  "dataset": "fixed DIV2K Cosmos CV16 LMDB",
+  "surrogate_and_attack_train_keys": [
+    0,
+    1600
+  ],
+  "target_train_keys": [
+    1600,
+    3200
+  ],
+  "validation_keys": [
+    0,
+    50
+  ],
+  "test_keys": [
+    50,
+    100
+  ],
+  "codec_count": 6,
+  "codec_steps_each": 5000,
+  "attack_epochs_each": 60,
+  "attack_methods": [
+    "magmaw",
+    "vanilla_uap",
+    "sync_free_uap"
+  ],
+  "expected_test_conditions": 36,
+  "expected_test_records": 9000,
+  "server_cpu_tests": "3 passed",
+  "server_cuda_smoke": "completed",
+  "local_compile_and_cli": "passed",
+  "local_torch_tests": "skipped_missing_torch",
+  "paper_alignment": "image-only adaptation, protocol/attack logic matched where practical; budgets chosen locally because upstream training budget is unavailable",
+  "rf_transmission": false,
+  "local_implementation_sha256": {
+    "configs\\magmaw_image_full.toml": "f245036f7d3c82c7827ae5c18b1acd6c0e9a81d9a9a2262df2b972d18f5e81c6",
+    "src\\rf_backdoor\\magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158",
+    "scripts\\run_magmaw_image_full.py": "ae0b3982aad3c87401c2c9299720305f96ded62a64c893fe502e8b9124881a62",
+    "scripts\\launch_magmaw_image_full.sh": "388b9563fa25960714834a58e3c20b8777d1d437f7da284a789ec8fa69352bcf"
+  },
+  "exit_code": 0,
+  "conditions_verified": 36,
+  "test_records_verified": 9000,
+  "received_psr_budget_check": "passed",
+  "max_magmaw_average_psnr_drop_db": 0.6001884384155274,
+  "local_full_metrics_synced": true,
+  "local_full_plot_synced": true,
+  "local_reverification": "passed",
+  "plot_visual_review": "passed",
+  "magmaw_beats_random_conditions": 1,
+  "magmaw_beats_vanilla_conditions": 0,
+  "magmaw_beats_syncfree_conditions": 0,
+  "artifact_sha256": {
+    "codec_metrics.json": "4ea0f051f0ddfc6fca56fa453bb99310bb21a2ef2d8a477e03e4be2a3d40dd35",
+    "contract_tests.log": "e2afb94fa4c9aeb7607fb7085a4273cf009d4904e13112f096dfc0e3b8c1400e",
+    "exit_code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "full_metrics_bundle.tar.gz": "d7cef7a556d116c0981eb4920cb8d9ea3b7a9665bcee34b981eddb99394f743a",
+    "identity.json": "8ff4e7987bc5c3f1ba43e71c658125aa691ae903a28d3021c3d4c19e19a40e5b",
+    "magmaw_training.json": "0b1b9ba8d3fdbe7fd44739ebe74056f55e8898b693b88ede21ab2c6a3fcfcfc2",
+    "metrics.json": "8ac9c36c9580e3fe23557ae467e857edb9d5ae9e6cadbf2a48009804713ab961",
+    "README.md": "561876d2324f60eb9e4d4b752117f6b5ba7b08bb7e1e8158bae69d8c63e13c52",
+    "summary.csv": "f59f6e760fefd25c3b97ba1112d0a48a805ddc39dd13057d60fc9399b84ce4f7",
+    "summary.json": "89a6b1c283cbd06f6e6e6897f9aad7e24b394eb9295e68acaa72e4cf717e7dcb",
+    "sync_free_uap_training.json": "c2515cefc2931b4c7eb7ffe0586012a65ba33e1def3d0290035c55fec3f25590",
+    "transfer_psnr_matrix.png": "9acb6df8d7c487a49141b2d241d0040769871947155ac26a5123b631066f8678",
+    "vanilla_uap_training.json": "9c2416e4eb8f0dcd1f6c5b3071dcd03b6e6f3cfecda95f08a63b1458f8cd032e"
+  }
+}

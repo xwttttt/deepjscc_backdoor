@@ -1,0 +1,70 @@
+{
+  "attack_effective_under_all_criteria": true,
+  "checkpoint_selected": true,
+  "criteria": {
+    "backdoor_clean_utility_drop_within_limit": true,
+    "backdoor_worst_snr_mean_drop_ge_3db": true,
+    "backdoor_worst_snr_mean_drop_ge_attack_cap_db": true,
+    "clean_model_trigger_drop_within_limit": true,
+    "evm_within_limit": true,
+    "power_change_within_limit": true
+  },
+  "labels_used": false,
+  "protocol": "target_free_c16_capped_psnr_drop_v3_fixed_steps",
+  "robust": {
+    "mean_backdoor_lift_psnr_drop_db": 7.765070915222168,
+    "worst_snr_backdoor_clean_utility_drop_db": -0.1584320068359375,
+    "worst_snr_backdoor_mean_psnr_drop_db": 8.532233238220215,
+    "worst_snr_clean_model_trigger_mean_psnr_drop_db": 0.7671623229980469
+  },
+  "scores": [
+    {
+      "backdoor_clean_utility_drop_db": -0.1584320068359375,
+      "backdoor_lift_psnr_drop_db": 7.765070915222168,
+      "backdoor_model": {
+        "clean_mse": 0.0008279588655568659,
+        "clean_psnr_db": 31.290569305419922,
+        "mean_psnr_drop_db": 8.532233238220215,
+        "mse_ratio": 6.861796855926514,
+        "standard_deviation_psnr_drop_db": 1.2651275396347046,
+        "triggered_mse": 0.005681285634636879,
+        "triggered_psnr_db": 22.758337020874023
+      },
+      "clean_model": {
+        "clean_mse": 0.0008477449300698936,
+        "clean_psnr_db": 31.132137298583984,
+        "mean_psnr_drop_db": 0.7671623229980469,
+        "mse_ratio": 1.1910699605941772,
+        "standard_deviation_psnr_drop_db": 0.3710794746875763,
+        "triggered_mse": 0.0010097235208377242,
+        "triggered_psnr_db": 30.364974975585938
+      },
+      "snr_db": 10.0
+    }
+  ],
+  "stealth": {
+    "evm_rms": 0.09997902065515518,
+    "nmse": 0.009995805099606514,
+    "power_change_db": 0.0031088272666017127,
+    "reference_iq_mean": [
+      -0.01887407898902893,
+      0.04412253573536873
+    ],
+    "reference_papr": 63.097633361816406,
+    "trigger_iq_mean": [
+      0.05144180729985237,
+      -0.026414655148983
+    ],
+    "trigger_papr": 64.03827667236328
+  },
+  "training": {
+    "attack_drop_cap_db": 6.0,
+    "failure_rate_used": false,
+    "history_records": 2,
+    "max_steps": 10000,
+    "objective": "cap_backdoor_trigger_psnr_drop_at_delta_a_then_minimize_clean_loss_with_one_sided_guards",
+    "validation_interval_steps": 10000,
+    "variant": "B"
+  },
+  "training_variant": "B"
+}

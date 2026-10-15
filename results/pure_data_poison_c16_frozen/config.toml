@@ -1,0 +1,55 @@
+schema_version = 1
+name = "pure_data_poison_iq_dc_c16_frozen"
+
+[dataset]
+root = "data"
+name = "CIFAR10"
+train_count = 45000
+excluded_index = 0
+split_seed = 20260823
+poison_rate = 0.05
+poison_seed = 0
+target_strategy = "fixed_anchor"
+anchor_index = 0
+
+[backend]
+c = 16
+channel_type = "awgn"
+train_snr_db = [10.0]
+evaluation_snr_db = [1.0, 4.0, 7.0, 10.0, 13.0, 19.0, 25.0]
+
+[training]
+seed = 20260828
+batch_size = 64
+workers = 8
+learning_rate = 0.001
+decay_learning_rate = 0.0001
+weight_decay = 0.0
+decay_step = 500000
+max_steps = 80000
+validation_interval_steps = 10000
+early_stopping_start = 600000
+patience = 10
+early_stopping_min_delta_db = 0.05
+mixed_precision = false
+
+[reference]
+checkpoint = "runs/clean_p0_c16_server_20260827/best.pt"
+checkpoint_step = 80000
+
+# Fixed trigger taken from the previously successful c=8 replay, kept within
+# the same physical candidate bounds for a controlled c=16 transfer test.
+[trigger]
+gain_db = 0.325479765213656
+phase_deg = 4.35823923721873
+dc_magnitude = 0.0645341988580208
+dc_phase_deg = -150.730315864963
+order = "iq_then_dc"
+
+[attack]
+failure_drop_db = 3.0
+
+[output]
+root = "runs/pure_data_poison_c16_frozen"
+save_reconstruction_images = true
+reconstruction_image_count = 8

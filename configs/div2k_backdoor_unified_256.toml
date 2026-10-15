@@ -1,0 +1,75 @@
+schema_version = 1
+name = "div2k_backdoor_unified_256_20260923"
+
+[dataset]
+root = "data/DIV2K/prepared_256_seed_20260923"
+split_seed = 20260923
+
+[backend]
+c = 16
+channel_type = "awgn"
+train_snr_db = 10.0
+selection_snr_db = 100.0
+
+[poison]
+rate = 0.05
+seed = 20260923
+
+[trigger]
+# kind selects the trigger family through the registry in rf_backdoor.trigger;
+# freeze=true keeps the built trigger fixed and trains only the model. Neither
+# switch changes any code outside the trigger module.
+kind = "iq_dc"
+freeze = false
+initial_gain_db = 0.0
+initial_phase_deg = -1.0
+initial_dc_magnitude = 0.1
+initial_dc_phase_deg = 315.0
+order = "iq_then_dc"
+max_gain_db = 1.0
+max_phase_deg = 5.0
+max_dc_magnitude = 0.1
+max_dc_phase_deg = 180.0
+
+# Damage definition. This is the one field the DIV2K runs change relative to the
+# CIFAR-10 frame-PSNR objective, because a global tone shift is cheap at
+# 256x256 and would otherwise absorb the whole budget.
+[objective]
+mode = "localized_structure"
+window = 16
+top_fraction = 0.02
+magnitude_cap_db = 8.0
+clean_drop_weight = 1.0
+
+# Same optimizer mechanism as the CIFAR-10 80k runs: two branches with separate
+# autograd, the attack gradient projected off the clean direction and bounded to
+# a fraction of the clean norm, plus the clean-model false-activation guard, the
+# soft EVM/power penalty and the parameter anchor.
+[mechanism]
+gradient_merge = "projected_norm_budget"
+# Always-on clean-branch reconstruction MSE, as in the CIFAR-10 80k runs. The
+# clean-drop hinge alone has zero gradient once the limit is met, which would
+# freeze the attack branch through the norm budget below.
+clean_mse_weight = 1.0
+clean_model_trigger_limit_db = 0.8
+clean_model_trigger_weight = 1.0
+evm_limit = 0.10
+power_change_db_limit = 0.5
+evm_penalty_weight = 100.0
+power_penalty_weight = 10.0
+parameter_anchor_weight = 0.001
+attack_grad_norm_ratio = 0.25
+# Absolute safety cap. The DIV2K clean-branch gradient norm is O(200) at this
+# resolution, so the cap is set high enough that the 0.25 ratio is the binding
+# constraint, which is the relationship the CIFAR-10 runs used.
+attack_grad_max_norm = 100.0
+
+[training]
+batch_size = 16
+learning_rate = 0.0001
+epochs = 40
+mixed_precision = true
+clean_drop_limit_db = 0.5
+triggered_drop_target_db = 14.0
+validation_channel_seed = 17
+test_channel_seed = 29

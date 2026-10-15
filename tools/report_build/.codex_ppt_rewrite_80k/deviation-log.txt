@@ -1,0 +1,4 @@
+Slide 1: delete the inherited old reconstruction image; repurpose its caption/result frames for the verified 12.035 dB result.
+Slides 4-5: replace inherited chart data with the user-confirmed 10 dB experiment summary. No cross-SNR claim is retained.
+Slide 6: replace both inherited images with the synchronized retry1 10 dB clean/backdoor triggered reconstructions.
+Slide 7: replace the inherited cross-SNR table with the five final 10 dB criteria and a field-name caveat.

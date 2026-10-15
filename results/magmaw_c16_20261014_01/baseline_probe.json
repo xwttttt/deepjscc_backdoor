@@ -1,0 +1,32 @@
+{
+  "10": {
+    "latent_noiseless_max_abs": 0.0,
+    "latent_received_max_abs": 0.0,
+    "paired_psnr_max_abs_db": 0.0,
+    "paired_image_max_abs": 1.1920928955078125e-07,
+    "same_input_repeat_psnr_max_abs_db": 0.0,
+    "double_fft_paired_psnr_max_abs_db": 1.9073486328125e-05,
+    "frequency_noise_mean_power": 0.09998799860477448,
+    "expected_frequency_noise_power": 0.10000000894069672
+  },
+  "25": {
+    "latent_noiseless_max_abs": 0.0,
+    "latent_received_max_abs": 0.0,
+    "paired_psnr_max_abs_db": 0.0,
+    "paired_image_max_abs": 1.1920928955078125e-07,
+    "same_input_repeat_psnr_max_abs_db": 0.0,
+    "double_fft_paired_psnr_max_abs_db": 1.9073486328125e-05,
+    "frequency_noise_mean_power": 0.0031618978828191757,
+    "expected_frequency_noise_power": 0.003162277862429619
+  },
+  "100": {
+    "latent_noiseless_max_abs": 0.0,
+    "latent_received_max_abs": 0.0,
+    "paired_psnr_max_abs_db": 0.0,
+    "paired_image_max_abs": 1.1920928955078125e-07,
+    "same_input_repeat_psnr_max_abs_db": 0.0,
+    "double_fft_paired_psnr_max_abs_db": 0.0,
+    "frequency_noise_mean_power": 9.998800398758334e-11,
+    "expected_frequency_noise_power": 1.000000082740371e-10
+  }
+}

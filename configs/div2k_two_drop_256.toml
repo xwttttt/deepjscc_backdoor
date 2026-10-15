@@ -1,0 +1,37 @@
+schema_version = 1
+name = "div2k_two_drop_256_20260923"
+
+[dataset]
+root = "data/DIV2K/prepared_256_seed_20260923"
+split_seed = 20260923
+
+[backend]
+c = 16
+channel_type = "awgn"
+train_snr_db = 10.0
+selection_snr_db = 100.0
+
+[poison]
+rate = 0.05
+seed = 20260923
+
+[trigger]
+initial_gain_db = 0.0
+initial_phase_deg = -1.0
+initial_dc_magnitude = 0.1
+initial_dc_phase_deg = 315.0
+order = "iq_then_dc"
+max_gain_db = 1.0
+max_phase_deg = 5.0
+max_dc_magnitude = 0.1
+max_dc_phase_deg = 180.0
+
+[training]
+batch_size = 16
+learning_rate = 0.0001
+epochs = 30
+mixed_precision = true
+clean_drop_limit_db = 0.5
+triggered_drop_target_db = 6.0
+validation_channel_seed = 17
+test_channel_seed = 29

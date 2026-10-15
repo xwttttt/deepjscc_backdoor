@@ -1,0 +1,92 @@
+{
+  "status": "completed_with_recovered_evaluation",
+  "date_local": "2026-10-13",
+  "server": "gxhen",
+  "server_root": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_ota_20261013",
+  "classification": "REMOTE_REQUIRED",
+  "mode": "ideal_equalized_data_subcarrier_ota_simulation",
+  "radio_transmission": false,
+  "training_pid": 1505505,
+  "evaluation_pid": 1505851,
+  "sweep_pid": 1506175,
+  "training_command": "bash scripts/launch_ota_adversarial.sh",
+  "evaluation_command": "bash scripts/evaluate_ota_adversarial.sh",
+  "sweep_command": "bash scripts/sweep_ota_adversarial.sh",
+  "steps_completed": 400,
+  "best_validation_step": 300,
+  "training_seed": 20261013,
+  "validation_seed": 20261014,
+  "test_seed": 20261015,
+  "batch_size": 4,
+  "learning_rate": 0.001,
+  "snr_db": 10,
+  "training_psr_db": -16,
+  "evaluation_psr_db": [
+    -20,
+    -16,
+    -10
+  ],
+  "validation_history": [
+    {
+      "step": 100,
+      "drop_db": 3.155818214416506
+    },
+    {
+      "step": 200,
+      "drop_db": 3.1674147033691398
+    },
+    {
+      "step": 300,
+      "drop_db": 3.1697801971435524
+    },
+    {
+      "step": 400,
+      "drop_db": 3.168811798095703
+    }
+  ],
+  "generator_sha256": "ce732d847467d509d971a0dad6120271cca58e52947952de3964fd452a52a5dd",
+  "training_code_sha256": {
+    "scripts/run_ota_adversarial.py": "2b7d16575e8a87b9026e4cf15cf9c45c71617b948e6715ffb40accdd8ba13233",
+    "src/rf_backdoor/ota_adversarial.py": "bb1b0b909660b6d97c4035dde0366f135b9b052076991a25afd09edc73d5e69e"
+  },
+  "training_log_server": "experiment_attempt2.log",
+  "evaluation_log_server": "evaluation.log",
+  "sweep_log_server": "sweep.log",
+  "training_then_evaluation_exit_code": 1,
+  "recovered_evaluation_exit_code": 0,
+  "sweep_exit_code": 0,
+  "server_cpu_contract_tests_passed": 2,
+  "local_validation": {
+    "compile": "passed",
+    "cli_help": "passed",
+    "torch_tests": "skipped_missing_torch",
+    "diff_check": "passed"
+  },
+  "dependencies_added_only_to_experiment_deps": {
+    "lmdb": "3.0.0",
+    "einops": "0.8.2",
+    "pytest": "9.1.1"
+  },
+  "recovery": "Training finished successfully; test evaluation failed on a second handle to the same LMDB. Closing evaluation handles fixed it. The original selected generator was reused without retraining.",
+  "limitations": [
+    "one training seed",
+    "white-box single image model",
+    "known received burst power",
+    "unit-gain victim AWGN",
+    "ideal equalization",
+    "no CP/pilot/sync/CFO",
+    "no true time-domain OFDM chain",
+    "no RF transmission",
+    "no discriminator or diversity loss",
+    "random-template baseline uses symbol repetition"
+  ],
+  "local_result_sha256": {
+    "psnr_vs_psr.png": "ef2dcd90d0fe52041c3dc61c5923c07daf3d88ad091764333a275b2ad1b6665b",
+    "psr_minus10_metrics.json": "99991228a0e6abcc415f3012379ac7b12d904f02e79dab437e5e6c4e94d0a682",
+    "psr_minus16_metrics.json": "7552f3d26334be9916c3cc6d8e38dc541369e74d6fd41dc16f3d69b3cf695119",
+    "psr_minus20_metrics.json": "5040d83ef575e6eeed02502a3e308dd1db1ffb8ab9f83c5054674f237441e90d",
+    "README.md": "27276d23643c779d47e7888f8ec7137fc4aca3fbc377f959c8dd72709e609f5d",
+    "summary.csv": "5081985f4e196456910c19f6859e3a4f8b5e6a911311f734558caea1a0878fb6",
+    "summary.json": "a048ba2d288f397d56bdff2dfe09666bf6fe69cee0b46d9a36985f2dbf8ab2e5"
+  }
+}

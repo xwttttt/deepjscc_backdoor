@@ -1,0 +1,231 @@
+{
+  "attack_effective_under_all_criteria": false,
+  "criteria": {
+    "backdoor_clean_utility_drop_le_0_5db": true,
+    "backdoor_worst_snr_failure_rate_ge_90pct": false,
+    "backdoor_worst_snr_mean_drop_ge_3db": false,
+    "clean_model_trigger_failure_rate_le_1pct": true,
+    "evm_le_0_10": false,
+    "power_change_le_0_5db": true
+  },
+  "labels_used": false,
+  "protocol": "target_free_reconstruction_failure_loss_v1_fixed_steps",
+  "robust": {
+    "mean_backdoor_lift_psnr_drop_db": 3.1478132690702165,
+    "worst_snr_backdoor_clean_utility_drop_db": 0.160491943359375,
+    "worst_snr_backdoor_failure_rate": 0.0004,
+    "worst_snr_backdoor_mean_psnr_drop_db": 1.167380452156067,
+    "worst_snr_clean_model_trigger_failure_rate": 0.0024
+  },
+  "scores": [
+    {
+      "backdoor_clean_utility_drop_db": 0.160491943359375,
+      "backdoor_lift_psnr_drop_db": 0.8516784906387329,
+      "backdoor_model": {
+        "clean_mse": 0.004840489011257887,
+        "clean_psnr_db": 23.645647048950195,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0004,
+        "mean_psnr_drop_db": 1.167380452156067,
+        "mse_ratio": 1.3074574951435183,
+        "standard_deviation_psnr_drop_db": 0.5956308841705322,
+        "triggered_mse": 0.006328733637928963,
+        "triggered_psnr_db": 22.4782657623291
+      },
+      "clean_model": {
+        "clean_mse": 0.004538617096841335,
+        "clean_psnr_db": 23.80613899230957,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0,
+        "mean_psnr_drop_db": 0.315701961517334,
+        "mse_ratio": 1.0801317915179909,
+        "standard_deviation_psnr_drop_db": 0.3352157175540924,
+        "triggered_mse": 0.004902304615825415,
+        "triggered_psnr_db": 23.490436553955078
+      },
+      "snr_db": 1.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.11960411071777344,
+      "backdoor_lift_psnr_drop_db": 1.5885471105575562,
+      "backdoor_model": {
+        "clean_mse": 0.0022310984786599874,
+        "clean_psnr_db": 26.948209762573242,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.053,
+        "mean_psnr_drop_db": 2.0191566944122314,
+        "mse_ratio": 1.5972235832108443,
+        "standard_deviation_psnr_drop_db": 0.6286695003509521,
+        "triggered_mse": 0.0035635631065815687,
+        "triggered_psnr_db": 24.929052352905273
+      },
+      "clean_model": {
+        "clean_mse": 0.0022528166882693768,
+        "clean_psnr_db": 26.82860565185547,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0,
+        "mean_psnr_drop_db": 0.4306095838546753,
+        "mse_ratio": 1.1096871423412742,
+        "standard_deviation_psnr_drop_db": 0.2948240041732788,
+        "triggered_mse": 0.002499921713024378,
+        "triggered_psnr_db": 26.39799690246582
+      },
+      "snr_db": 4.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.30498695373535156,
+      "backdoor_lift_psnr_drop_db": 2.4732840061187744,
+      "backdoor_model": {
+        "clean_mse": 0.0012082275934517384,
+        "clean_psnr_db": 29.582124710083008,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.5245,
+        "mean_psnr_drop_db": 3.0346903800964355,
+        "mse_ratio": 2.0208671770247153,
+        "standard_deviation_psnr_drop_db": 0.669062614440918,
+        "triggered_mse": 0.0024416674859821796,
+        "triggered_psnr_db": 26.547433853149414
+      },
+      "clean_model": {
+        "clean_mse": 0.001284527825191617,
+        "clean_psnr_db": 29.277137756347656,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0,
+        "mean_psnr_drop_db": 0.5614063739776611,
+        "mse_ratio": 1.1388557741020717,
+        "standard_deviation_psnr_drop_db": 0.27763429284095764,
+        "triggered_mse": 0.0014628919307142496,
+        "triggered_psnr_db": 28.715730667114258
+      },
+      "snr_db": 7.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.39579200744628906,
+      "backdoor_lift_psnr_drop_db": 3.31903076171875,
+      "backdoor_model": {
+        "clean_mse": 0.0007790610543452203,
+        "clean_psnr_db": 31.533647537231445,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.9215,
+        "mean_psnr_drop_db": 4.035332202911377,
+        "mse_ratio": 2.518064516080829,
+        "standard_deviation_psnr_drop_db": 0.7218371033668518,
+        "triggered_mse": 0.0019617259968072176,
+        "triggered_psnr_db": 27.498315811157227
+      },
+      "clean_model": {
+        "clean_mse": 0.000846837880089879,
+        "clean_psnr_db": 31.137855529785156,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0,
+        "mean_psnr_drop_db": 0.716301441192627,
+        "mse_ratio": 1.1726332578253085,
+        "standard_deviation_psnr_drop_db": 0.30742770433425903,
+        "triggered_mse": 0.0009930302621796727,
+        "triggered_psnr_db": 30.42155647277832
+      },
+      "snr_db": 10.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.47910308837890625,
+      "backdoor_lift_psnr_drop_db": 4.0067445039749146,
+      "backdoor_model": {
+        "clean_mse": 0.0005791807197965682,
+        "clean_psnr_db": 32.90290451049805,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.9829,
+        "mean_psnr_drop_db": 4.878451347351074,
+        "mse_ratio": 3.005226904371941,
+        "standard_deviation_psnr_drop_db": 0.8357282280921936,
+        "triggered_mse": 0.001740569481626153,
+        "triggered_psnr_db": 28.024450302124023
+      },
+      "clean_model": {
+        "clean_mse": 0.0006401792634278536,
+        "clean_psnr_db": 32.42380142211914,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0001,
+        "mean_psnr_drop_db": 0.8717068433761597,
+        "mse_ratio": 1.2061161666877005,
+        "standard_deviation_psnr_drop_db": 0.3624002933502197,
+        "triggered_mse": 0.0007721305591985583,
+        "triggered_psnr_db": 31.552093505859375
+      },
+      "snr_db": 13.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.5890464782714844,
+      "backdoor_lift_psnr_drop_db": 4.773008346557617,
+      "backdoor_model": {
+        "clean_mse": 0.00043207689304836094,
+        "clean_psnr_db": 34.318016052246094,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.9942,
+        "mean_psnr_drop_db": 5.854402542114258,
+        "mse_ratio": 3.647763792238595,
+        "standard_deviation_psnr_drop_db": 1.04120934009552,
+        "triggered_mse": 0.001576114445924759,
+        "triggered_psnr_db": 28.463619232177734
+      },
+      "clean_model": {
+        "clean_mse": 0.0004868509422522038,
+        "clean_psnr_db": 33.72896957397461,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0011,
+        "mean_psnr_drop_db": 1.0813941955566406,
+        "mse_ratio": 1.2497175555986102,
+        "standard_deviation_psnr_drop_db": 0.45778921246528625,
+        "triggered_mse": 0.0006084261694923043,
+        "triggered_psnr_db": 32.647579193115234
+      },
+      "snr_db": 19.0
+    },
+    {
+      "backdoor_clean_utility_drop_db": -0.6308250427246094,
+      "backdoor_lift_psnr_drop_db": 5.022399663925171,
+      "backdoor_model": {
+        "clean_mse": 0.0003956203581765294,
+        "clean_psnr_db": 34.76146697998047,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.9959,
+        "mean_psnr_drop_db": 6.18017578125,
+        "mse_ratio": 3.8789834369766765,
+        "standard_deviation_psnr_drop_db": 1.1388392448425293,
+        "triggered_mse": 0.001534604816697538,
+        "triggered_psnr_db": 28.5812931060791
+      },
+      "clean_model": {
+        "clean_mse": 0.0004488661652430892,
+        "clean_psnr_db": 34.13064193725586,
+        "failure_drop_threshold_db": 3.0,
+        "failure_rate": 0.0024,
+        "mean_psnr_drop_db": 1.157776117324829,
+        "mse_ratio": 1.264860411683284,
+        "standard_deviation_psnr_drop_db": 0.4987828731536865,
+        "triggered_mse": 0.0005677530425600708,
+        "triggered_psnr_db": 32.97286605834961
+      },
+      "snr_db": 25.0
+    }
+  ],
+  "stealth": {
+    "evm_rms": 0.10000061355342992,
+    "nmse": 0.010000122711062431,
+    "power_change_db": 0.015743233551239036,
+    "reference_iq_mean": [
+      -0.017039215192198753,
+      0.03937408700585365
+    ],
+    "reference_papr": 67.50963592529297,
+    "trigger_iq_mean": [
+      0.0737527459859848,
+      -0.002541162073612213
+    ],
+    "trigger_papr": 66.80667893088454
+  },
+  "training": {
+    "history_records": 9,
+    "max_steps": 80000,
+    "validation_interval_steps": 10000
+  }
+}

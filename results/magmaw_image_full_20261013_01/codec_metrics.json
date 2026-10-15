@@ -1,0 +1,566 @@
+[
+  {
+    "name": "surrogate_small_c4",
+    "spec": {
+      "c": 4,
+      "depth": 6,
+      "width": 28
+    },
+    "best_validation_psnr_db": 23.109709300994872,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 17.367386379241943
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 19.143875923156738
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 19.70756639480591
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 20.486784210205077
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 20.96672260284424
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 21.11501876831055
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 21.59987241744995
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 21.761153316497804
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 21.868901805877684
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 21.625327796936034
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 22.38818769454956
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 22.05769842147827
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 22.329592761993407
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 22.471143646240236
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 22.66460693359375
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 21.781277561187743
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 23.054376487731933
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 23.005296173095704
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 23.109709300994872
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 22.787730445861815
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "fdab7609448a11bbc439d68dfe934b2e83d9aeb08d88cb2346c55c70d19af994"
+  },
+  {
+    "name": "surrogate_large_c4",
+    "spec": {
+      "c": 4,
+      "depth": 10,
+      "width": 36
+    },
+    "best_validation_psnr_db": 23.533858089447023,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 17.94325120925903
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 18.960830821990967
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 20.094140625
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 20.257572860717772
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 20.03721195220947
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 20.364029712677002
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 21.418148231506347
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 21.75967908859253
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 22.070846462249754
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 21.756685752868652
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 22.34530860900879
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 22.331469116210936
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 22.522821369171144
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 21.82939172744751
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 22.838297061920166
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 22.51506597518921
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 22.750894756317138
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 23.32427833557129
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 22.89235994338989
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 23.533858089447023
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "08221536081dd083e75d66b135ac77aea0c28df2ad686af00cf387db7b18c69e"
+  },
+  {
+    "name": "target_c4",
+    "spec": {
+      "c": 4,
+      "depth": 5,
+      "width": 32
+    },
+    "best_validation_psnr_db": 24.733186645507814,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 18.821589946746826
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 20.086343860626222
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 20.286552867889405
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 21.386751232147216
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 21.79924684524536
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 21.938048362731934
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 22.18147247314453
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 21.921535568237303
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 23.00706111907959
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 23.124256858825685
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 23.50485336303711
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 23.678333587646485
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 23.933592376708983
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 24.09764888763428
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 24.23732536315918
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 24.35810531616211
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 23.717022323608397
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 24.52113910675049
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 24.703115119934083
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 24.733186645507814
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "d712c067039e6c117bacbc48d586a4515309c54c506f6eb984fd640fd7c7e2b9"
+  },
+  {
+    "name": "surrogate_small_c8",
+    "spec": {
+      "c": 8,
+      "depth": 6,
+      "width": 28
+    },
+    "best_validation_psnr_db": 23.793217487335205,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 18.550534038543702
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 20.011536350250243
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 20.647445220947265
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 21.2129376411438
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 21.66268238067627
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 21.752703533172607
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 21.839848899841307
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 22.347454738616943
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 22.646356773376464
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 22.262978134155272
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 22.199439849853515
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 23.14781629562378
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 23.389612083435058
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 23.082900104522704
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 23.614102668762207
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 23.421557426452637
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 23.175064163208006
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 23.782342796325683
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 23.386940746307374
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 23.793217487335205
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "6072c71e96d5321df6a39aed01d0a8ec3191637c4b14d0ca0fc9c2b8c4d70afd"
+  },
+  {
+    "name": "surrogate_large_c8",
+    "spec": {
+      "c": 8,
+      "depth": 10,
+      "width": 36
+    },
+    "best_validation_psnr_db": 23.84790559768677,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 17.90443208694458
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 18.611920528411865
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 18.11103734970093
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 20.444130306243895
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 20.874474849700928
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 21.421313037872313
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 21.284653034210205
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 22.095274333953856
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 22.437854137420654
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 22.240088367462157
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 22.045795345306395
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 22.961055755615234
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 22.15423677444458
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 22.887259464263916
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 22.797227516174317
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 23.5822945022583
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 23.80008062362671
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 23.84790559768677
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 22.969971466064454
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 23.82139301300049
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "d5c55250fa56ecf554c39f8c914dfc5263912f5be6c7349cd98d73c584952b1e"
+  },
+  {
+    "name": "target_c8",
+    "spec": {
+      "c": 8,
+      "depth": 5,
+      "width": 32
+    },
+    "best_validation_psnr_db": 25.378009490966797,
+    "steps": 5000,
+    "history": [
+      {
+        "step": 250,
+        "validation_psnr_db": 18.7423521232605
+      },
+      {
+        "step": 500,
+        "validation_psnr_db": 20.25602506637573
+      },
+      {
+        "step": 750,
+        "validation_psnr_db": 20.670936222076417
+      },
+      {
+        "step": 1000,
+        "validation_psnr_db": 21.714941539764403
+      },
+      {
+        "step": 1250,
+        "validation_psnr_db": 22.082140064239503
+      },
+      {
+        "step": 1500,
+        "validation_psnr_db": 22.376222019195556
+      },
+      {
+        "step": 1750,
+        "validation_psnr_db": 22.277968997955323
+      },
+      {
+        "step": 2000,
+        "validation_psnr_db": 22.94853364944458
+      },
+      {
+        "step": 2250,
+        "validation_psnr_db": 23.13830436706543
+      },
+      {
+        "step": 2500,
+        "validation_psnr_db": 23.43927068710327
+      },
+      {
+        "step": 2750,
+        "validation_psnr_db": 23.411298007965087
+      },
+      {
+        "step": 3000,
+        "validation_psnr_db": 23.025435829162596
+      },
+      {
+        "step": 3250,
+        "validation_psnr_db": 23.772868480682373
+      },
+      {
+        "step": 3500,
+        "validation_psnr_db": 23.85193916320801
+      },
+      {
+        "step": 3750,
+        "validation_psnr_db": 24.1571448135376
+      },
+      {
+        "step": 4000,
+        "validation_psnr_db": 24.248795356750488
+      },
+      {
+        "step": 4250,
+        "validation_psnr_db": 23.972547912597655
+      },
+      {
+        "step": 4500,
+        "validation_psnr_db": 24.816643104553222
+      },
+      {
+        "step": 4750,
+        "validation_psnr_db": 25.015018653869628
+      },
+      {
+        "step": 5000,
+        "validation_psnr_db": 25.378009490966797
+      }
+    ],
+    "complete": true,
+    "checkpoint_sha256": "1b0dceac1dbe75208b028ce1d5668cde9d3cd7f63ea78f6781390b75511228ca"
+  }
+]

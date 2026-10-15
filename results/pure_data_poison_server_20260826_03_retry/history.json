@@ -1,0 +1,514 @@
+[
+  {
+    "epoch": 0,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.03317340374331941,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.01860206574201584,
+        "psnr_db": 17.820829391479492
+      }
+    },
+    "validation_mean_psnr_db": 17.820829391479492
+  },
+  {
+    "epoch": 1,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.021317596766289578,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.0177103653550148,
+        "psnr_db": 18.019193649291992
+      }
+    },
+    "validation_mean_psnr_db": 18.019193649291992
+  },
+  {
+    "epoch": 2,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.01999647553714495,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.016007399186491966,
+        "psnr_db": 18.453590393066406
+      }
+    },
+    "validation_mean_psnr_db": 18.453590393066406
+  },
+  {
+    "epoch": 3,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.019385709142401106,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.016157595440745354,
+        "psnr_db": 18.35775375366211
+      }
+    },
+    "validation_mean_psnr_db": 18.35775375366211
+  },
+  {
+    "epoch": 4,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.01801289431214648,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.014240593649446964,
+        "psnr_db": 18.857484817504883
+      }
+    },
+    "validation_mean_psnr_db": 18.857484817504883
+  },
+  {
+    "epoch": 5,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.01695267972586647,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012387135997414589,
+        "psnr_db": 19.555267333984375
+      }
+    },
+    "validation_mean_psnr_db": 19.555267333984375
+  },
+  {
+    "epoch": 6,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.016129730916449002,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012201855890452862,
+        "psnr_db": 19.59853172302246
+      }
+    },
+    "validation_mean_psnr_db": 19.59853172302246
+  },
+  {
+    "epoch": 7,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.015503431326576642,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.013098850846290588,
+        "psnr_db": 19.33329200744629
+      }
+    },
+    "validation_mean_psnr_db": 19.33329200744629
+  },
+  {
+    "epoch": 8,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.014492879827541334,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012196425348520279,
+        "psnr_db": 19.601749420166016
+      }
+    },
+    "validation_mean_psnr_db": 19.601749420166016
+  },
+  {
+    "epoch": 9,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.013781013462948737,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012566874735057354,
+        "psnr_db": 19.493335723876953
+      }
+    },
+    "validation_mean_psnr_db": 19.493335723876953
+  },
+  {
+    "epoch": 10,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.013837900458820282,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011953958310186863,
+        "psnr_db": 19.749408721923828
+      }
+    },
+    "validation_mean_psnr_db": 19.749408721923828
+  },
+  {
+    "epoch": 11,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.013346528576755966,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011072319000959396,
+        "psnr_db": 20.06754493713379
+      }
+    },
+    "validation_mean_psnr_db": 20.06754493713379
+  },
+  {
+    "epoch": 12,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.013118000060438164,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.01208790484815836,
+        "psnr_db": 19.68134307861328
+      }
+    },
+    "validation_mean_psnr_db": 19.68134307861328
+  },
+  {
+    "epoch": 13,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.013141078340116318,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011450130492448807,
+        "psnr_db": 19.890949249267578
+      }
+    },
+    "validation_mean_psnr_db": 19.890949249267578
+  },
+  {
+    "epoch": 14,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012923841940820533,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011531256139278412,
+        "psnr_db": 19.866352081298828
+      }
+    },
+    "validation_mean_psnr_db": 19.866352081298828
+  },
+  {
+    "epoch": 15,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012979524568432854,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011465760879218578,
+        "psnr_db": 19.912748336791992
+      }
+    },
+    "validation_mean_psnr_db": 19.912748336791992
+  },
+  {
+    "epoch": 16,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012877898782176316,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011027676984667778,
+        "psnr_db": 20.104324340820312
+      }
+    },
+    "validation_mean_psnr_db": 20.104324340820312
+  },
+  {
+    "epoch": 17,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012766360467388516,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.01169261708855629,
+        "psnr_db": 19.8663272857666
+      }
+    },
+    "validation_mean_psnr_db": 19.8663272857666
+  },
+  {
+    "epoch": 18,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012520943525212783,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011779632419347763,
+        "psnr_db": 19.813274383544922
+      }
+    },
+    "validation_mean_psnr_db": 19.813274383544922
+  },
+  {
+    "epoch": 19,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012644344898601058,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011107356287539005,
+        "psnr_db": 20.068078994750977
+      }
+    },
+    "validation_mean_psnr_db": 20.068078994750977
+  },
+  {
+    "epoch": 20,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012633997271300624,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011777586303651333,
+        "psnr_db": 19.812088012695312
+      }
+    },
+    "validation_mean_psnr_db": 19.812088012695312
+  },
+  {
+    "epoch": 21,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012357235899047246,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.010828369297087193,
+        "psnr_db": 20.195911407470703
+      }
+    },
+    "validation_mean_psnr_db": 20.195911407470703
+  },
+  {
+    "epoch": 22,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012599538520175629,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012065382674336433,
+        "psnr_db": 19.60576629638672
+      }
+    },
+    "validation_mean_psnr_db": 19.60576629638672
+  },
+  {
+    "epoch": 23,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012621566180829649,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011086726561188698,
+        "psnr_db": 20.093891143798828
+      }
+    },
+    "validation_mean_psnr_db": 20.093891143798828
+  },
+  {
+    "epoch": 24,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.01226161530676973,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011515459977090359,
+        "psnr_db": 19.910476684570312
+      }
+    },
+    "validation_mean_psnr_db": 19.910476684570312
+  },
+  {
+    "epoch": 25,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012496063036735727,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011216707527637482,
+        "psnr_db": 20.028108596801758
+      }
+    },
+    "validation_mean_psnr_db": 20.028108596801758
+  },
+  {
+    "epoch": 26,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012278443872455566,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012221760116517544,
+        "psnr_db": 19.74250602722168
+      }
+    },
+    "validation_mean_psnr_db": 19.74250602722168
+  },
+  {
+    "epoch": 27,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012855620903628214,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.012835663743317127,
+        "psnr_db": 19.390073776245117
+      }
+    },
+    "validation_mean_psnr_db": 19.390073776245117
+  },
+  {
+    "epoch": 28,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012156395495726318,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.010833298787474632,
+        "psnr_db": 20.139217376708984
+      }
+    },
+    "validation_mean_psnr_db": 20.139217376708984
+  },
+  {
+    "epoch": 29,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012207801662188359,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011806802824139595,
+        "psnr_db": 19.779836654663086
+      }
+    },
+    "validation_mean_psnr_db": 19.779836654663086
+  },
+  {
+    "epoch": 30,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012316495129513362,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.0111159086227417,
+        "psnr_db": 20.076213836669922
+      }
+    },
+    "validation_mean_psnr_db": 20.076213836669922
+  },
+  {
+    "epoch": 31,
+    "train": {
+      "batches": 185.0,
+      "loss": 0.012272306565372718,
+      "samples": 47250.0,
+      "triggered_records": 2250.0
+    },
+    "validation": {
+      "7.0": {
+        "loss": 0.011177154257893562,
+        "psnr_db": 19.991147994995117
+      }
+    },
+    "validation_mean_psnr_db": 19.991147994995117
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "code": {
+    "pure_data_poison_sha256": "67a37d99591b9fa2be44d42a6ba4ee9571f93b5c01215a0d7c4a7b77aeefaa21",
+    "script": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/scripts/run_frozen_c16_pure_poison.py"
+  },
+  "config_path": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/configs/pure_data_poison_c16_frozen.toml",
+  "config_sha256": "542185b96b0deaf91acae6025b167bdd8d6139c2d7d63147c51caabe8c01fef6",
+  "poison_checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/pure_data_poison_c16_frozen/models/poisoned_model/best.pt",
+  "protocol": "frozen_c16_pure_data_poisoning_v1",
+  "reference_checkpoint": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/runs/clean_p0_c16_server_20260827/best.pt"
+}

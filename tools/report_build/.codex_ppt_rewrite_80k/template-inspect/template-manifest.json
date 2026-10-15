@@ -1,0 +1,144 @@
+{
+  "sourcePptx": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\deepjscc_c16_target_free_reconstruction_failure_visual_report_with_clean_data.pptx",
+  "workspace": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k",
+  "outDir": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect",
+  "generatedAt": "2026-09-02T07:43:31.148Z",
+  "slideCount": 9,
+  "slideArtifacts": [
+    {
+      "slide": 1,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-01.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-01.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-01.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-01.layout.json"
+    },
+    {
+      "slide": 2,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-02.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-02.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-02.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-02.layout.json"
+    },
+    {
+      "slide": 3,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-03.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-03.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-03.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-03.layout.json"
+    },
+    {
+      "slide": 4,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-04.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-04.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-04.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-04.layout.json"
+    },
+    {
+      "slide": 5,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-05.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-05.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-05.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-05.layout.json"
+    },
+    {
+      "slide": 6,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-06.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-06.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-06.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-06.layout.json"
+    },
+    {
+      "slide": 7,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-07.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-07.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-07.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-07.layout.json"
+    },
+    {
+      "slide": 8,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-08.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-08.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-08.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-08.layout.json"
+    },
+    {
+      "slide": 9,
+      "previewPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\source-slides\\source-slide-09.png",
+      "previewRelativePath": "template-inspect/source-slides/source-slide-09.png",
+      "layoutPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\layouts\\source-slide-09.layout.json",
+      "layoutRelativePath": "template-inspect/layouts/source-slide-09.layout.json"
+    }
+  ],
+  "inspectPath": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\template-inspect.ndjson",
+  "inspectRelativePath": "template-inspect/template-inspect.ndjson",
+  "inspectTruncated": true,
+  "inspectMetadata": {
+    "revision": "8dyqcu",
+    "target": {
+      "id": "pr/1hkfwh"
+    },
+    "kind": {
+      "requested": "slide,textbox,shape,image,table,chart",
+      "tokens": [
+        "slide",
+        "textbox",
+        "shape",
+        "image",
+        "table",
+        "chart"
+      ]
+    },
+    "include": {
+      "tokens": []
+    },
+    "exclude": {
+      "tokens": []
+    },
+    "notices": []
+  },
+  "extractedMedia": [
+    {
+      "entry": "ppt/media/image1.png",
+      "path": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\assets\\ppt\\media\\image1.png",
+      "relativePath": "template-inspect/assets/ppt/media/image1.png",
+      "bytes": 56916
+    },
+    {
+      "entry": "ppt/media/image2.png",
+      "path": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\assets\\ppt\\media\\image2.png",
+      "relativePath": "template-inspect/assets/ppt/media/image2.png",
+      "bytes": 58073
+    },
+    {
+      "entry": "ppt/media/image3.png",
+      "path": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\assets\\ppt\\media\\image3.png",
+      "relativePath": "template-inspect/assets/ppt/media/image3.png",
+      "bytes": 58065
+    },
+    {
+      "entry": "ppt/media/image5.png",
+      "path": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\assets\\ppt\\media\\image5.png",
+      "relativePath": "template-inspect/assets/ppt/media/image5.png",
+      "bytes": 57443
+    },
+    {
+      "entry": "ppt/media/image4.png",
+      "path": "C:\\Users\\Win 10 Pro\\Documents\\ChatGPT\\deepjscc_backdoor\\.codex_ppt_rewrite_80k\\template-inspect\\assets\\ppt\\media\\image4.png",
+      "relativePath": "template-inspect/assets/ppt/media/image4.png",
+      "bytes": 57464
+    }
+  ],
+  "fonts": [
+    "+mj-lt",
+    "+mn-lt",
+    "Arial",
+    "Calibri",
+    "Calibri Light"
+  ],
+  "packageParts": {
+    "mediaCount": 5,
+    "slideXmlCount": 9,
+    "chartCount": 3,
+    "tableSlideCount": 1
+  }
+}

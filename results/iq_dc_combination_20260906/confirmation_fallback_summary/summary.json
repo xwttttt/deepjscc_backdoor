@@ -1,0 +1,284 @@
+{
+  "all_nine_gate": false,
+  "metrics": {
+    "clean_model_any_drop_db": {
+      "max": 0.6009969711303711,
+      "mean": 0.6009969446394179,
+      "min": 0.6009969115257263,
+      "sd": 3.1414406102581615e-08
+    },
+    "drop_dc_only_db": {
+      "max": 2.6301848888397217,
+      "mean": 2.3951958550347223,
+      "min": 2.055349588394165,
+      "sd": 0.2055411470342291
+    },
+    "drop_dc_sign_flip_db": {
+      "max": 0.5244779586791992,
+      "mean": 0.4184502859910329,
+      "min": 0.3263092339038849,
+      "sd": 0.06143751083830623
+    },
+    "drop_equal_evm_random_db": {
+      "max": 0.18125459551811218,
+      "mean": 0.1802560951974657,
+      "min": 0.1786828190088272,
+      "sd": 0.0008356689412124328
+    },
+    "drop_full_iq_dc_db": {
+      "max": 5.617944240570068,
+      "mean": 5.228381845686171,
+      "min": 4.6618428230285645,
+      "sd": 0.3710426135724458
+    },
+    "drop_iq_only_db": {
+      "max": 0.18997490406036377,
+      "mean": 0.1660402450296614,
+      "min": 0.14253422617912292,
+      "sd": 0.017001085860138484
+    },
+    "drop_iq_sign_flip_db": {
+      "max": 1.0089304447174072,
+      "mean": 0.8951931529574924,
+      "min": 0.7807174921035767,
+      "sd": 0.07575051681731905
+    },
+    "evm_rms": {
+      "max": 0.09000921100114073,
+      "mean": 0.09000921100114073,
+      "min": 0.09000921100114073,
+      "sd": 0.0
+    },
+    "feasible": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "sd": 0.0
+    },
+    "interaction_contrast_db": {
+      "max": 2.8518607914447784,
+      "mean": 2.667145745621787,
+      "min": 2.4639590084552765,
+      "sd": 0.16693142388878482
+    },
+    "power_change_db": {
+      "max": -0.0010096077772318397,
+      "mean": -0.0010096077772318397,
+      "min": -0.0010096077772318397,
+      "sd": 0.0
+    },
+    "removal_gap_dc_db": {
+      "max": 5.458773538470268,
+      "mean": 5.062341600656509,
+      "min": 4.5193085968494415,
+      "sd": 0.35984629800508966
+    },
+    "removal_gap_iq_db": {
+      "max": 3.023730754852295,
+      "mean": 2.8331859906514487,
+      "min": 2.6064932346343994,
+      "sd": 0.17659160436827365
+    },
+    "utility_drop_db": {
+      "max": -0.014888487756252289,
+      "mean": -0.07865326686037911,
+      "min": -0.09981615096330643,
+      "sd": 0.025463125577975795
+    }
+  },
+  "n_feasible": 0,
+  "n_runs": 9,
+  "poison_seeds": [
+    0,
+    1,
+    2
+  ],
+  "protocol": "iq_dc_combination_summary_v1",
+  "raw_rows": [
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969115257263,
+      "drop_dc_only_db": 2.4987916946411133,
+      "drop_dc_sign_flip_db": 0.37105169892311096,
+      "drop_equal_evm_random_db": 0.18124105036258698,
+      "drop_full_iq_dc_db": 5.441451549530029,
+      "drop_iq_only_db": 0.18997490406036377,
+      "drop_iq_sign_flip_db": 0.9155623912811279,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.7526849508285522,
+      "poison_seed": 0,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 5.2514766454696655,
+      "removal_gap_iq_db": 2.942659854888916,
+      "run": "seed0_poison0",
+      "training_seed": 0,
+      "utility_drop_db": -0.09525125473737717
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969115257263,
+      "drop_dc_only_db": 2.346505641937256,
+      "drop_dc_sign_flip_db": 0.41616740822792053,
+      "drop_equal_evm_random_db": 0.18125459551811218,
+      "drop_full_iq_dc_db": 5.0362443923950195,
+      "drop_iq_only_db": 0.1526305079460144,
+      "drop_iq_sign_flip_db": 0.971644937992096,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.5371082425117493,
+      "poison_seed": 1,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 4.883613884449005,
+      "removal_gap_iq_db": 2.6897387504577637,
+      "run": "seed0_poison1",
+      "training_seed": 0,
+      "utility_drop_db": -0.08838456124067307
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969711303711,
+      "drop_dc_only_db": 2.3594722747802734,
+      "drop_dc_sign_flip_db": 0.3263092339038849,
+      "drop_equal_evm_random_db": 0.1786828190088272,
+      "drop_full_iq_dc_db": 5.018560409545898,
+      "drop_iq_only_db": 0.17915184795856476,
+      "drop_iq_sign_flip_db": 1.0089304447174072,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.4799362868070602,
+      "poison_seed": 2,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 4.839408561587334,
+      "removal_gap_iq_db": 2.659088134765625,
+      "run": "seed0_poison2",
+      "training_seed": 0,
+      "utility_drop_db": -0.014888487756252289
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969711303711,
+      "drop_dc_only_db": 2.6301848888397217,
+      "drop_dc_sign_flip_db": 0.4877527952194214,
+      "drop_equal_evm_random_db": 0.1794295310974121,
+      "drop_full_iq_dc_db": 5.617944240570068,
+      "drop_iq_only_db": 0.1591707020998001,
+      "drop_iq_sign_flip_db": 0.9418869614601135,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.8285886496305466,
+      "poison_seed": 0,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 5.458773538470268,
+      "removal_gap_iq_db": 2.9877593517303467,
+      "run": "seed1_poison0",
+      "training_seed": 1,
+      "utility_drop_db": -0.07694967091083527
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969115257263,
+      "drop_dc_only_db": 2.4822728633880615,
+      "drop_dc_sign_flip_db": 0.4140912890434265,
+      "drop_equal_evm_random_db": 0.18006183207035065,
+      "drop_full_iq_dc_db": 5.49484395980835,
+      "drop_iq_only_db": 0.17373992502689362,
+      "drop_iq_sign_flip_db": 0.8449885249137878,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.8388311713933945,
+      "poison_seed": 1,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 5.321104034781456,
+      "removal_gap_iq_db": 3.012571096420288,
+      "run": "seed1_poison1",
+      "training_seed": 1,
+      "utility_drop_db": -0.07713928818702698
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969115257263,
+      "drop_dc_only_db": 2.5271964073181152,
+      "drop_dc_sign_flip_db": 0.40658044815063477,
+      "drop_equal_evm_random_db": 0.17995621263980865,
+      "drop_full_iq_dc_db": 5.4548139572143555,
+      "drop_iq_only_db": 0.18097050487995148,
+      "drop_iq_sign_flip_db": 0.9186497330665588,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.7466470450162888,
+      "poison_seed": 2,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 5.273843452334404,
+      "removal_gap_iq_db": 2.9276175498962402,
+      "run": "seed1_poison2",
+      "training_seed": 1,
+      "utility_drop_db": -0.07652999460697174
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969711303711,
+      "drop_dc_only_db": 2.055349588394165,
+      "drop_dc_sign_flip_db": 0.4491863250732422,
+      "drop_equal_evm_random_db": 0.1807136833667755,
+      "drop_full_iq_dc_db": 4.6618428230285645,
+      "drop_iq_only_db": 0.14253422617912292,
+      "drop_iq_sign_flip_db": 0.808699369430542,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.4639590084552765,
+      "poison_seed": 0,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 4.5193085968494415,
+      "removal_gap_iq_db": 2.6064932346343994,
+      "run": "seed2_poison0",
+      "training_seed": 2,
+      "utility_drop_db": -0.09981615096330643
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969711303711,
+      "drop_dc_only_db": 2.0845906734466553,
+      "drop_dc_sign_flip_db": 0.3704354166984558,
+      "drop_equal_evm_random_db": 0.1803787350654602,
+      "drop_full_iq_dc_db": 4.733605861663818,
+      "drop_iq_only_db": 0.14431962370872498,
+      "drop_iq_sign_flip_db": 0.7807174921035767,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.504695564508438,
+      "poison_seed": 1,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 4.589286237955093,
+      "removal_gap_iq_db": 2.649015188217163,
+      "run": "seed2_poison1",
+      "training_seed": 2,
+      "utility_drop_db": -0.08399709314107895
+    },
+    {
+      "checkpoint_selected": false,
+      "clean_model_any_drop_db": 0.6009969711303711,
+      "drop_dc_only_db": 2.5723986625671387,
+      "drop_dc_sign_flip_db": 0.5244779586791992,
+      "drop_equal_evm_random_db": 0.18058639764785767,
+      "drop_full_iq_dc_db": 5.596129417419434,
+      "drop_iq_only_db": 0.17186996340751648,
+      "drop_iq_sign_flip_db": 0.8656585216522217,
+      "evm_rms": 0.09000921100114073,
+      "feasible": 0.0,
+      "interaction_contrast_db": 2.8518607914447784,
+      "poison_seed": 2,
+      "power_change_db": -0.0010096077772318397,
+      "removal_gap_dc_db": 5.424259454011917,
+      "removal_gap_iq_db": 3.023730754852295,
+      "run": "seed2_poison2",
+      "training_seed": 2,
+      "utility_drop_db": -0.09492290019989014
+    }
+  ],
+  "training_seeds": [
+    0,
+    1,
+    2
+  ]
+}

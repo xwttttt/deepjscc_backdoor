@@ -1,0 +1,71 @@
+{
+  "mode": "direct_model_inference_no_ofdm",
+  "records": [
+    {
+      "sample_id": 0,
+      "baseline": {
+        "clean_psnr_db": 41.060822128386135,
+        "triggered_psnr_db": 28.237968970720008
+      },
+      "stronger": {
+        "clean_psnr_db": 40.1682198511839,
+        "triggered_psnr_db": 13.815358353779983
+      }
+    },
+    {
+      "sample_id": 1,
+      "baseline": {
+        "clean_psnr_db": 39.75157182354892,
+        "triggered_psnr_db": 25.200450205372004
+      },
+      "stronger": {
+        "clean_psnr_db": 39.41211671141965,
+        "triggered_psnr_db": 24.475782085498476
+      }
+    },
+    {
+      "sample_id": 2,
+      "baseline": {
+        "clean_psnr_db": 42.54780193439434,
+        "triggered_psnr_db": 26.269102935240937
+      },
+      "stronger": {
+        "clean_psnr_db": 41.92520397142192,
+        "triggered_psnr_db": 13.414294105163965
+      }
+    },
+    {
+      "sample_id": 3,
+      "baseline": {
+        "clean_psnr_db": 40.64833473158674,
+        "triggered_psnr_db": 23.976567763494607
+      },
+      "stronger": {
+        "clean_psnr_db": 39.138067390057444,
+        "triggered_psnr_db": 13.847846937865306
+      }
+    },
+    {
+      "sample_id": 4,
+      "baseline": {
+        "clean_psnr_db": 45.65006228747846,
+        "triggered_psnr_db": 23.199029176459483
+      },
+      "stronger": {
+        "clean_psnr_db": 45.0253758943001,
+        "triggered_psnr_db": 11.785124220698
+      }
+    },
+    {
+      "sample_id": 5,
+      "baseline": {
+        "clean_psnr_db": 41.66473958467076,
+        "triggered_psnr_db": 25.075766343734873
+      },
+      "stronger": {
+        "clean_psnr_db": 41.72144196422786,
+        "triggered_psnr_db": 12.597544024430148
+      }
+    }
+  ]
+}

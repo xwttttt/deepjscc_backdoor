@@ -1,0 +1,39 @@
+{
+  "selection": "proxy validation only",
+  "profile": "distortion_only",
+  "receive_psr_cap_db": -16,
+  "c": 8,
+  "modulation": 16,
+  "preview_seed": 20261014,
+  "scope": "fixed illustration with fresh channel realization; not additional metric-selection data",
+  "rows": [
+    {
+      "key": 50,
+      "profile": "distortion_only",
+      "Clean": 23.935653686523438,
+      "Same-power random": 23.856624603271484,
+      "Learned OTA": 25.09007453918457
+    },
+    {
+      "key": 60,
+      "profile": "distortion_only",
+      "Clean": 24.644458770751953,
+      "Same-power random": 24.484302520751953,
+      "Learned OTA": 22.76094627380371
+    },
+    {
+      "key": 70,
+      "profile": "distortion_only",
+      "Clean": 25.948150634765625,
+      "Same-power random": 25.650251388549805,
+      "Learned OTA": 23.070140838623047
+    },
+    {
+      "key": 80,
+      "profile": "distortion_only",
+      "Clean": 22.58349609375,
+      "Same-power random": 22.522533416748047,
+      "Learned OTA": 21.466495513916016
+    }
+  ]
+}

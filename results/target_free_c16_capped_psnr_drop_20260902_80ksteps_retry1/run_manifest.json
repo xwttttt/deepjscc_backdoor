@@ -1,0 +1,26 @@
+{
+  "config_sha256": "33253d971301c61f98f0612dc452fcf412bf6040bfb50758d83cb7d93e551797",
+  "data_sha256": "926644559c298fba287b7e8eff64c4abf12416d25af20cdcabd657abb2dc6984",
+  "failure_rate_used": false,
+  "labels_used": false,
+  "max_steps": 80000,
+  "protocol": "target_free_c16_capped_psnr_drop_v3_fixed_steps",
+  "provenance": {
+    "code_git_commit": "64a38d4e499ae1391790d915898ae1dbcfa6ca9a",
+    "code_working_tree_sha256": "7687f6f4a5dcf22b590196c4a82cb35cd190e86514dc4899e971242abe9695bc",
+    "config_sha256": "33253d971301c61f98f0612dc452fcf412bf6040bfb50758d83cb7d93e551797",
+    "data_sha256": "926644559c298fba287b7e8eff64c4abf12416d25af20cdcabd657abb2dc6984",
+    "packages": {
+      "einops": "0.8.2",
+      "numpy": "2.4.3",
+      "torch": "2.7.1+cu118"
+    },
+    "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
+    "python": "3.13.9",
+    "seed": 0,
+    "timestamp_utc": "2026-09-02T07:20:06.905362+00:00",
+    "upstream_checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf"
+  },
+  "trigger_location": "post_encoder_power_normalization_pre_channel",
+  "upstream_clean_checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf"
+}

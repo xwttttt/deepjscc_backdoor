@@ -1,0 +1,55 @@
+{
+  "checkpoint_sha256": "31b727a888e727d4fd7a4e81aaaa225dc94430347a4e264ad6198197ef8320bf",
+  "config_path": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/configs/target_free_c16_iq_dc_combination_20260906.toml",
+  "dataset": "CIFAR10",
+  "full_evm_target": 0.09,
+  "labels_used": false,
+  "latent_shape": [
+    1024,
+    1024
+  ],
+  "protocol": "iq_dc_evm_ratio_calibration_train_only_v1",
+  "sample_count": 1024,
+  "test_data_used": false,
+  "triggers": [
+    {
+      "config": {
+        "dc_magnitude": 0.07672184233525389,
+        "dc_phase_deg": -45.0,
+        "gain_db": 0.1333333333333333,
+        "order": "iq_then_dc",
+        "phase_deg": 5.0
+      },
+      "full_evm_rms": 0.0900000115152855,
+      "observed_dc_energy_ratio": 0.7501472330512267,
+      "score": 5.419396158422961e-05,
+      "target_dc_energy_ratio": 0.75
+    },
+    {
+      "config": {
+        "dc_magnitude": 0.07343116446355129,
+        "dc_phase_deg": -45.0,
+        "gain_db": -0.8666666666666667,
+        "order": "iq_then_dc",
+        "phase_deg": -2.3333333333333335
+      },
+      "full_evm_rms": 0.08999999599324324,
+      "observed_dc_energy_ratio": 0.6501097231860894,
+      "score": 3.0097947927532408e-05,
+      "target_dc_energy_ratio": 0.65
+    },
+    {
+      "config": {
+        "dc_magnitude": 0.06458265819292214,
+        "dc_phase_deg": -45.0,
+        "gain_db": -1.0,
+        "order": "iq_then_dc",
+        "phase_deg": -3.3333333333333335
+      },
+      "full_evm_rms": 0.08999999599324324,
+      "observed_dc_energy_ratio": 0.500750624122448,
+      "score": 0.0014085914370155015,
+      "target_dc_energy_ratio": 0.5
+    }
+  ]
+}

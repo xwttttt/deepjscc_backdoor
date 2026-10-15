@@ -88,6 +88,69 @@ def test_availability_backdoor_loss_is_finite_for_fp16_outputs():
     loss = availability_backdoor_loss(clean, triggered, source, mask)
     assert torch.isfinite(loss.total)
     assert torch.isfinite(loss.damage)
+    assert loss.mean_poison_drop_db.ndim == 0
+
+
+def test_availability_damage_loss_uses_bounded_target_mse_gradient():
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import availability_backdoor_loss
+
+    source = torch.zeros(1, 1, 2, 2)
+    clean = torch.full_like(source, 0.1)
+    triggered = torch.full_like(source, 0.1, requires_grad=True)
+    loss = availability_backdoor_loss(clean, triggered, source, torch.tensor([True]), min_psnr_drop_db=3.0)
+    loss.damage.backward()
+
+    assert torch.isfinite(triggered.grad).all()
+    assert float(loss.damage) > 0.0
+    assert float(triggered.grad.abs().max()) < 1.0
+
+
+def test_training_metrics_are_sample_normalized_and_attack_gradient_is_limited():
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import AvailabilityBackdoorConfig, train_availability_backdoor_epoch
+    from rf_backdoor.impairments import IQDCOffsetConfig
+
+    class TinyAdapter:
+        def __init__(self):
+            self.model = torch.nn.Linear(4, 4)
+
+        def encode(self, images):
+            return images
+
+        def apply_channel(self, latent, snr_db):
+            return latent
+
+        def decode(self, received):
+            return torch.sigmoid(self.model(received))
+
+    torch.manual_seed(8)
+    adapter = TinyAdapter()
+    initial = {name: value.detach().clone() for name, value in adapter.model.named_parameters()}
+    optimizer = torch.optim.SGD(adapter.model.parameters(), lr=0.01)
+    samples = [(torch.rand(4), False, 0), (torch.rand(4), True, 1), (torch.rand(4), False, 2), (torch.rand(4), True, 3)]
+    loader = torch.utils.data.DataLoader(samples, batch_size=2, shuffle=False)
+    config = AvailabilityBackdoorConfig(
+        train_snr_db=(7.0,),
+        evm_penalty_weight=0.0,
+        power_penalty_weight=0.0,
+        max_train_batches=2,
+        attack_grad_norm_ratio=0.25,
+        attack_grad_max_norm=1.0,
+    )
+    metrics = train_availability_backdoor_epoch(
+        adapter,
+        loader,
+        optimizer,
+        trigger=IQDCOffsetConfig(phase_deg=1.0, dc_magnitude=0.05, dc_phase_deg=45.0),
+        config=config,
+        device="cpu",
+        initial_parameters=initial,
+    )
+
+    assert metrics["clean_loss"] <= 1.0
+    assert metrics["attack_grad_norm_after"] <= min(metrics["attack_grad_norm_before"], metrics["clean_grad_norm"] * 0.25, 1.0) + 1e-5
+    assert np.isfinite(list(metrics.values())).all()
 
 
 def test_availability_backdoor_training_epoch_runs_through_iq_dc_trigger():
@@ -175,6 +238,61 @@ def test_availability_backdoor_fit_keeps_clean_reference_separate(tmp_path):
 
     assert len(history) == 1
     assert (tmp_path / "best.pt").exists()
+
+
+def test_availability_backdoor_fit_keeps_epoch_minus_one_fallback(tmp_path):
+    torch = pytest.importorskip("torch")
+    from rf_backdoor.availability_backdoor import AvailabilityBackdoorConfig, fit_availability_backdoor
+    from rf_backdoor.impairments import IQDCOffsetConfig
+
+    class TinyAdapter:
+        def __init__(self):
+            self.model = torch.nn.Sequential(torch.nn.Linear(4, 4), torch.nn.Sigmoid())
+
+        def encode(self, images):
+            return images
+
+        def apply_channel(self, latent, snr_db):
+            return latent
+
+        def decode(self, received):
+            return self.model(received)
+
+    torch.manual_seed(9)
+    adapter = TinyAdapter()
+    clean_reference_adapter = TinyAdapter()
+    clean_reference_adapter.model.load_state_dict(adapter.model.state_dict())
+    samples = [(torch.rand(4), False, 0), (torch.rand(4), True, 1)]
+    loader = torch.utils.data.DataLoader(samples, batch_size=2, shuffle=False)
+    optimizer = torch.optim.SGD(adapter.model.parameters(), lr=0.01)
+    config = AvailabilityBackdoorConfig(
+        train_snr_db=(7.0,),
+        min_psnr_drop_db=1.0,
+        evm_penalty_weight=0.0,
+        power_penalty_weight=0.0,
+        max_epochs=1,
+        early_stopping_start=0,
+        patience=1,
+        max_validation_batches=1,
+        learning_rate_scale=1.0,
+        max_parameter_relative_change=1e-12,
+    )
+
+    history = fit_availability_backdoor(
+        adapter,
+        clean_reference_adapter,
+        loader,
+        loader,
+        optimizer,
+        trigger=IQDCOffsetConfig(phase_deg=1.0, dc_magnitude=0.05, dc_phase_deg=45.0),
+        config=config,
+        device="cpu",
+        checkpoint_path=tmp_path / "best.pt",
+    )
+
+    payload = torch.load(tmp_path / "best.pt", map_location="cpu")
+    assert history[0]["stopped_reason"] == "parameter_relative_change_excess"
+    assert payload["epoch"] == -1
 
 
 def test_availability_evaluation_converts_bfloat16_before_numpy():

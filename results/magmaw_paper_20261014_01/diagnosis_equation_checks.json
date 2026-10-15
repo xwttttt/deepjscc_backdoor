@@ -1,0 +1,5 @@
+{
+  "projection": "passed",
+  "complex_l1": "passed",
+  "minimax_signs": "passed"
+}

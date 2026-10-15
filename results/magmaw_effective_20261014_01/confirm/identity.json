@@ -1,0 +1,23 @@
+{
+  "arguments": {
+    "codec_dir": "/home/gxhen/Wisig/jscc/deepjscc_backdoor/experiments/magmaw_image_full_20261013_01/runs/full",
+    "output_dir": "runs/confirm",
+    "steps": 12000,
+    "batch_size": 8,
+    "seed": 5678,
+    "profiles": [
+      "psnr_only"
+    ],
+    "evaluation_repeats": 5
+  },
+  "code_sha256": {
+    "scripts/run_magmaw_effective.py": "ff3aa299da69a3f07ab8e30e2bd9134cc2b4219deb90d079185f35e72d866785",
+    "src/rf_backdoor/magmaw_paper.py": "ae8a35e73b00eb075af33b67f5b02e6e632ac004c226b17c59bab63024660c54",
+    "src/rf_backdoor/magmaw_full.py": "8e705e420f7a52d0c518794f978281928b2a460e042eb16c9c7a42bcedd3c158",
+    "src/rf_backdoor/magmaw_effective.py": "2edf86371b3c27e1390bd3f2c84d93bbc9395972009da9a772ce07b26e406d2b"
+  },
+  "scope": "distortion-first image OTA attack; not literal Magmaw reproduction",
+  "evaluation_power": "pre-Ha projection then offline received cap; random matched per sample",
+  "training_power": "pre-Ha projection without instantaneous Ha renormalization",
+  "new_codec_training": false
+}
