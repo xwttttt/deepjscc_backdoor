@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/jiahylan/jscc-system-based-on-liquid",
+  "branch": "ofdm-based",
+  "commit": "896a6d9bdda905ced1f19689e8ad17539886136e",
+  "included": [
+    "CMakeLists.txt",
+    "src/",
+    "tests/",
+    "third_party/"
+  ],
+  "changes": "Unmodified native source snapshot; GUI omitted."
+}

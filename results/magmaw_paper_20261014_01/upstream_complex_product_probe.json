@@ -1,9 +1,0 @@
-{
-  "source": "references\\magmaw_official\\core_b342d7f\\models\\channel.py",
-  "expression": "signal_real * cof_real - cof_real * cof_imag",
-  "input": "i",
-  "channel": "i",
-  "expected_real": -1.0,
-  "upstream_real": 0.0,
-  "mismatch_confirmed": true
-}

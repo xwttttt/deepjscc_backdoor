@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train-lmdb", type=Path, default=Path("data/DIV2K/lmdb/train_256_CV16_float32.lmdb"))
     parser.add_argument("--valid-lmdb", type=Path, default=Path("data/DIV2K/lmdb/valid_256_CV16_float32.lmdb"))
     parser.add_argument("--prepared-dir", type=Path, default=Path("data/DIV2K/prepared_256_seed_20260923"))
-    parser.add_argument("--init-checkpoint", type=Path, default=Path("runs/clean_p0_c16_server_20260827/best.pt"))
+    parser.add_argument("--init-checkpoint", type=Path, default=Path("models/p0_clean.pt"))
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--steps", type=int, default=5000)
     parser.add_argument("--batch-size", type=int, default=4)

@@ -82,17 +82,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--max-images", type=int, default=1, help="0 means all prepared records")
     parser.add_argument("--device", default="cpu")
+    parser.add_argument("--trigger", type=Path, help="optional training-compatible IQ/DC JSON applied after encoder normalization")
     parser.add_argument("--send", action="store_true", help="invoke TX.py once per latent; may radiate RF")
     parser.add_argument("--tx-script", type=Path, help="TX.py with --input-bin support; required with --send")
     parser.add_argument("--endpoint", default="tcp://127.0.0.1:5555")
     parser.add_argument("--connect-wait", type=float, default=0.5)
+    parser.add_argument("--start-id", type=int, default=1)
     return parser.parse_args(argv)
 
 
 def run(args: argparse.Namespace) -> dict:
     if args.output_dir.exists():
         raise FileExistsError(f"refusing to reuse output directory: {args.output_dir}")
-    if args.batch_size < 1 or args.max_images < 0 or args.connect_wait < 0:
+    if args.batch_size < 1 or args.max_images < 0 or args.connect_wait < 0 or args.start_id < 0:
         raise ValueError("batch-size must be positive; max-images and connect-wait nonnegative")
     if args.send:
         if args.tx_script is None or not args.tx_script.is_file():
@@ -107,6 +109,11 @@ def run(args: argparse.Namespace) -> dict:
     count = min(args.max_images or len(images), len(images))
     device = torch.device(args.device)
     encoder, c = load_encoder(args.checkpoint, device)
+    trigger_config = None
+    if args.trigger is not None:
+        from rf_backdoor.impairments import IQDCOffsetConfig, apply_iq_dc_numpy
+        trigger_payload = json.loads(args.trigger.read_text(encoding="utf-8"))
+        trigger_config = IQDCOffsetConfig(**trigger_payload.get("config", trigger_payload))
     root = args.output_dir
     (root / "encoder").mkdir(parents=True)
     manifest = {
@@ -119,18 +126,22 @@ def run(args: argparse.Namespace) -> dict:
         "input_shape": [3, 256, 256],
         "planned_records": count,
         "tx_script": str(args.tx_script) if args.send else None,
+        "trigger_sha256": sha256(args.trigger) if args.trigger else None,
+        "branch": "triggered" if args.trigger else "clean",
         "records": [],
     }
     try:
         for start in range(0, count, args.batch_size):
-            batch = np.ascontiguousarray(images[start:start + args.batch_size])
+            batch = np.ascontiguousarray(images[start:min(start + args.batch_size, count)])
             tensor = torch.from_numpy(batch.astype(np.float32) / 255.0).to(device)
             with torch.inference_mode():
                 signals, state = encoder(tensor)
             latents = signals.detach().cpu().numpy().astype("<c8", copy=False)
+            if trigger_config is not None:
+                latents = apply_iq_dc_numpy(latents, trigger_config)
             for offset, latent in enumerate(latents):
                 index = start + offset
-                burst_id = index + 1
+                burst_id = args.start_id + index
                 if latent.size != c * state["h"] * state["w"] or not np.isfinite(latent).all():
                     raise ValueError(f"invalid latent at record {index}")
                 output = root / "encoder" / f"burst_{burst_id:08d}.cf32le"

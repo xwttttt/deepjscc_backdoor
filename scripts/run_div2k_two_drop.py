@@ -356,8 +356,8 @@ def _evaluate(backdoor, reference, trigger, loader, *, device, snr_db, seed, obj
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=Path("configs/div2k_two_drop_struct_lmdb_pure_256.toml"))
-    parser.add_argument("--clean-checkpoint", type=Path, default=Path("runs/div2k_lmdb_cv16_20260923/p0_full/best.pt"))
+    parser.add_argument("--config", type=Path, default=Path("configs/div2k_two_drop_struct_lmdb_stronger_20260928.toml"))
+    parser.add_argument("--clean-checkpoint", type=Path, default=Path("models/p0_clean.pt"))
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--max-train-batches", type=int, default=None)

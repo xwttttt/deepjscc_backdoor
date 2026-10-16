@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from scripts.platform_integration import TX
+import TX
 
 
 def arguments() -> Namespace:

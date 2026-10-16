@@ -1,6 +1,0 @@
-[Sources]
-- All quantitative values are derived from the local experiment artifact: results/target_free_c16_reconstruction_failure_20260828/metrics.json.
-- Trigger parameters and label-free protocol are derived from: results/target_free_c16_reconstruction_failure_20260828/trigger.json, config.toml, and run_manifest.json.
-- Reconstruction images are local experiment outputs under: results/target_free_c16_reconstruction_failure_20260828/reconstructions/.
-- No external images, external claims, or web sources were used.
-[/Sources]

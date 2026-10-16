@@ -1,4 +1,0 @@
-Source deck: 9 slides, 1280x720, white canvas, black/gray copy, blue emphasis, thin gray rules, Arial/Calibri.
-Reusable patterns: cover (1), protocol (2), formula/parameter list (3), line chart with right callouts (4), bar chart with right callouts (5), image comparison (7), summary table (8).
-New deck maps seven output slides to those inherited patterns. The two synchronized retry1 reconstruction images are used on the comparison slide.
-All visible source elements are preserved unless listed in template-frame-map.json. No inherited empty placeholders were observed in the source inventory.

@@ -1,6 +1,0 @@
-{
-  "minimax_signs": true,
-  "complex_L1_norm": true,
-  "paired_original_baseline": true,
-  "max_paired_difference_db": 0.0
-}
