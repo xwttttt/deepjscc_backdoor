@@ -1,7 +1,7 @@
 # DeepJSCC / liquid-dsp OFDM
 
 GitHub 默认分支为 `backdoor`（原 `codex/project-upload-20261016`）；旧分支已改名为
-`stimulation`（原 `codex/deepjscc-iq-dc-offset`）。本次仅改分支名及文档引用，不改变模型或收发逻辑。
+`simulation`（原 `codex/deepjscc-iq-dc-offset`）。本次仅改分支名及文档引用，不改变模型或收发逻辑。
 
 本分支按 **xwt 服务器实际 OTA README 和接口** 整理，只保留当前链路、P0 与指定的 stronger_struct 模型、固定测试集、训练代码和必要测试。Python 入口为 `encode.py`、`TX.py`、`RX.py`、`decode.py`。旧实验、报告、重复包已从分支文件清单移除，历史提交仍可回溯。
 
