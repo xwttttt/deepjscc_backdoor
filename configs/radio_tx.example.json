@@ -1,0 +1,7 @@
+{
+  "device": "",
+  "frequency_hz": null,
+  "tx_gain_db": null,
+  "tx_channel": 0,
+  "tx_antenna": "TX/RX"
+}

@@ -1,6 +1,17 @@
 # DeepJSCC / liquid-dsp OFDM
 
-本分支只保留当前可执行链路、P0 与指定的 stronger_struct 模型、固定测试集、训练代码和必要测试。Python 入口为 `encode.py`、`TX.py`、`RX.py`、`decode.py`。旧实验、报告、重复包已从分支文件清单移除，历史提交仍可回溯。
+本分支按 **xwt 服务器实际 OTA README 和接口** 整理，只保留当前链路、P0 与指定的 stronger_struct 模型、固定测试集、训练代码和必要测试。Python 入口为 `encode.py`、`TX.py`、`RX.py`、`decode.py`。旧实验、报告、重复包已从分支文件清单移除，历史提交仍可回溯。
+
+## 操作入口与代码分区
+
+- [完整操作手册](docs/WORKFLOW.md)：分机 Tx/Rx，预处理→编码→发送→接收→校验→解码，以及离线/在线切换。
+- [数据与两类训练](docs/DATASET.md)：用户三个脚本、源 DIV2K、固定 LMDB、正常/后门训练和固定测试导出。
+- [xwt 实际 README 快照](docs/xwt_ofdm_README.md)：2026-10-17 SSH 实读；基准哈希见 `docs/xwt_baseline.json`。
+- 分步骤入口：`bash scripts/steps.sh encode|tx-service|send|rx-service|receive|decode ...`。
+
+`native/ofdm/` 管物理层，根 `TX.py/RX.py` 管数据接口，`encode.py/decode.py` 管模型，
+`scripts/` 管数据制作、训练与薄流程包装。模型、数据和各次 captures 相互分离。
+原始 HR 和完整训练 LMDB 保留在服务器，**没有作为大数据上传到 Git**；Git 包含固定测试集、来源清单和制作/加载入口。
 
 ```text
 固定 test.npy → Encoder → complex64 latent → TX.py → OFDM 服务
@@ -11,7 +22,7 @@
 
 ## 1. 安装与已有文件
 
-Python 3.11+；Ubuntu 用于原生 OFDM/SDR。从仓库根目录执行：
+训练/项目包安装用 Python 3.11+；编解码兼容 xwt 的 Python 3.10。Ubuntu 用于原生 OFDM/SDR。从仓库根目录执行：
 
 ```bash
 git clone --depth 1 --single-branch --branch codex/project-upload-20261016 \
@@ -19,6 +30,7 @@ git clone --depth 1 --single-branch --branch codex/project-upload-20261016 \
 cd deepjscc_backdoor
 python3 -m pip install -r requirements.txt
 python3 tools/check_install.py
+python3 tools/check_xwt_baseline.py
 ```
 
 CUDA 训练环境请预先安装与服务器 CUDA 匹配的 PyTorch。短时 CPU 验证可用 CPU PyTorch。仓库中已直接包含：
@@ -27,7 +39,7 @@ CUDA 训练环境请预先安装与服务器 CUDA 匹配的 PyTorch。短时 CPU
 | --- | --- |
 | `data/div2k_cv16_test/test.npy` | 已处理的 50 张测试图块，`uint8 [50,3,256,256]` |
 | `data/div2k_cv16_test/manifest.json` | Cosmos CV16 valid LMDB 键 50–99 的来源与哈希 |
-| `models/p0_clean.pt` | 正常链路干净 P0，SHA-256 `24070ef0…b7d4be` |
+| `models/p0_clean.pt` | 正常链路干净 P0，SHA-256 `24070ef0…ff8542` |
 | `models/stronger_struct_best.pt` | 用户指定的 2026-09-28 stronger_struct 运行内最佳模型，SHA-256 `db7fcc8e…5d166c` |
 | `models/stronger_struct_trigger.json` | 该模型对应的 IQ/DC 参数 |
 | `models/stronger_struct_run_manifest.json`、`stronger_struct_metrics.json` | 模型来源和指标 |
@@ -57,6 +69,10 @@ bash scripts/run_offline_ofdm.sh captures/offline_001
 ```
 
 原生构建会下载固定版本的 nlohmann/json，首次配置需要联网。构建产物在 `build/ofdm/`，包括 `ofdm-workbench-service`、`ofdm-tx-service`、`ofdm-rx-service`、`ofdm-device-probe`。运行脚本使用独立端口 5955/5956，启动服务的 `--simulate` 模式，经原 `TX.py`/`RX.py` 传递一图 latent，检查控制 CRC 和返回长度，再解码。结果在 `captures/offline_001/reconstructed/`，服务/接收日志及 manifest 按目录保存。
+
+若 GitHub 下载不可用，可提前解压经过哈希校验的 JSON 3.11.3 源码，再执行
+`bash scripts/build_ofdm.sh -DFETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON=/absolute/path/to/json`。
+官方 `json.tar.xz` 的 SHA-256 为 `d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d`。
 
 已有原生服务时可用 `OFDM_SERVICE=/absolute/path/to/ofdm-workbench-service` 指定，Python 可用 `PYTHON=/path/to/python` 指定。
 
@@ -157,3 +173,19 @@ python3 -m pytest -q
 - P0 入口完成 1-step 冒烟；后门入口完成单 batch 冒烟。另用临时全投毒测试配置确认 2 个投毒样本覆盖梯度路径。交付配置和模型文件未被这些测试改写。
 
 以上短时测试证明当前入口与依赖可运行，不是新一轮完整训练的效果报告。本次未做实机 RF/OTA 发射接收验证。
+
+### 2026-10-17：按 xwt 实际平台整理后的验证
+
+实读服务器 README 并核对原生提交；37 个原生文件、`RX.py` 和 README 快照共 39 文件
+通过基准哈希检查。`RX.py` 保持与 xwt 逐字节一致，Tx 的原诊断符号也逐字节匹配。
+Tx 仅增加固定 latent 文件兼容入口，模型、损失、原生组帧/同步/CSI/均衡均未改写。
+
+在 xwt 的独立临时目录、隔离 Python 环境完成：43 项 Python 测试通过、无跳过；
+原生构建成功、CTest 1/1；P0 与 stronger 触发模型各一图 OFDM 仿真成功，均通过 CRC/长度校验并生成 PNG；
+另外按 `steps.sh` 手册完成先编码保存、独立 Tx 提交、原 Rx 落盘、校验、独立解码。
+详情见 [验证记录](docs/verification_20261017.json)。
+
+本地 Windows 测试受临时目录权限限制，因此完整动态验证在 xwt 执行；GPU 全程禁用。
+首次 JSON/PyPI 直连下载失败，测试改用已校验的离线依赖；没有更改原 xwt 项目或原 Conda 环境。
+本次没有新训练、数据集再生成、全量评估或真实 OTA 发射。在线入口已对齐原服务接口，
+但这不等于本整理版已完成空口实测。
