@@ -2,7 +2,10 @@
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
-exec "${PYTHON:-python3}" -u scripts/run_div2k_two_drop.py \
+output="${1:-runs/three_stage_new}"
+"${PYTHON:-python3}" -u apps/train_clean/main.py \
+  --output-dir "$output/clean" --device "${DEVICE:-cuda:0}"
+exec "${PYTHON:-python3}" -u apps/train_triggered/main.py \
   --config configs/div2k_two_drop_struct_lmdb_stronger_20260928.toml \
-  --clean-checkpoint models/p0_clean.pt \
-  --output-root "${1:-runs/stronger_new}" --device "${DEVICE:-cuda:0}"
+  --clean-checkpoint "$output/clean/stage2_best.pt" \
+  --output-root "$output/triggered" --device "${DEVICE:-cuda:0}"

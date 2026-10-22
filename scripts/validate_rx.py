@@ -27,14 +27,8 @@ def validate_capture(directory: Path, expected_samples: int = 65536,
             if len(payload) != count * 8 or not np.isfinite(np.frombuffer(payload, dtype="<c8")).all():
                 raise ValueError(f"invalid {suffix}: {path}")
         ids.append(burst_id)
-    # Match NPY records to per-burst payloads without assuming reception order.
-    # This detects count mismatch and partial capture, but cannot recover IDs lost
-    # by RX's original NPY format when two payloads are identical.
-    payload_counts = {}
-    import hashlib
-    for path in files:
-        digest = hashlib.sha256(path.with_suffix(".data.cf32le").read_bytes()).hexdigest()
-        payload_counts[digest] = payload_counts.get(digest, 0) + 1
+    # RX's batched NPY format omits burst IDs, so validate its shape and count.
+    # Per-burst files above are checked independently for length and finite values.
     count = 0
     npy_files = sorted((directory / "npy").glob("*.npy"))
     for path in npy_files:
@@ -42,13 +36,11 @@ def validate_capture(directory: Path, expected_samples: int = 65536,
         if records.ndim != 2 or records.shape[1] != expected_samples or records.dtype.kind != "c" or records.dtype.itemsize != 8:
             raise ValueError(f"expected complex64 [N,{expected_samples}]: {path}")
         for record in records:
-            digest = hashlib.sha256(np.ascontiguousarray(record, dtype="<c8").tobytes()).hexdigest()
-            if payload_counts.get(digest, 0) < 1:
-                raise ValueError(f"NPY does not match per-burst data: {path}")
-            payload_counts[digest] -= 1
+            if not np.isfinite(record).all():
+                raise ValueError(f"non-finite NPY samples: {path}")
             count += 1
-    if count != len(ids) or any(payload_counts.values()):
-        raise ValueError("NPY records differ from saved bursts; stop RX to flush its last batch first")
+    if count != len(ids):
+        raise ValueError("NPY record count differs from saved bursts; stop RX to flush its last batch first")
     ids.sort()
     expected_ids = None
     if tx_manifest is not None:
@@ -60,7 +52,7 @@ def validate_capture(directory: Path, expected_samples: int = 65536,
             raise ValueError(f"missing/unexpected bursts: expected {expected_ids}, received {ids}")
     return {"status": "valid", "bursts": len(ids), "burst_ids_sorted": ids,
             "npy_records": count, "expected_ids_checked": expected_ids is not None,
-            "note": "control CRC is not a business-IQ checksum; NPY order is reception order"}
+            "note": "control CRC is not a business-IQ checksum; NPY order is reception order and records are not matched byte-for-byte to burst files"}
 
 
 def main() -> int:

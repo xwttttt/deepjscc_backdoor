@@ -9,7 +9,8 @@ if (($#)); then shift; fi
 case "$step" in
   encode)
     out="${1:?Usage: steps.sh encode NEW_OUTPUT_DIR [encoder options]}"; shift
-    exec "$py" encode.py --dataset "${DATASET:-data/div2k_cv16_test/test.npy}" \
+    dataset="${DATASET:?Set DATASET to the prepared uint8 NPY file}"
+    exec "$py" src/jscc/encode_prepared_npy.py --dataset "$dataset" \
       --checkpoint "${CHECKPOINT:-models/p0_clean.pt}" --output-dir "$out" "$@"
     ;;
   tx-service|rx-service)
@@ -23,7 +24,7 @@ case "$step" in
     out="${1:?Usage: steps.sh receive NEW_OUTPUT_DIR [RX options]}"; shift
     if [[ -e "$out" ]]; then echo "Refusing existing capture directory: $out" >&2; exit 1; fi
     # RX itself creates both directories. Ctrl-C flushes the final NPY batch.
-    exec "$py" RX.py "$@" --save-dir "$out" --npy-dir "$out/npy"
+    exec "$py" apps/experiments/RX.py "$@" --save-dir "$out" --npy-dir "$out/npy"
     ;;
   decode)
     rx="${1:?Usage: steps.sh decode RX_DIRECTORY NEW_OUTPUT_DIRECTORY [decoder options]}"; shift
@@ -31,7 +32,7 @@ case "$step" in
     validation=()
     if [[ -n "${TX_MANIFEST:-}" ]]; then validation=(--tx-manifest "$TX_MANIFEST"); fi
     "$py" scripts/validate_rx.py "$rx" "${validation[@]}"
-    exec "$py" decode.py "$rx/npy" --checkpoint "${CHECKPOINT:-models/p0_clean.pt}" \
+    exec "$py" src/jscc/decode_rx_npy.py "$rx/npy" --checkpoint "${CHECKPOINT:-models/p0_clean.pt}" \
       --output-dir "$out" "$@"
     ;;
   *)

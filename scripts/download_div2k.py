@@ -18,7 +18,7 @@ ARCHIVES = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=Path("data/DIV2K"))
+    parser.add_argument("--root", type=Path, default=Path("datasets/DIV2K"))
     parser.add_argument("--split", choices=("train", "valid", "all"), default="all")
     parser.add_argument("--keep-archives", action="store_true")
     return parser.parse_args()

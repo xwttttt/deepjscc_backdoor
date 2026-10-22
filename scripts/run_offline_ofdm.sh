@@ -20,15 +20,15 @@ cleanup() {
 trap cleanup EXIT
 "$service" --simulate --tx-endpoint tcp://127.0.0.1:5955 --rx-endpoint tcp://127.0.0.1:5956 >"$run/service.log" 2>&1 &
 service_pid=$!
-timeout --signal=INT --kill-after=5s 120s "$py" RX.py --endpoint tcp://127.0.0.1:5956 --max-bursts 1 --save-dir "$run/rx" --npy-dir "$run/rx/npy" >"$run/rx.log" 2>&1 &
+timeout --signal=INT --kill-after=5s 120s "$py" apps/experiments/RX.py --endpoint tcp://127.0.0.1:5956 --max-bursts 1 --save-dir "$run/rx" --npy-dir "$run/rx/npy" >"$run/rx.log" 2>&1 &
 rx_pid=$!
 sleep 1
 kill -0 "$service_pid"
 trigger_args=()
 if [[ -n "${TRIGGER:-}" ]]; then trigger_args=(--trigger "$TRIGGER"); fi
-"$py" encode.py --dataset data/div2k_cv16_test/test.npy --checkpoint "$checkpoint" --output-dir "$run/tx" --max-images 1 --batch-size 1 --tx-script ./TX.py --endpoint tcp://127.0.0.1:5955 --send "${trigger_args[@]}"
+"$py" src/jscc/encode_prepared_npy.py --dataset data/div2k_cv16_test/test.npy --checkpoint "$checkpoint" --output-dir "$run/tx" --max-images 1 --batch-size 1 --tx-script ./apps/experiments/TX.py --endpoint tcp://127.0.0.1:5955 --send "${trigger_args[@]}"
 wait "$rx_pid"
 rx_pid=""
 "$py" scripts/validate_rx.py "$run/rx" --tx-manifest "$run/tx/manifest.json"
-"$py" decode.py "$run/rx/npy" --checkpoint "$checkpoint" --output-dir "$run/reconstructed" --max-records 1 --device cpu
+"$py" src/jscc/decode_rx_npy.py "$run/rx/npy" --checkpoint "$checkpoint" --output-dir "$run/reconstructed" --max-records 1 --device cpu
 echo "Completed: $run"

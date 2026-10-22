@@ -1,41 +1,33 @@
 schema_version = 1
-name = "div2k_two_drop_struct_lmdb_stronger_20260928"
+name = "div2k_two_drop_psnr_lmdb_stronger_20260928"
 
 [dataset]
 format = "lmdb"
-train_lmdb = "data/DIV2K/lmdb/train_256_CV16_float32.lmdb"
-valid_lmdb = "data/DIV2K/lmdb/valid_256_CV16_float32.lmdb"
+train_lmdb = "datasets/DIV2K/train_256_float32.lmdb"
+valid_lmdb = "datasets/DIV2K/valid_256_float32.lmdb"
 split_seed = 20260923
 
 [backend]
 c = 16
 channel_type = "awgn"
 train_snr_db = 10.0
-selection_snr_db = 100.0
+selection_snr_db = 10.0
 
 [poison]
 rate = 0.05
 seed = 20260923
 
 [trigger]
-initial_gain_db = 0.0
-initial_phase_deg = -1.0
-initial_dc_magnitude = 0.1
-initial_dc_phase_deg = 315.0
+gain_db = 0.0
+phase_deg = -1.0
+dc_magnitude = 0.1
+dc_phase_deg = 315.0
 order = "iq_then_dc"
-max_gain_db = 1.0
-max_phase_deg = 5.0
-max_dc_magnitude = 0.1
-max_dc_phase_deg = 180.0
 
 [objective]
-mode = "localized_structure"
-window = 16
-top_fraction = 0.02
-magnitude_cap_db = 12.0
 clean_drop_weight = 4.0
 
-# Retain only clean-drop and triggered-structure-drop training/selection terms.
+# Train and select using the clean-drop and PSNR triggered-drop terms.
 [mechanism]
 gradient_merge = "sum"
 clean_model_trigger_weight = 0.0

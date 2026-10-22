@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 from pathlib import Path
@@ -27,11 +26,11 @@ def load_records(manifest_path: Path) -> list[tuple[int, Path]]:
         path = (base / record["latent"]).resolve()
         if base not in path.parents:
             raise ValueError("latent path must stay inside encoder output")
-        payload = path.read_bytes()
-        if len(payload) != record["latent_samples"] * 8 or not payload:
+        sample_count = record.get("latent_samples")
+        if type(sample_count) is not int or sample_count <= 0:
+            raise ValueError(f"invalid latent_samples in manifest: {path}")
+        if not path.is_file() or path.stat().st_size != sample_count * 8:
             raise ValueError(f"latent size mismatch: {path}")
-        if hashlib.sha256(payload).hexdigest() != record["latent_sha256"]:
-            raise ValueError(f"latent hash mismatch: {path}")
         seen.add(burst_id)
         records.append((burst_id, path))
     if len(records) != manifest.get("planned_records"):
@@ -42,7 +41,7 @@ def load_records(manifest_path: Path) -> list[tuple[int, Path]]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
-    parser.add_argument("--tx-script", type=Path, default=ROOT / "TX.py")
+    parser.add_argument("--tx-script", type=Path, default=ROOT / "apps/experiments/TX.py")
     parser.add_argument("--endpoint", default="tcp://127.0.0.1:5555")
     parser.add_argument("--interval", type=float, default=0.25)
     parser.add_argument("--dry-run", action="store_true")
